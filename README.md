@@ -11,6 +11,26 @@ UMC(University MakeUs Challenge) 동아리 매칭 서비스 구축 프로젝트 
 - **Framework** : React
 - **Node** : 18.xx.x
 
+## 🗂️ Project Structure
+
+| 폴더명       | 설명                                                                                                 |
+| ------------ | ---------------------------------------------------------------------------------------------------- |
+| `public`     | 정적 파일들이 담긴 폴더                                                                              |
+| `assets`     | 프로젝트의 자산들을 관리하는 폴더                                                                    |
+| `fonts`      | font 파일들이 담긴 폴더                                                                              |
+| `images`     | image 파일들이 담긴 폴더                                                                             |
+| `src`        | 대부분의 파일을 넣는 폴더 (index.js, js파일, css파일 등)                                             |
+| `api`        | 서버와 데이터 통신하는 CRUD Axios가 담긴 폴더                                                        |
+| `components` | pages에 들어가는 부분마다의 components가 담긴 폴더                                                   |
+| `common`     | 여러 페이지에서 자주 사용되는 컴포넌트가 담긴 폴더 (navBar, footer 등)                               |
+| `context`    | Context API를 위한 context가 담긴 폴더                                                               |
+| `data`       | 굳이 서버와의 통신으로 받아오지 않아도 되는 정적인 data들을 Object Array로 표현한 파일들이 담긴 폴더 |
+| `lib`        | 어플리케이션 내에서 공통으로 사용되는 함수들이 담긴 폴더 (data, api 등)                              |
+| `modules`    | redux에 사용되는 action, reducer, store가 담긴 폴더                                                  |
+| `pages`      | DOM에 라우팅되어 렌더링되는 페이지들이 담긴 폴더                                                     |
+| `test`       | app.test.js과 같은 Unit test가 담긴 폴더                                                             |
+| `utils`      | util함수들이 담긴 폴더 (axios Interceopter 등)                                                       |
+
 ## ✉️ Git Message Convension
 
 ### 1. **Commit 메시지 구조**
