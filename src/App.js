@@ -1,14 +1,23 @@
-import "./App.css";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, BrowserRouter, Link } from "react-router-dom";
+import Register from "./pages/Register";
+import styled from "styled-components";
+import Home from "./pages/Home";
 
 function App() {
+  const Headers = styled.div`
+    display: flex;
+  `;
+
   return (
-    <div>
+    <BrowserRouter>
+      <Headers>
+        <Link to="/">Home</Link>
+      </Headers>
       <Routes>
-        <Route path="/Login" element={<SignIn />} />
-        <Route path="/*" element={<Main />} />
+        <Route path="/*" element={<Home />} />
+        <Route path="/Register" element={<Register />} />
       </Routes>
-    </div>
+    </BrowserRouter>
   );
 }
 export default App;
