@@ -1,0 +1,107 @@
+/*공통적으로 들어가는 부분*/
+.Container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.MainBox {
+  display: flex;
+  width: 100rem;
+  height: 60vh;
+}
+
+.CoverBox {
+  background-color: #014171;
+  font-family: KBO-Dia-Gothic;
+  font-weight: 700;
+  font-size: 5rem;
+  color: #fafafa;
+  box-sizing: border-box;
+  border-radius: 1rem 0 0 1rem;
+  padding: 9rem 0 0 8rem;
+  width: 50%;
+  height: 100%;
+}
+
+.FormBox {
+  background-color: #fafafa;
+  font-family: KBO-Dia-Gothic;
+  font-weight: 300;
+  font-size: 1.4rem;
+  color: #6b6880;
+  box-sizing: border-box;
+  border-radius: 0 1rem 1rem 0;
+  width: 50%;
+  height: 100%;
+}
+
+.FormSelect {
+  display: flex;
+}
+
+/*로그인 회원가입 */
+.FormBtn {
+  margin: 9.1rem 0rem 0 23rem;
+  color: #6b6880;
+}
+
+.FormLogin {
+  display: flex;
+  margin: 10.6rem 10.7rem 2rem 11.4rem;
+  flex-direction: column;
+  font-size: 1.2rem;
+}
+
+.FormCheckBox {
+  display: flex;
+  flex-direction: row;
+  font-size: 1rem;
+}
+
+.FormSubmit {
+  margin: 0rem 10.7rem 0 11.4rem;
+}
+
+.FormRegister {
+  display: flex;
+  margin: 1.4rem 0 0 9rem;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.ValidText {
+  color: #d62117;
+  font-size: 0.6rem;
+}
+
+.StyledInput {
+  border: none;
+  border-bottom: 1px solid #6b6880;
+  font-family: KBO-Dia-Gothic;
+  font-weight: 300;
+  font-size: 1.2rem;
+  width: 28.2rem;
+}
+
+.PasswordInput {
+    position:relative;
+}
+
+.StyledCheckbox {
+  margin: 0 0.4rem 0 0;
+}
+
+.FormCompleteTitle {
+  color: #014171;
+  font-size: 2.6rem;
+  font-weight: 500;
+  margin: 23.1rem 10.3rem 0 9.7rem;
+}
+
+.FormCompleteText {
+  margin: 2.8rem 7.6rem 0 7.3rem;
+}

@@ -1,7 +1,8 @@
 import { Route, Routes, BrowserRouter, Link } from "react-router-dom";
-import Register from "./pages/Register";
 import styled from "styled-components";
 import Home from "./pages/Home";
+import Register from "./pages/Register";
+import SignUp from "./pages/SignUp";
 
 function App() {
   const Headers = styled.div`
@@ -11,11 +12,12 @@ function App() {
   return (
     <BrowserRouter>
       <Headers>
-        <Link to="/">Home</Link>
+        <Link to="/register">Home</Link>
       </Headers>
       <Routes>
         <Route path="/*" element={<Home />} />
-        <Route path="/Register" element={<Register />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/register/signup" element={<SignUp />} />
       </Routes>
     </BrowserRouter>
   );
