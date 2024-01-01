@@ -53,6 +53,7 @@
   display: flex;
   margin: 10.6rem 10.7rem 2rem 11.4rem;
   flex-direction: column;
+  width: 28.2rem;
   font-size: 1.2rem;
 }
 
@@ -66,6 +67,26 @@
   margin: 0rem 10.7rem 0 11.4rem;
 }
 
+.FormSubmitBox {
+  background-color: #014171;
+  color: white;
+  font-size: 1.2rem;
+  border: 1px solid #014171; /* 테두리 추가, border 속성은 'border: 1px solid #014171;'로 설정 */
+  border-radius: 5rem;
+  height: 3rem;
+  width: 28.2rem;
+  cursor: pointer;
+}
+
+.UnableSubmitBox {
+  background-color: rgba(1, 65, 113, 0.50);
+  color: white;
+  font-size: 1.2rem;
+  border: 0px solid rgba(1, 65, 113, 0.50); /* 테두리 추가, border 속성은 'border: 1px solid #014171;'로 설정 */
+  border-radius: 5rem;
+  height: 3rem;
+  width: 28.2rem;
+}
 .FormRegister {
   display: flex;
   margin: 1.4rem 0 0 9rem;
@@ -76,15 +97,62 @@
 .ValidText {
   color: #d62117;
   font-size: 0.6rem;
+  margin : 0.2rem 0 0 0;
 }
 
-.StyledInput {
+.StyledInput24 { 
   border: none;
   border-bottom: 1px solid #6b6880;
   font-family: KBO-Dia-Gothic;
   font-weight: 300;
   font-size: 1.2rem;
   width: 28.2rem;
+  padding :0;
+  background-color: #fafafa;
+  margin-top : 2.4rem;
+}
+
+.StyledInput32 {
+  border: none;
+  border-bottom: 1px solid #6b6880;
+  font-family: KBO-Dia-Gothic;
+  font-weight: 300;
+  font-size: 1.2rem;
+  width: 28.2rem;
+  padding :0;
+  background-color: #fafafa;
+  margin-top : 3.2rem;
+}
+
+.StyledSelect {
+  border: none;
+  border-bottom: 1px solid #6b6880;
+  font-family: KBO-Dia-Gothic;
+  font-weight: 300;
+  font-size: 1.2rem;
+  width: 13rem;
+  padding :0;
+  background-color: #fafafa;
+  font-style: normal;
+}
+.StyledOption {
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  padding : 0;
+}
+
+.AuthButton {
+  border-radius: 0%;
+  border: 1px solid #6b6880;
+  background-color:#fafafa;
+  font-size: 1rem;
+  color:#6B6880;
+  width: 2.6rem;
+  height : 1.6rem;
+  margin-left : 0.4rem;
+  padding: 0 0 0.1rem 0;
+  cursor: pointer;
 }
 
 .PasswordInput {
@@ -93,15 +161,20 @@
 
 .StyledCheckbox {
   margin: 0 0.4rem 0 0;
+  border : 0.5rem solid #014171;
 }
 
 .FormCompleteTitle {
   color: #014171;
   font-size: 2.6rem;
   font-weight: 500;
-  margin: 23.1rem 10.3rem 0 9.7rem;
+  text-align: center;
+  margin: 23.1rem 0 0 0rem;
 }
 
 .FormCompleteText {
   margin: 2.8rem 7.6rem 0 7.3rem;
+  text-align: center;
+  color : #014171;
+  font-size: 2rem;
 }

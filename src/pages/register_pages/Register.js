@@ -2,10 +2,14 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IconEyeOff } from '@tabler/icons-react';
 import './Register.css';
-
+/*
+    아직 덜 처리한 부분
+    1.눈 위치
+    2.기능이 처리가 확실X -> 아이디 비번 둘 중에 하나만 틀려도 두개 다 보이게 해야할 지 헷갈림
+*/
 export default function Register() {
   const [id, setId] =useState(''); //ID 세팅
-  const [password, setPassword] =useState(''); //비밀번호 세팅
+  const [pw, setPw] =useState(''); //비밀번호 세팅
   const [idValid, setIdValid] =useState(true); //ID valid 확인
   const [pwValid, setPwValid] =useState(true); //비밀번호 valid 확인
   const [autoLogin,setAutoLogin] = useState(false); //자동 로그인 설정
@@ -17,10 +21,11 @@ export default function Register() {
   const handleLogin = (e) => {
     e.preventDefault();
     if(id==='exampleUser'){
-      if(password==='examplePassword'){
+      if(pw==='examplePassword'){
         navigate("/Home");
       }
       else{
+        setIdValid(true);
         setPwValid(false);
       }
     }
@@ -53,14 +58,14 @@ export default function Register() {
             <span className="FormBtn">로그인</span>
           </div>
           <div className="FormLogin">
-            <input className="StyledInput" type="email" placeholder="이메일(아이디)" value={id} onChange={(e) => setId(e.target.value)}/>
+            <input className="StyledInput32" type="email" placeholder="이메일(아이디)" value={id} style={{marginTop:"0rem"}} onChange={(e) => setId(e.target.value)}/>
             <p className="ValidText" style={{ visibility: idValid ? 'hidden' : 'visible' }}>
               올바른 이메일(아이디)을 입력해주세요
             </p>
             <div className="PasswordInput">
               <input
-                className="StyledInput" type={showPassword ? 'text' : 'password'}
-                placeholder="비밀번호" value={password}  onChange={(e) => setPassword(e.target.value)}
+                className="StyledInput32" type={showPassword ? 'text' : 'password'}
+                placeholder="비밀번호" value={pw}  onChange={(e) => setPw(e.target.value)}
               ></input>
               <IconEyeOff 
                 onClick={togglePasswordVisibility}
