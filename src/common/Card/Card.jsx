@@ -8,7 +8,7 @@ const Card = (props) => {
     }
     return (
         <div className='card-wrapper' onClick={handleCardClick}>
-            <div className='card-img-frame' style={{height:"16rem"}}>
+            <div className='card-img-frame'>
                 <img src={sample} alt="projectImg"/>
             </div>
             <div className='card-content'>

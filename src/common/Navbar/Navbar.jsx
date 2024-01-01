@@ -12,8 +12,8 @@ const Navbar = () => {
     return (
         <div className='app__nav'>
             <ul className='app__nav_items'>
-                <li className='app__nav_item nav-logo'><Link to="/Home"><img src={Logo}/></Link></li>
-                <li className='app__nav_item nav-home'><Link to="/Home" color="white">Home</Link></li>
+                <li className='app__nav_item'><Link to="/Home"><img src={Logo}/></Link></li>
+                <li className='app__nav_item nav-home'><Link to="/Home">Home</Link></li>
                 <li className='app__nav_item nav-loginButton'><button onClick={navigateToLogin}>Login</button></li>
             </ul>
         </div>

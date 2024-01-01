@@ -73,6 +73,12 @@ const FormContent=styled.div`
       display: none;
     }
 
+    > .project-img{
+      display:flex;
+      justify-content:center;
+      margin-bottom:4.7rem;
+    }
+
     > div >.project-title{
       color: #131313;
 
@@ -122,7 +128,9 @@ const ProjectDetail = () => {
                 </FormTitleMenu>
               </FormTitle>
               <FormContent>
-                <div className='project-img' style={{display:"flex",justifyContent:"center",marginBottom:"4.7rem"}}><img src={sample} alt="영화디테일"/></div>
+                <div className='project-img'>
+                  <img src={sample} alt="프로젝트디테일"/>
+                </div>
                 {DETAIL_NAV.map(({idx,name})=>{
                   return(
                     <>
