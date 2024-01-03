@@ -1,40 +1,39 @@
-.app__nav{
-    width:100%;
-    padding:0 22rem;
+.app__nav {
+  width: 100%;
+  padding: 0 22rem;
 }
-.app__nav_items{
-    display:flex;
-    justify-content: space-between;
-    align-items:center;
-    justify-items: center;
+.app__nav_items {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  justify-items: center;
 
-    padding:0 8.6rem;
-}
-
-.app__nav_item{
-    width:12rem;
+  padding: 0 8.6rem;
 }
 
-.app__nav_item.nav-home > a{
-    text-decoration: none;
-    font-family: KBO-Dia-Gothic;
-    font-size: 2.4rem;
-    font-weight: 300;
-    color:#CECDD5;
-    padding-bottom:0.5rem ;
-    border-bottom:0.1rem white solid;
+.app__nav_item {
+  width: 12rem;
 }
 
-.app__nav_item.nav-loginButton > button{
-    background: inherit;
-    width:7.8rem;
-    height:2.4rem;
-    border-radius: 5px;
-    border:1px #0261AA solid;
-    color:#FAFAFA;
-    
-    font-size: 1.4rem;
-    font-family: KBO-Dia-Gothic;
-    font-weight: 300;
-    
+.app__nav_item.nav-home > a {
+  text-decoration: none;
+  font-family: KBO-Dia-Gothic;
+  font-size: 2.4rem;
+  font-weight: 300;
+  color: #cecdd5;
+  padding-bottom: 0.5rem;
+  border-bottom: 0.1rem white solid;
+}
+
+.app__nav_item.nav-loginButton > button {
+  background: inherit;
+  width: 7.8rem;
+  height: 2.4rem;
+  border-radius: 5px;
+  border: 1px #0261aa solid;
+  color: #fafafa;
+
+  font-size: 1.4rem;
+  font-family: KBO-Dia-Gothic;
+  font-weight: 300;
 }
