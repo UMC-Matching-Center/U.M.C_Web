@@ -83,7 +83,7 @@ export default function Signup() {
   const [pwEqual, setpwEqual] = useState(-1); //비밀번호 일치 확인 (-1: 초기 설정, 0: 불일치, 1: 일치)
 
   const [adminLogin, setAdminLogin] = useState(false); //관리자 로그인 설정
-  const [ableBtn, setAbleBtn] = useState(false); //버튼 Enable 여부
+  const [ableBtn, setAbleBtn] = useState(true); //버튼 Enable 여부
   const navigate = useNavigate();
 
   /* ---- ID 관련 ----- */
@@ -152,8 +152,7 @@ export default function Signup() {
   //회원가입 제출 후 다음으로 이동
   const handleSubmit = (e) => {
     e.preventDefault();
-    const connectUrl = !adminLogin ? "./mode1r" : "./mode2";
-    navigate(connectUrl, { state: { id: id, pw: pw } });
+    navigate("../detail", { state: { id: id, pw: pw } });
   };
 
   return (
@@ -310,7 +309,7 @@ export default function Signup() {
                 <span>이미 계정이 있으신가요?</span>
                 <span
                   onClick={() => {
-                    navigate("/register");
+                    navigate("..");
                   }}
                 >
                   로그인

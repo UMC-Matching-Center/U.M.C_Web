@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { IconAlignCenter } from "@tabler/icons-react";
 import Card from "../common/Card/Card";
 import styled from "styled-components";
 import "./Home.css";
@@ -162,7 +161,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleProjectClick = (project) => {
-    navigate(`/Home/project/${project.title}`, {
+    navigate(`../project/${project.title}`, {
       state: {
         item: { project },
       },
@@ -191,9 +190,6 @@ const Home = () => {
       <div className="app__main-contents">
         <div className="app__main-filter">
           <div className="app__main-filterWrap">
-            <div className="app__main-filter-icon">
-              <IconAlignCenter color="#FAFAFA" size={30} />
-            </div>
             <SelectBox
               className="app__main-filter-content"
               onClick={() => setIsShowOptions((prev) => !prev)}

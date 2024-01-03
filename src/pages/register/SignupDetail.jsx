@@ -232,7 +232,7 @@ export default function UserSignup() {
                 <span>계정이 있으신가요?</span>
                 <span
                   onClick={() => {
-                    navigate("/register");
+                    navigate("..");
                   }}
                 >
                   로그인

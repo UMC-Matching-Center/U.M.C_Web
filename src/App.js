@@ -19,7 +19,7 @@ function App() {
       </Headers>
       <Routes>
         <Route path="/*" element={<Home />} />
-        <Route path="/Home/project/*" element={<ProjectDetail />} />
+        <Route path="/project/*" element={<ProjectDetail />} />
         <Route path="/register/*" element={<Register />} />
       </Routes>
     </BrowserRouter>

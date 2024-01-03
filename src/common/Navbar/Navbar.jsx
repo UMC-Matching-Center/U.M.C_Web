@@ -7,18 +7,18 @@ import "./Navbar.css";
 const Navbar = () => {
   const navigate = useNavigate();
   const navigateToLogin = () => {
-    navigate("/register/login");
+    navigate("/register");
   };
   return (
     <div className="app__nav">
       <ul className="app__nav_items">
         <li className="app__nav_item">
-          <Link to="/Home">
+          <Link to="/">
             <img src={Logo} />
           </Link>
         </li>
         <li className="app__nav_item nav-home">
-          <Link to="/Home">Home</Link>
+          <Link to="/">Home</Link>
         </li>
         <li className="app__nav_item nav-loginButton">
           <button onClick={navigateToLogin}>Login</button>

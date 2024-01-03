@@ -9,8 +9,7 @@ import {
   IconSquareCheckFilled,
 } from "@tabler/icons-react";
 import Signup from "./Signup";
-import SignupUser from "./SignupUser";
-import SignupAdmin from "./SignupAdmin";
+import SignupDetail from "./SignupDetail";
 import SignupSuccess from "./SignupSuccess";
 
 // input간 간격
@@ -191,7 +190,7 @@ function Login() {
                 <span>계정이 없으신가요?</span>
                 <span
                   onClick={() => {
-                    navigate("/register/signup");
+                    navigate("./signup");
                   }}
                 >
                   회원가입
@@ -211,8 +210,7 @@ function Register() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/signup/mode1" element={<SignupUser />} />
-        <Route path="/signup/mode2" element={<SignupAdmin />} />
+        <Route path="/detail" element={<SignupDetail />} />
         <Route path="/complete" element={<SignupSuccess />} />
       </Routes>
     </div>
