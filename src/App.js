@@ -9,7 +9,8 @@ import ProjectDetail from "./components/ProjectDetail";
 function App() {
   const Headers = styled.div`
     display: flex;
-    padding: 3.9rem 0;
+    justify-content: center;
+    padding: 3.9rem 8.6rem;
   `;
 
   return (
