@@ -289,21 +289,27 @@ const AdminNavbar = () => {
             strokeWidth={1}
             color={"#cecdd5"}
             size={36}
-            onClick={() => navigate("/")}
+            onClick={() => {
+              navigate("/");
+            }}
           />
           <IconBell
             strokeWidth={1}
             color={"#cecdd5"}
             size={36}
             style={{ margin: "0 2.4rem" }}
-            onClick={() => setIsViewModal((pre) => !pre)}
+            onClick={() => {
+              setIsViewModal((pre) => !pre);
+            }}
           />
           <RedCircleFilled aliveAlarm={aliveAlarm} />
           <IconUser
             strokeWidth={1}
             color={"#cecdd5"}
             size={36}
-            onClick={() => navigate("/mypage")}
+            onClick={() => {
+              navigate("/mypage"), handleNavIndex(4);
+            }}
           />
         </UserNavItem>
       </UserNavItems>
