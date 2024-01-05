@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: space-between;
   padding-left: 0;
-  padding-right: 3rem;
+  padding: 0 2rem;
 }
 
 .app__nav_item.nav-home > a {
@@ -18,7 +18,7 @@
   color: #cecdd5;
   margin-right: 5rem;
   padding-bottom: 0.5rem;
-  border-bottom: 0.1rem white solid;
+  border-bottom: 0.1rem #cecdd5 solid;
 }
 
 .app__nav_item.nav-loginButton > button {

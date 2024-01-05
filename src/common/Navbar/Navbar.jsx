@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "../../images/logo.png";
+import Logo from "../../images/logo_crop.png";
 import { Link, useNavigate } from "react-router-dom";
 
 import "./Navbar.css";
