@@ -96,7 +96,7 @@ const RedCircleFilled = styled.div`
   left: 8.8rem;
 `;
 const AlarmModal = styled.div`
-  display: ${(props) => props.display && "none"};
+  display: ${(props) => !props.display && "none"};
   z-index: 2;
   position: absolute;
   left: 81rem;
