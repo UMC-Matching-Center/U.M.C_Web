@@ -133,41 +133,61 @@ const MyPageInput = styled.input`
   border-bottom: 0.1rem solid #6b6880;
   background: transparent;
 `;
-const DropDownArea = styled.div`
+
+const SelectBox = styled.div`
+  z-index: 1;
+  position: relative;
   min-width: 20rem;
   border-bottom: 0.1rem solid #6b6880;
+  align-self: center;
+  cursor: pointer;
+  &::before {
+    content: ${(props) =>
+      props.show
+        ? `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-up" width="15" height="15" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 15l6 -6l6 6" /></svg>')`
+        : `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-down" width="15" height="15" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg>')`};
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
 `;
-
-const DropDownArrow = btoa(`
-  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none">
-    <path d="M1 1L5 5L9 1" stroke="#6B6880" stroke-linecap="round"/>
-  </svg>`);
-
-const DropDownSelect = styled.select`
-  border: none;
-  outline: none;
-  font-family: KBO-Dia-Gothic;
-  font-weight: 300;
+const Label = styled.label`
   font-size: 1.2rem;
-  color: #6b6880;
-  background-color: #fafafa00;
-  font-style: normal;
-  text-align: left;
-  width: 100%;
-  padding: 0.2rem 0;
-  -o-appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background: url("data:image/svg+xml;base64, ${DropDownArrow}") no-repeat right
-    0.5rem center/0.8rem 0.6rem;
+  text-align: center;
 `;
+const SelectOptions = styled.ul`
+  position: absolute;
+  list-style: none;
+  left: 0;
+  top: 1rem;
+  width: 20rem;
+  height: 10rem;
+  padding: 0;
+  overflow-y: scroll;
 
-const DropDownOption = styled.option`
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
-  padding: 0.5rem;
+  &::-webkit-scrollbar {
+    width: 0.6rem;
+  }
+  &::-webkit-scrollbar-thumb {
+    height: 10%;
+    border-radius: 5rem;
+    background-color: #9c9aab;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  max-height: ${(props) => (props.show ? "none" : "0")};
+  background-color: #fafafa;
+
+  color: #010004;
+  font-family: KBO-Dia-Gothic;
+
+  display: flex;
+  flex-direction: column;
+`;
+const Option = styled.li`
+  font-size: 1rem;
+  padding: 0.8rem 0.3rem;
 `;
 
 const MyPageButton = styled.button`
@@ -200,7 +220,9 @@ const MyPage = () => {
   const [rePwd, setRePwd] = useState("12345678"); //비밀번호 재입력 값
   //const [phoneNumber,setPhoneNumber] = useState("010-1234-5678"); // 대표전화 입력 값
   const [isMatched, setIsMatched] = useState(false); //pwd,rePwd 일치 여부
-  const [office, setOffice] = useState("");
+  const [isShowOptions, setIsShowOptions] = useState(false);
+  const [office, setOffice] = useState("GACI 지부");
+
   const handleChangePw = (e) => {
     const inputPwd = e.target.value;
     setPwd(inputPwd); // input에서 입력받은 비밀번호 변경
@@ -210,6 +232,9 @@ const MyPage = () => {
     setRePwd(inputRePwd); // input에서 입력받은 확인용 비밀번호 변경
   };
 
+  const handleOnChangeOption = (name) => {
+    setOffice(name);
+  };
   useEffect(() => {
     if (pwd !== "" && rePwd !== "") {
       setIsMatched(pwd.localeCompare(rePwd) === 0 ? 1 : 0); // pwd, rePwd 일치 여부 설정
@@ -278,27 +303,23 @@ const MyPage = () => {
               <div className="form-label" style={{ marginRight: "3.7rem" }}>
                 지부 선택
               </div>
-              <DropDownArea>
-                {/* 지부 */}
-                <DropDownSelect
-                  value={office}
-                  onChange={(e) => setOffice(e.target.value)}
-                >
-                  <DropDownOption disabled selected>
-                    GACI 지부
-                  </DropDownOption>
-                  <DropDownOption disabled>------</DropDownOption>
-                  {OfficeOptionsDummy.map((option) => (
-                    <DropDownOption key={option.value} value={option.value}>
+              <SelectBox
+                className="app__main-filter-content"
+                onClick={() => setIsShowOptions((prev) => !prev)}
+                show={isShowOptions}
+              >
+                <Label>{office}</Label>
+                <SelectOptions show={isShowOptions}>
+                  {OfficeOptionsDummy.map((option, i) => (
+                    <Option
+                      onClick={() => handleOnChangeOption(option.name)}
+                      key={i}
+                    >
                       {option.name}
-                    </DropDownOption>
+                    </Option>
                   ))}
-                </DropDownSelect>
-                <div
-                  className="FormInputUnderline"
-                  style={{ minHeight: "0" }}
-                />
-              </DropDownArea>
+                </SelectOptions>
+              </SelectBox>
             </FormArea>
             <MyPageButton
               onClick={() => {
