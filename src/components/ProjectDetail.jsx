@@ -16,16 +16,17 @@ const ProjectDetailWrapper = styled.div`
   display: flex;
   justify-content: center;
 
-  margin-top: 5.85rem;
+  margin-top: 5.8rem;
 `;
 const ProjectDetailForm = styled.div`
   width: 120rem;
-  height: 73.2rem;
+  max-height: 73.2rem;
   background: #fafafa;
+  padding: 3rem 0;
 
   border-radius: 1rem;
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
 `;
@@ -37,27 +38,27 @@ const FormTitle = styled.div`
 const FormTitleMenu = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 6rem;
+  max-width: 13.7rem;
+  margin-top: 3rem;
+  margin-left: 4.2rem;
   padding: 0.5rem 0;
-  border-left: 0.1rem solid #6b6880;
 
   > div {
     margin-left: 1rem;
     margin-bottom: 1rem;
 
-    color: #6b6880;
+    color: #cecdd5;
     font-family: KBO-Dia-Gothic;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     font-weight: 300;
 
     border: 0;
     background-color: transparent;
     cursor: pointer;
 
-    // &.active {
-    //   box-sizing: border-box;
-    //   border-bottom: 0.6rem solid #e7e6ea;
-    // }
+    &.active {
+      color: #08032c;
+    }
   }
 `;
 
@@ -66,9 +67,9 @@ const FormContent = styled.div`
   flex-direction: column;
 
   width: 70.2rem;
-  height: 64.7rem;
-  margin-left: 24.8rem;
-  margin-right: 5.5rem;
+  max-height: 64.7rem;
+  margin-left: 6.5rem;
+  margin-right: 24.9rem;
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;
