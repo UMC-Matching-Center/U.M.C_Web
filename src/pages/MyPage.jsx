@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { IconPhotoPlus, IconPencil } from "@tabler/icons-react";
 
@@ -115,15 +115,6 @@ const FormArea = styled.div`
     font-size: 1.2rem;
     font-weight: 300;
   }
-  .form-pwd-confirm {
-    display: flex;
-    flex-direction: column;
-  }
-  .form-pwd-text {
-    color: #014171;
-    font-size: 0.8rem;
-    margin-top: 0.25rem;
-  }
 `;
 
 const MyPageInput = styled.input`
@@ -134,6 +125,9 @@ const MyPageInput = styled.input`
   background: transparent;
 `;
 
+{
+  /*드롭박스 커스텀*/
+}
 const SelectBox = styled.div`
   z-index: 1;
   position: relative;
@@ -190,21 +184,6 @@ const Option = styled.li`
   padding: 0.8rem 0.3rem;
 `;
 
-const MyPageButton = styled.button`
-  background: #014171;
-  color: #fafafa;
-  font-family: KBO-Dia-Gothic;
-  font-size: 1.2rem;
-  font-weight: 300;
-  border: none;
-  box-shadow: none;
-  width: 11.8rem;
-  height: 3rem;
-  border-radius: 5rem;
-  padding: 0;
-  overflow: visible;
-  cursor: pointer;
-`;
 //학교 option들 정의
 const OfficeOptionsDummy = [
   { value: "GACI", name: "GACI 지부" },
@@ -216,30 +195,13 @@ const OfficeOptionsDummy = [
 ];
 
 const MyPage = () => {
-  const [pwd, setPwd] = useState("12345678"); //비밀번호 입력값
-  const [rePwd, setRePwd] = useState("12345678"); //비밀번호 재입력 값
-  //const [phoneNumber,setPhoneNumber] = useState("010-1234-5678"); // 대표전화 입력 값
-  const [isMatched, setIsMatched] = useState(false); //pwd,rePwd 일치 여부
+  const [phoneNumber] = useState("010-1234-5678"); // 대표전화 입력 값
   const [isShowOptions, setIsShowOptions] = useState(false);
   const [office, setOffice] = useState("GACI 지부");
-
-  const handleChangePw = (e) => {
-    const inputPwd = e.target.value;
-    setPwd(inputPwd); // input에서 입력받은 비밀번호 변경
-  };
-  const handleChangeRePw = (e) => {
-    const inputRePwd = e.target.value;
-    setRePwd(inputRePwd); // input에서 입력받은 확인용 비밀번호 변경
-  };
 
   const handleOnChangeOption = (name) => {
     setOffice(name);
   };
-  useEffect(() => {
-    if (pwd !== "" && rePwd !== "") {
-      setIsMatched(pwd.localeCompare(rePwd) === 0 ? 1 : 0); // pwd, rePwd 일치 여부 설정
-    }
-  }, [pwd, rePwd]);
 
   return (
     <Container>
@@ -256,7 +218,7 @@ const MyPage = () => {
               strokeWidth={1}
               color={"#6B6880"}
               onClick={() => {
-                /*수정 아이콘? 클릭 시 이벤트 함수 추후 구현*/
+                /*연필 아이콘 클릭 시 수정 화면이동*/
               }}
             />
             <ProfileBoxContent>
@@ -267,37 +229,11 @@ const MyPage = () => {
         </ProfileBoxWrapper>
         <InfoBox>
           <BoxForm>
-            <FormArea bottom="1.7rem">
-              <div className="form-label" style={{ marginRight: "4rem" }}>
-                비밀번호
-              </div>
-              <MyPageInput value={pwd} onChange={handleChangePw} />
-            </FormArea>
-            <FormArea bottom="2.3rem">
-              <div className="form-label" style={{ marginRight: "1.7rem" }}>
-                비밀번호 확인
-              </div>
-              <div className="form-pwd-confirm">
-                <MyPageInput
-                  type="password"
-                  value={rePwd}
-                  onChange={handleChangeRePw}
-                />
-                <div
-                  className="form-pwd-text"
-                  style={{ color: isMatched ? "#014171" : "#d62117" }}
-                >
-                  {isMatched
-                    ? "비밀번호가 일치합니다."
-                    : "비밀번호가 일치하지 않습니다."}
-                </div>
-              </div>
-            </FormArea>
             <FormArea bottom="3.2rem">
               <div className="form-label" style={{ marginRight: "3.7rem" }}>
                 대표 번호
               </div>
-              <MyPageInput />
+              <MyPageInput value={phoneNumber} disabled />
             </FormArea>
             <FormArea bottom="3.2rem">
               <div className="form-label" style={{ marginRight: "3.7rem" }}>
@@ -305,7 +241,7 @@ const MyPage = () => {
               </div>
               <SelectBox
                 className="app__main-filter-content"
-                onClick={() => setIsShowOptions((prev) => !prev)}
+                onClick={() => setIsShowOptions(false)}
                 show={isShowOptions}
               >
                 <Label>{office}</Label>
@@ -321,13 +257,6 @@ const MyPage = () => {
                 </SelectOptions>
               </SelectBox>
             </FormArea>
-            <MyPageButton
-              onClick={() => {
-                /*마이페이지 수정내역 저장 이벤트 구현*/
-              }}
-            >
-              저장
-            </MyPageButton>
           </BoxForm>
         </InfoBox>
       </BoxWrapper>
