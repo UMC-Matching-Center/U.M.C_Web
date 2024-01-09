@@ -8,6 +8,31 @@ const InputGap = styled.div`
   margin-top: 3.2rem;
 `;
 
+// email 부분 layout
+const EmailArea = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+// 이메일 input 태그 관련 영역
+const EmailInputArea = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+`;
+
+// 이메일 인증 버튼
+const EmailAuth = styled.button`
+  border: 1px solid #6b6880;
+  background-color: #fafafa00;
+  font-size: 1rem;
+  color: #6b6880;
+  box-sizing: border-box;
+  width: 2.6rem;
+  padding: 0;
+  margin-left: 0.6rem;
+`;
+
 const SchoolAndPartArea = styled.div`
   display: flex;
   flex-direction: row;
@@ -50,27 +75,51 @@ const DropDownOption = styled.option`
   padding: 0;
 `;
 
-/*
-    아직 덜 처리한 부분(AdminSignup과 동일)
-    2.select 값 왼쪽으로 정렬
-*/
-
 export default function UserSignup() {
+  const [email, setEmail] = useState(""); //Email 세팅
+  const [emailValid, setEmailValid] = useState(-1); //Email 유효 (-1: 초기 설정 / 0:[형식 X •인증 X] / 1:[형식 O•인증 X] / 2:[형식 O•인증 O])
+  const [emailAuth, setEmailAuth] = useState(false); //ID Auth 확인
   const [name, setName] = useState(""); //이름
   const [nickname, setNickname] = useState(""); //닉네임
-  const [school, setSchool] = useState("학교"); //학교
+  const [year, setYear] = useState("기수"); //기수
   const [part, setPart] = useState("파트"); //파트
   const [phoneNumber, setPhoneNumber] = useState(""); //전화번호
   const [portfolio, setPortfolio] = useState(""); //포트폴리오 링크
   const [ableBtn, setAbleBtn] = useState(false); //회원가입 버튼
   const navigate = useNavigate();
 
-  //학교 option들 정의
-  const SchoolOptionsDummy = [
-    { value: "Catholic", name: "가톨릭대" },
-    { value: "Gachon", name: "가천대" },
-    { value: "Azu", name: "아주대" },
-    { value: "Inha", name: "인하대" },
+  /* ---- Email 관련 ----- */
+  const handleChangeId = (e) => {
+    if (emailValid === -1) setEmailValid(0); //Email Valid 검사 시작
+    const inputId = e.target.value;
+    setEmail(inputId);
+    setEmailAuth(false); //Email 작성 시 인증 여부 초기화
+    setEmailValid(validatEmail(inputId)); //Email 형식 여부
+    //setEmailAuth(AuthatEmail(inputId)); //Email 인증 여부
+  };
+
+  //Email 형식 조건
+  const validatEmail = (e) => {
+    //Email Valid 여부
+    const emailtest = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailtest.test(e) ? 1 : 0; // (0: 형식 X •인증 X, 1: 형식 O•인증 X)
+  };
+
+  //Email 인증 여부
+  const onClickAuth = () => {
+    //API 연동 필요!!!
+    setEmailAuth(!emailAuth);
+    if (emailValid === 1 && emailAuth) setEmailValid(2); // (2: 형식 일치•인증)
+    else setEmailValid(1); // (1: 형식 일치•비인증)
+  };
+
+  //기수 option들 정의
+  const YearDummy = [
+    { value: "1st", name: "1기" },
+    { value: "2nd", name: "2기" },
+    { value: "3rd", name: "3기" },
+    { value: "4th", name: "4기" },
+    { value: "5th", name: "5기" },
   ];
 
   //파트들 정의
@@ -85,15 +134,16 @@ export default function UserSignup() {
   ];
 
   useEffect(() => {
-    //이름, 닉네임, 전화번호, 학교, 파트가 모두 입력•선택되었을 때 버튼 활성화
+    //이메일, 이름, 닉네임, 전화번호, 기수, 파트가 모두 정상일 때 버튼 활성화
     setAbleBtn(
-      name !== "" &&
+      emailValid === 2 &&
+        name !== "" &&
         nickname !== "" &&
         phoneNumber !== "" &&
-        school !== "학교" &&
+        year !== "기수" &&
         part !== "파트"
     );
-  }, [name, nickname, phoneNumber, school, part]);
+  }, [emailValid, name, nickname, phoneNumber, year, part]);
 
   //회원가입 제출 후 다음으로 이동
   const handleSubmit = (e) => {
@@ -121,6 +171,37 @@ export default function UserSignup() {
           {/* 일반 유저 회원가입 폼 */}
           <div className="FormDetail">
             <div style={{ width: "100%" }}>
+              {/* 이메일(아이디) 관련 */}
+              <EmailArea>
+                <EmailInputArea>
+                  <input
+                    className="FormInput"
+                    type="email"
+                    placeholder="이메일"
+                    value={email}
+                    onChange={handleChangeId}
+                  />
+                  <div className="FormInputUnderline" />
+                </EmailInputArea>
+                <EmailAuth onClick={onClickAuth} disabled={emailValid !== 1}>
+                  인증
+                </EmailAuth>
+              </EmailArea>
+              <div
+                className="ValidText"
+                style={{
+                  visibility: emailValid === -1 ? "hidden" : "visible",
+                  color: emailValid === 2 ? "#014171" : "#d62117",
+                }}
+              >
+                {emailValid == 2
+                  ? "이메일이 인증되었습니다."
+                  : emailValid == 1
+                    ? "이메일이 인증되지 않았습니다."
+                    : "이메일 형식이 정확하지 않습니다."}
+              </div>
+              <InputGap style={{ marginTop: "2.3rem" }} />
+
               {/* 이름 부분 */}
               <input
                 className="FormInput"
@@ -144,19 +225,19 @@ export default function UserSignup() {
               <div className="FormInputUnderline" />
               <InputGap />
 
-              {/* 학교, 파트 부분 */}
+              {/* 기수, 파트 부분 */}
               <SchoolAndPartArea>
                 <DropDownArea>
-                  {/* 학교 */}
+                  {/* 기수 */}
                   <DropDownSelect
-                    value={school}
-                    onChange={(e) => setSchool(e.target.value)}
+                    value={year}
+                    onChange={(e) => setYear(e.target.value)}
                   >
                     <DropDownOption disabled selected>
-                      학교
+                      기수
                     </DropDownOption>
                     <DropDownOption disabled>------</DropDownOption>
-                    {SchoolOptionsDummy.map((option) => (
+                    {YearDummy.map((option) => (
                       <DropDownOption key={option.value} value={option.value}>
                         {option.name}
                       </DropDownOption>

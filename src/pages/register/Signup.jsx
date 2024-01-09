@@ -2,13 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import "./Register.css";
-import {
-  IconEyeOff,
-  IconEye,
-  IconCheck,
-  IconSquare,
-  IconSquareCheckFilled,
-} from "@tabler/icons-react";
+import { IconEyeOff, IconEye, IconCheck } from "@tabler/icons-react";
 
 // input간 간격
 const InputGap = styled.div`
@@ -82,7 +76,6 @@ export default function Signup() {
 
   const [pwEqual, setpwEqual] = useState(-1); //비밀번호 일치 확인 (-1: 초기 설정, 0: 불일치, 1: 일치)
 
-  const [adminLogin, setAdminLogin] = useState(false); //관리자 로그인 설정
   const [ableBtn, setAbleBtn] = useState(true); //버튼 Enable 여부
   const navigate = useNavigate();
 
@@ -143,11 +136,6 @@ export default function Signup() {
       idValid == 2 && pwEnglish && pwNumber && pwLength && pwEqual === 1
     ); //나중에 인증기능 추가시 && idAuth 추가
   }, [idValid, pwEnglish, pwNumber, pwLength, pwEqual]); // 동일하게 ", idAuth" 추가
-
-  //관리자 로그인 설정 및 상태를 반전시켜 업데이트
-  const handleAdminLogin = () => {
-    setAdminLogin(!adminLogin);
-  };
 
   //회원가입 제출 후 다음으로 이동
   const handleSubmit = (e) => {
@@ -264,30 +252,6 @@ export default function Signup() {
                 {pwEqual === 1
                   ? "비밀번호가 일치합니다."
                   : "비밀번호가 일치하지 않습니다."}
-              </div>
-
-              {/* 관리자 회원가입 여부 */}
-              <div className="FormCheckArea">
-                <input
-                  id="adminLogin"
-                  type="checkbox"
-                  checked={adminLogin}
-                  onChange={handleAdminLogin}
-                />
-                <label htmlFor="adminLogin" className="FormCheckCustom">
-                  {adminLogin ? (
-                    <IconSquareCheckFilled
-                      htmlFor="autoLogin"
-                      className="FormCheckCustom"
-                    />
-                  ) : (
-                    <IconSquare
-                      htmlFor="autoLogin"
-                      className="FormCheckCustom"
-                    />
-                  )}
-                </label>
-                <span>관리자 회원가입</span>
               </div>
 
               {/* 다음 버튼 */}
