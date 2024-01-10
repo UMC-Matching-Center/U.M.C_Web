@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "../common/Card/Card";
-import styled from "styled-components";
 import "./Home.css";
 
 const projectsDummy = [
@@ -83,79 +82,38 @@ const projectsDummy = [
     description: "설명",
     imageUrl: "../../images/sample_project.png",
   },
+  {
+    id: 14,
+    title: "프로젝트 이름",
+    description: "설명",
+    imageUrl: "../../images/sample_project.png",
+  },
+  {
+    id: 15,
+    title: "프로젝트 이름",
+    description: "설명",
+    imageUrl: "../../images/sample_project.png",
+  },
+  {
+    id: 16,
+    title: "프로젝트 이름",
+    description: "설명",
+    imageUrl: "../../images/sample_project.png",
+  },
+  {
+    id: 17,
+    title: "프로젝트 이름",
+    description: "설명",
+    imageUrl: "../../images/sample_project.png",
+  },
 ];
 
-const SelectBox = styled.div`
-  z-index: 1;
-  position: relative;
-  width: 11rem;
-  padding: 0.8rem;
-  border-radius: 0.5rem;
-  background-color: #ffffff;
-  align-self: center;
-  cursor: pointer;
-  &::before {
-    content: "⌵";
-    position: absolute;
-    top: 0.1rem;
-    right: 0.8rem;
-    font-size: 2rem;
-  }
-`;
-const Label = styled.label`
-  font-size: 1.2rem;
-  margin-left: 0.4rem;
-  text-align: center;
-`;
-const SelectOptions = styled.ul`
-  position: absolute;
-  list-style: none;
-  left: 0;
-  width: 11rem;
-  padding: 0 0.8rem;
-  overflow: hidden;
-  height: 12rem;
-  max-height: ${(props) => (props.show ? "none" : "0")};
-  border-radius: 0.5rem;
-  background-color: #fafafa;
-  color: #010004;
-  font-family: KBO-Dia-Gothic;
-  font-size: 1rem;
-`;
-const Option = styled.li`
-  font-size: 1.2rem;
-  padding: 0.8rem 1rem;
-  transition: background-color 0.2s ease-in;
-  &:hover {
-    background-color: #fafafa;
-  }
-`;
 const Home = () => {
-  /*n개씩 보기*/
-  const [cardCount, setCardCount] = useState(6);
-  const [moreCount, setMoreCount] = useState(3);
-  const changeViewCount = (count) => {
-    setMoreCount(count);
-  };
+  const [cardCount, setCardCount] = useState(15);
+
   const handleShowMoreCount = () => {
-    setCardCount((prev) => prev + moreCount);
+    setCardCount((prev) => prev + 15);
   };
-  /*필터 메뉴*/
-  const [isShowOptions, setIsShowOptions] = useState(false);
-  const [currentValue, setCurrentValue] = useState("3개씩 보기");
-  const handleOnChangeOption = (num, content) => {
-    setCurrentValue(content);
-
-    num === 3 ? setCardCount(6) : setCardCount(num); //초기에 보여지는 카드 개수 설정
-    changeViewCount(num); // 추가적으로 보여지는 카드 개수 설정
-  };
-
-  const optionList = [
-    { num: 3, content: "3개씩 보기" },
-    { num: 15, content: "15개씩 보기" },
-    { num: 30, content: "30개씩 보기" },
-    { num: 60, content: "60개씩 보기" },
-  ];
 
   /*프로젝트 카드 클릭 후 상세 페이지 이동*/
   const navigate = useNavigate();
@@ -187,42 +145,13 @@ const Home = () => {
 
   return (
     <div className="app__main">
-      <div className="app__main-contents">
-        <div className="app__main-filter">
-          <div className="app__main-filterWrap">
-            <SelectBox
-              className="app__main-filter-content"
-              onClick={() => setIsShowOptions((prev) => !prev)}
-            >
-              <Label>{currentValue}</Label>
-              <SelectOptions show={isShowOptions}>
-                {optionList.map((option, i) => (
-                  <Option
-                    onClick={() =>
-                      handleOnChangeOption(option.num, option.content)
-                    }
-                    key={i}
-                  >
-                    {option.content}
-                  </Option>
-                ))}
-              </SelectOptions>
-            </SelectBox>
-          </div>
-        </div>
-        <div className="app__main-projects">
-          {projectsDummy.slice(0, cardCount).map((project, index) => {
-            return (
-              <Card
-                project={project}
-                key={index}
-                onClick={handleProjectClick}
-              />
-            );
-          })}
-        </div>
+      <div className="app__main-projects">
+        {projectsDummy.slice(0, cardCount).map((project, index) => {
+          return (
+            <Card project={project} key={index} onClick={handleProjectClick} />
+          );
+        })}
       </div>
-      <div></div>
     </div>
   );
 };
