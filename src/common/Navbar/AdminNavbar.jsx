@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Logo from "../../images/logo_crop.png";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,31 +14,37 @@ const AlarmDummy = [
     type: "match",
     content: "00 챌린저의 매칭이 완료되었습니다.",
     date: "2023년 12월 12일",
+    is_cofirm: false,
   },
   {
     type: "match",
     content: "새로운 챌린저의 가입신청이 등록되었습니다.",
     date: "2023년 12월 12일",
+    is_cofirm: false,
   },
   {
     type: "join",
     content: "00 챌린저의 매칭이 완료되었습니다.",
     date: "2023년 12월 12일",
+    is_cofirm: true,
   },
   {
     type: "match",
     content: "00 챌린저의 매칭이 완료되었습니다.",
     date: "2023년 12월 12일",
+    is_cofirm: true,
   },
   {
     type: "join",
     content: "새로운 챌린저의 가입신청이 등록되었습니다.",
     date: "2023년 12월 12일",
+    is_confirm: true,
   },
   {
     type: "match",
     content: "00 챌린저의 매칭이 완료되었습니다.",
     date: "2023년 12월 12일",
+    is_cofirm: true,
   },
 ];
 const UserNavWrapper = styled.div`
@@ -85,6 +91,36 @@ const UserNavMenuItem = styled.div`
     color: #cecdd5;
   }
 `;
+
+const SubMenuWrapper = styled.div`
+  padding-top: 1.8rem;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: none;
+  flex-direction: column;
+  z-index: 1;
+
+  ${UserNavMenuItem}:hover & {
+    display: flex;
+  }
+`;
+
+const SubMenuItem = styled(UserNavMenuItem)`
+  width: 13.5rem;
+  margin-bottom: 0.2rem;
+  > a {
+    color: #cecdd5;
+    font-weigth: 300;
+    font-size: 1.8rem;
+
+    &:hover {
+      font-weight: 500;
+      color: #e7e6ea;
+    }
+  }
+`;
+
 const RedCircleFilled = styled.div`
   display: ${(props) => !props.aliveAlarm && "none"};
   position: absolute;
@@ -215,31 +251,40 @@ const AdminNavbar = () => {
   const [aliveAlarm, setAliveAlarm] = useState(true);
   /*알림창 토글*/
   const [isViewModal, setIsViewModal] = useState(false);
-  /*각 알림을 읽었는지를 나타내는 bluecircle 표시*/
-  const [blueCircleVisibility, setBlueCircleVisibility] = useState(
-    Array(AlarmDummy.length).fill(true)
-  );
+  /*각 알림을 읽었는지를 나타내는 bluecircle 표시 = is_confirmed*/
+  const [blueCircleVisibility, setBlueCircleVisibility] = useState([
+    false,
+    false,
+    true,
+    true,
+    true,
+    true,
+  ]);
+
   /*선택된 메뉴 표시*/
   const [selectIndex, setSelectIndex] = useState(0);
   const handleNavIndex = (idx) => {
     setSelectIndex(idx);
   };
 
-  /*각 알림 클릭 시, 각 bluecircle 제거*/
-  const toggleBlueCircleVisibility = (index) => {
-    const updatedVisibility = [...blueCircleVisibility];
-    if (updatedVisibility[index] == true) {
-      updatedVisibility[index] = !updatedVisibility[index];
+  /*알림창 클릭 이벤트*/
+  const handleIconBellClick = () => {
+    setIsViewModal((pre) => !pre);
+    // Toggle alarm modal red circle
+    if (aliveAlarm) setAliveAlarm((pre) => !pre);
+    // If the modal is closing, reset BlueCircleVisibility
+    if (isViewModal) {
+      const updatedVisibility = [...blueCircleVisibility].map((is_confirm) =>
+        is_confirm === false ? true : is_confirm
+      );
       setBlueCircleVisibility(updatedVisibility);
     }
   };
 
-  useEffect(() => {
-    const arr = blueCircleVisibility.filter((circle) => {
-      if (circle === true) return true;
-    });
-    arr.length === 0 ? setAliveAlarm(false) : setAliveAlarm(true);
-  }, [blueCircleVisibility]);
+  /*알림창 삭제 이벤트*/
+  const deleteAlarm = () => {
+    /*API) 알림 is_confirm이 true인 경우 삭제*/
+  };
 
   return (
     <UserNavWrapper>
@@ -252,13 +297,35 @@ const AdminNavbar = () => {
         <UserNavItem>
           <UserNavMenuItem className={`${selectIndex === 0 && "active"}`}>
             <Link
-              to="/challenger"
+              to="/challenger/manage"
               onClick={() => {
                 handleNavIndex(0);
               }}
             >
               Challenger
             </Link>
+            <SubMenuWrapper>
+              <SubMenuItem>
+                <Link
+                  to="/challenger/manage"
+                  onClick={() => {
+                    handleNavIndex(0);
+                  }}
+                >
+                  챌린저 관리
+                </Link>
+              </SubMenuItem>
+              <SubMenuItem>
+                <Link
+                  to="/challenger/new"
+                  onClick={() => {
+                    handleNavIndex(0);
+                  }}
+                >
+                  신규 챌린저
+                </Link>
+              </SubMenuItem>
+            </SubMenuWrapper>
           </UserNavMenuItem>
           <UserNavMenuItem
             className={`${selectIndex === 1 && "active"}`}
@@ -298,9 +365,7 @@ const AdminNavbar = () => {
             color={"#cecdd5"}
             size={36}
             style={{ margin: "0 2.4rem" }}
-            onClick={() => {
-              setIsViewModal((pre) => !pre);
-            }}
+            onClick={handleIconBellClick}
           />
           <RedCircleFilled aliveAlarm={aliveAlarm} />
           <IconUser
@@ -308,7 +373,7 @@ const AdminNavbar = () => {
             color={"#cecdd5"}
             size={36}
             onClick={() => {
-              navigate("/mypage"), handleNavIndex(4);
+              navigate("/mypage"), handleNavIndex(3);
             }}
           />
         </UserNavItem>
@@ -316,11 +381,7 @@ const AdminNavbar = () => {
       <AlarmModal display={isViewModal}>
         <ModalContentBox>
           <ContentBoxTitle>알림</ContentBoxTitle>
-          <ContentBoxSubTitle
-            onClick={() => {
-              /*클릭 시, 읽은 알림 삭제*/
-            }}
-          >
+          <ContentBoxSubTitle onClick={deleteAlarm}>
             읽은 알림 삭제
           </ContentBoxSubTitle>
           <ModalContent>
@@ -328,7 +389,11 @@ const AdminNavbar = () => {
               return (
                 <AlarmContent
                   key={idx}
-                  onClick={() => toggleBlueCircleVisibility(idx)}
+                  onClick={() => {
+                    navigate("/challenger/manage"),
+                      handleIconBellClick(),
+                      handleNavIndex(0);
+                  }}
                 >
                   <AlarmContentDetail>
                     {alarm.type === "match" ? (
@@ -364,7 +429,7 @@ const AdminNavbar = () => {
                       </ContentDetailText>
                     </ContentDetailWrap>
                   </AlarmContentDetail>
-                  {blueCircleVisibility[idx] && <BlueCircleFilled />}
+                  {!blueCircleVisibility[idx] && <BlueCircleFilled />}
                   {AlarmDummy.length - 1 !== idx && <AlarmSeperateBar />}
                 </AlarmContent>
               );
