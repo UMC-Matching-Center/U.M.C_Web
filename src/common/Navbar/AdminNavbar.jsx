@@ -14,25 +14,25 @@ const AlarmDummy = [
     type: "match",
     content: "00 챌린저의 매칭이 완료되었습니다.",
     date: "2023년 12월 12일",
-    is_cofirm: false,
+    is_confirm: false,
   },
   {
     type: "match",
     content: "새로운 챌린저의 가입신청이 등록되었습니다.",
     date: "2023년 12월 12일",
-    is_cofirm: false,
+    is_confirm: false,
   },
   {
     type: "join",
     content: "00 챌린저의 매칭이 완료되었습니다.",
     date: "2023년 12월 12일",
-    is_cofirm: true,
+    is_confirm: true,
   },
   {
     type: "match",
     content: "00 챌린저의 매칭이 완료되었습니다.",
     date: "2023년 12월 12일",
-    is_cofirm: true,
+    is_confirm: true,
   },
   {
     type: "join",
@@ -44,7 +44,7 @@ const AlarmDummy = [
     type: "match",
     content: "00 챌린저의 매칭이 완료되었습니다.",
     date: "2023년 12월 12일",
-    is_cofirm: true,
+    is_confirm: true,
   },
 ];
 const UserNavWrapper = styled.div`
@@ -252,14 +252,7 @@ const AdminNavbar = () => {
   /*알림창 토글*/
   const [isViewModal, setIsViewModal] = useState(false);
   /*각 알림을 읽었는지를 나타내는 bluecircle 표시 = is_confirmed*/
-  const [blueCircleVisibility, setBlueCircleVisibility] = useState([
-    false,
-    false,
-    true,
-    true,
-    true,
-    true,
-  ]);
+  const [alarmContent, setAlarmContent] = useState(AlarmDummy);
 
   /*선택된 메뉴 표시*/
   const [selectIndex, setSelectIndex] = useState(0);
@@ -274,16 +267,22 @@ const AdminNavbar = () => {
     if (aliveAlarm) setAliveAlarm((pre) => !pre);
     // If the modal is closing, reset BlueCircleVisibility
     if (isViewModal) {
-      const updatedVisibility = [...blueCircleVisibility].map((is_confirm) =>
-        is_confirm === false ? true : is_confirm
-      );
-      setBlueCircleVisibility(updatedVisibility);
+      const updatedVisibility = [...alarmContent].map((alarm) => ({
+        ...alarm,
+        is_confirm: alarm.is_confirm === false ? true : alarm.is_confirm,
+      }));
+      setAlarmContent(updatedVisibility);
     }
   };
 
   /*알림창 삭제 이벤트*/
   const deleteAlarm = () => {
-    /*API) 알림 is_confirm이 true인 경우 삭제*/
+    if (alarmContent.length > 0) {
+      const updatedArr = [...alarmContent].filter(
+        (arr) => arr.is_confirm === false
+      );
+      setAlarmContent(updatedArr);
+    }
   };
 
   return (
@@ -385,7 +384,7 @@ const AdminNavbar = () => {
             읽은 알림 삭제
           </ContentBoxSubTitle>
           <ModalContent>
-            {AlarmDummy.map((alarm, idx) => {
+            {alarmContent.map((alarm, idx) => {
               return (
                 <AlarmContent
                   key={idx}
@@ -429,8 +428,8 @@ const AdminNavbar = () => {
                       </ContentDetailText>
                     </ContentDetailWrap>
                   </AlarmContentDetail>
-                  {!blueCircleVisibility[idx] && <BlueCircleFilled />}
-                  {AlarmDummy.length - 1 !== idx && <AlarmSeperateBar />}
+                  {!alarm.is_confirm && <BlueCircleFilled />}
+                  {alarmContent.length - 1 !== idx && <AlarmSeperateBar />}
                 </AlarmContent>
               );
             })}
