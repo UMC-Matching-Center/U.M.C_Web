@@ -85,7 +85,7 @@ const SelectOptions = styled.ul`
   left: 0;
   padding: 0rem;
   overflow: hidden;
-  height: 14.4rem;
+  height: 18rem;
   max-height: ${(props) => (props.show ? "none" : "0")};
   border-radius: 0.5rem;
   background-color: #fafafa;
@@ -188,6 +188,8 @@ const MatchingDetailBox = styled.div`
   border-radius: 0rem 0rem 0.8rem 0.8rem;
   font-size: 1.6rem;
   font-weight: 500;
+  margin : -1.6rem 0 1.6rem 0; //container_main에서 아무리 margin-top을 해도 nth-child 적용이 안되어서 1.6rem을 여기서 빼기해줌 
+
 `;
 
 //매칭 디테일 리스트
@@ -225,6 +227,7 @@ const ExitBtn = styled.div`
   color: #fafafa;
   cursor: pointer;
 `;
+
 const projectsDummy = [
   {
     id: 1,
@@ -298,11 +301,11 @@ function ChallengerList() {
   const [arrowState, setArrowState] = useState([]);
   const [radiusState, setRadiusState] = useState([]);
   const [isShowOptions, setIsShowOptions] = useState(false);
-  const [currentValue, setCurrentValue] = useState("모두 보기");
+  const [currentValue, setCurrentValue] = useState("전체");
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(null);
   const [infoboxData, setInfoboxData] = useState(projectsDummy);
   const optionList = [
-    { num: 1, content: "모두 보기" },
+    { num: 1, content: "전체" },
     { num: 2, content: "미지원" },
     { num: 3, content: "지원 완료" },
     { num: 4, content: "결과 대기중" },
@@ -366,57 +369,64 @@ function ChallengerList() {
       </div>
       <div className="box">
         <div className="box__container">
-        {infoboxData.map((infobox, index) => (
-          (currentValue == "모두 보기"|| currentValue == infobox.currentstate) &&   
-          <div key={index}>
-            <div
-                className="box__container_main"
-                onClick={() => handleDetail(index)}
-                style={{
-                  cursor: "pointer",
-                  borderRadius: radiusState[index]
-                    ? "0.8rem 0.8rem 0rem 0rem"
-                    : "0.8rem",
-                }}
-              >
-                <div key={index} className="box__container_list">
-                  {infobox.chapter}
+          {infoboxData.map(
+            (infobox, index) =>
+              (currentValue == "전체" ||
+                currentValue == infobox.currentstate) && (
+                <div key={index}>
+                  <div
+                    className="box__container_main"
+                    onClick={() => handleDetail(index)}
+                    style={{
+                      cursor: "pointer",
+                      borderRadius: radiusState[index]
+                        ? "0.8rem 0.8rem 0rem 0rem"
+                        : "0.8rem",
+                    }}
+                  >
+                    <div key={index} className="box__container_list">
+                      {infobox.chapter}
+                    </div>
+                    <div key={index} className="box__container_list">
+                      {infobox.nickname}
+                    </div>
+                    <div key={index} className="box__container_list">
+                      {infobox.name}
+                    </div>
+                    <div key={index} className="box__container_list">
+                      {infobox.position}
+                    </div>
+                    <StateBox>
+                      <MatchingNum>{infobox.generation}</MatchingNum>
+                      <MatchingState statecolor={infobox.currentstate}>
+                        {infobox.currentstate}
+                      </MatchingState>
+                      <ArrowBtn>
+                        {arrowState[index] ? (
+                          <DropUpArrow />
+                        ) : (
+                          <DropDownArrow />
+                        )}
+                      </ArrowBtn>
+                    </StateBox>
+                  </div>
+                  {showDetail[index] && (
+                    <MatchingDetailBox>
+                      <MatchingDetailList>
+                        1차 : Tape - 주위 사람들과 음악 취향을 공유하는 소셜
+                        네트워크 서비스
+                      </MatchingDetailList>
+                      <MatchingDetailList>
+                        3차 : Tape - 취향을 공유하는 소셜 네트워크 서비스
+                      </MatchingDetailList>
+                      <ExitBtn onClick={() => handleExit(index)}>탈부</ExitBtn>
+                    </MatchingDetailBox>
+                  )}
                 </div>
-                <div key={index} className="box__container_list">
-                  {infobox.nickname}
-                </div>
-                <div key={index} className="box__container_list">
-                  {infobox.name}
-                </div>
-                <div key={index} className="box__container_list">
-                  {infobox.position}
-                </div>
-                <StateBox>
-                  <MatchingNum>{infobox.generation}</MatchingNum>
-                  <MatchingState statecolor={infobox.currentstate}>
-                    {infobox.currentstate}
-                  </MatchingState>
-                  <ArrowBtn>
-                    {arrowState[index] ? <DropUpArrow /> : <DropDownArrow />}
-                  </ArrowBtn>
-                </StateBox>
-              </div>
-            {showDetail[index] && (
-              <MatchingDetailBox>
-                <MatchingDetailList>
-                  1차 : Tape - 주위 사람들과 음악 취향을 공유하는 소셜 네트워크
-                  서비스
-                </MatchingDetailList>
-                <MatchingDetailList>
-                  3차 : Tape - 취향을 공유하는 소셜 네트워크 서비스
-                </MatchingDetailList>
-                <ExitBtn onClick={() => handleExit(index)}>탈부</ExitBtn>
-              </MatchingDetailBox>
-            )}
-          </div>
-          ))}
+              )
+          )}
+        </div>
       </div>
-    </div>
     </div>
   );
 }
