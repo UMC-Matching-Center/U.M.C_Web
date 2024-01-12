@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import "./Register.css";
+import { useDispatch } from "react-redux";
+import { signupCompleteOpen } from "../../modules/userInfo";
 
 // input간 간격
 const InputGap = styled.div`
@@ -136,6 +138,7 @@ export default function UserSignup() {
   const [ableBtn, setAbleBtn] = useState(false); //회원가입 버튼
 
   const navigate = useNavigate();
+  const dispatch = useDispatch(); // action을 reducer한테 보내서 state를 update시키는 함수
 
   /* ---- Email 관련 ----- */
   const handleChangeId = (e) => {
@@ -243,10 +246,11 @@ export default function UserSignup() {
     );
   }, [emailValid, name, nickname, phoneNumber, year, part]);
 
-  //회원가입 제출 후 다음으로 이동
+  //회원가입 제출 후 홈으로 이동
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate("../complete");
+    dispatch(signupCompleteOpen(true));
+    navigate("../../");
   };
 
   return (
@@ -423,7 +427,7 @@ export default function UserSignup() {
                   marginTop: "3.2rem",
                   backgroundColor: ableBtn ? "#014171" : "#01417180",
                 }}
-                disabled={!ableBtn}
+                // disabled={!ableBtn}
               >
                 회원가입
               </button>

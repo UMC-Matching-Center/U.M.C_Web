@@ -10,7 +10,6 @@ import {
 } from "@tabler/icons-react";
 import Signup from "./Signup";
 import SignupDetail from "./SignupDetail";
-import SignupSuccess from "./SignupSuccess";
 
 // input간 간격
 const InputGap = styled.div`
@@ -184,7 +183,6 @@ function Register() {
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/detail" element={<SignupDetail />} />
-        <Route path="/complete" element={<SignupSuccess />} />
       </Routes>
     </div>
   );
