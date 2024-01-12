@@ -112,6 +112,21 @@ const projectsDummy = [
   },
 ];
 
+const ModalStyles = {
+  overlay: { width: "100vw", background: "rgba(2, 1, 11, 0.5)" },
+  content: {
+    width: "100rem",
+    height: "60rem",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    padding: "0",
+    background: "none",
+    border: "none",
+  },
+};
+
 const Home = () => {
   /*--- Redux 관련 ---*/
   const { modalOpen } = useSelector((state) => state.userInfo);
