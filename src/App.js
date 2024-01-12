@@ -5,11 +5,13 @@ import Navbar from "./common/Navbar/Navbar";
 import Home from "./pages/Home";
 import Register from "./pages/register/Register";
 import ProjectDetail from "./components/ProjectDetail";
+import MyPage from "./pages/myPage/MyPage";
 
 function App() {
   const Headers = styled.div`
     display: flex;
-    padding: 3.9rem 0;
+    justify-content: center;
+    padding: 3.9rem 8.6rem;
   `;
 
   return (
@@ -21,6 +23,7 @@ function App() {
         <Route path="/*" element={<Home />} />
         <Route path="/project/*" element={<ProjectDetail />} />
         <Route path="/register/*" element={<Register />} />
+        <Route path="/mypage/*" element={<MyPage />} />
       </Routes>
     </BrowserRouter>
   );

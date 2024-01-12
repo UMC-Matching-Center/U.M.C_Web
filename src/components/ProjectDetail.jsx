@@ -16,46 +16,48 @@ const ProjectDetailWrapper = styled.div`
   display: flex;
   justify-content: center;
 
-  margin-top: 5.85rem;
+  margin-top: 5.8rem;
 `;
 const ProjectDetailForm = styled.div`
   width: 120rem;
-  height: 73.2rem;
+  max-height: 73.2rem;
   background: #fafafa;
+  padding: 3rem 0;
 
   border-radius: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 `;
 
 const FormTitle = styled.div`
-  height: 7.8rem;
-  width: 100%;
-
-  border-bottom: 0.03rem solid #010004;
+  width: 19.7rem;
+  height: 100%;
 `;
 const FormTitleMenu = styled.div`
   display: flex;
-  justify-content: center;
-
-  padding: 3rem 0;
+  flex-direction: column;
+  max-width: 13.7rem;
+  margin-top: 3rem;
+  margin-left: 4.2rem;
+  padding: 0.5rem 0;
 
   > div {
-    margin: 0 2.35rem;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
 
-    color: #000;
-
+    color: #cecdd5;
     font-family: KBO-Dia-Gothic;
-    font-size: 1.8rem;
-    font-style: normal;
+    font-size: 1.6rem;
     font-weight: 300;
-    line-height: normal;
 
     border: 0;
     background-color: transparent;
     cursor: pointer;
 
     &.active {
-      box-sizing: border-box;
-      border-bottom: 0.6rem solid #e7e6ea;
+      color: #08032c;
     }
   }
 `;
@@ -65,9 +67,9 @@ const FormContent = styled.div`
   flex-direction: column;
 
   width: 70.2rem;
-  height: 56.4rem;
-  margin: 1.2rem 24.9rem;
-
+  max-height: 64.7rem;
+  margin-left: 6.5rem;
+  margin-right: 24.9rem;
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;

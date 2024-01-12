@@ -2,30 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 8.6rem;
-}
-.app__main-contents {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 3rem 0;
-}
-
-.app__main-contents > * {
-  margin: 2.3rem 0;
-}
-
-/*content 내용*/
-.app__main-filter {
-  padding: 0 1rem;
-}
-.app__main-filterWrap {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-.app__main-filterWrap > * {
-  margin: 0 1.7rem;
+  padding: 7.8rem 8.6rem;
 }
 
 .app__main-projects {
