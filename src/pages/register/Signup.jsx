@@ -2,41 +2,35 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import "./Register.css";
-import {
-  IconEyeOff,
-  IconEye,
-  IconCheck,
-  IconSquare,
-  IconSquareCheckFilled,
-} from "@tabler/icons-react";
+import { IconEyeOff, IconEye, IconCheck } from "@tabler/icons-react";
 
 // input간 간격
 const InputGap = styled.div`
   margin-top: 2.4rem;
 `;
 
-const EmailArea = styled.div`
+const IDArea = styled.div`
   display: flex;
   flex-direction: row;
 `;
 
-// 이메일 input 태그 관련 영역
-const EmailInputArea = styled.div`
+// ID input 태그 관련 영역
+const IDInputArea = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 `;
 
-// 이메일 인증 버튼
-const EmailAuth = styled.button`
+// ID 중복 확인 버튼
+const IDAuth = styled.button`
   border: 1px solid #6b6880;
   background-color: #fafafa00;
+  font-family: "KBO Dia Gothic";
   font-size: 1rem;
+  font-weight: 300;
   color: #6b6880;
   box-sizing: border-box;
-  width: 2.6rem;
-  height: 100%;
-  padding: 0;
+  padding: 0.3rem;
   margin-left: 0.6rem;
 `;
 
@@ -64,14 +58,14 @@ const PwCondition = styled.div`
   }
 
   span {
-    font-size: 0.6rem;
-    margin-right: 0.5rem;
+    font-size: 0.8rem;
+    margin: 0.2rem 0.5rem 0 0;
   }
 `;
 
 export default function Signup() {
   const [id, setId] = useState(""); //ID 세팅
-  const [idValid, setIdValid] = useState(-1); //ID Email 유효 (-1: 초기 설정, 0: 형식 불일치•비인증, 1: 형식 일치•비인증, 2: 형식 일치•인증)
+  const [idValid, setIdValid] = useState(-1); //ID 유효 (-1: 초기 설정, 0: 비인증, 1: 인증)
   const [idAuth, setIdAuth] = useState(false); //ID Auth 확인
 
   const [pw, setPw] = useState(""); //비밀번호 세팅
@@ -80,35 +74,33 @@ export default function Signup() {
   const [pwNumber, setPwNumber] = useState(false); //비밀번호 숫자 여부
   const [pwLength, setPwLength] = useState(false); //비밀번호 길이 여부
 
-  const [pwEqual, setpwEqual] = useState(-1); //비밀번호 일치 확인 (-1: 초기 설정, 0: 불일치, 1: 일치)
+  const [pwEqual, setpwEqual] = useState(-1); //비밀번호 일치 확인 (-1: 초기 설정, 0: 중복 확인 필요, 1: 아이디 중복, 2: 중복 확인 완료)
+  const [pwEqualVisible, setpwEqualVisible] = useState(false); //비밀번호 확인 노출 여부
 
-  const [adminLogin, setAdminLogin] = useState(false); //관리자 로그인 설정
   const [ableBtn, setAbleBtn] = useState(true); //버튼 Enable 여부
   const navigate = useNavigate();
 
   /* ---- ID 관련 ----- */
   const handleChangeId = (e) => {
-    if (idValid === -1) setIdValid(0); //ID Valid 검사 시작
+    const idRegulation = /^[A-Za-z0-9+]*$/; //ID 정규식 (영문, 숫자))
     const inputId = e.target.value;
-    setId(inputId);
-    setIdAuth(false); //ID 작성 시 인증 여부 초기화
-    setIdValid(validatEmail(inputId)); //ID 형식 여부
-    //setIdAuth(AuthatEmail(inputId)); //이메일 인증 여부
-  };
-
-  //ID 형식 조건
-  const validatEmail = (e) => {
-    //이메일 Valid 여부
-    const emailtest = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailtest.test(e) ? 1 : 0; // (0: 형식 불일치•비인증, 1: 형식 일치•비인증)
+    if (!idRegulation.test(inputId)) return; //ID 정규식에 맞지 않으면 return
+    else {
+      if (idValid === -1) setIdValid(0); //ID 중복확인 여부 확인 시작
+      else if (idValid === 1) setIdValid(0); //ID 중복 확인 기록 삭제
+      setId(inputId);
+      setIdAuth(false); //ID 작성 시 인증 여부 초기화
+      //setIdAuth(AuthatEmail(inputId)); //이메일 인증 여부
+    }
   };
 
   //ID 인증 여부
   const onClickAuth = () => {
     //API 연동 필요!!!
-    setIdAuth(!idAuth);
-    if (idValid === 1 && idAuth) setIdValid(2); // (2: 형식 일치•인증)
-    else setIdValid(1); // (1: 형식 일치•비인증)
+    setIdAuth(!idAuth); //임시로 인증 여부 변경
+
+    if (idAuth) setIdValid(2); // (2: 중복 확인 완료)
+    else setIdValid(1); // (0: 중복 확인 필요)
   };
 
   /* ---- PW 관련 ----- */
@@ -126,15 +118,21 @@ export default function Signup() {
   };
 
   //비밀번호 노출 여부
-  const toggleVisible = () => {
+  const pwVisibleToggle = () => {
     setPwVisible(!pwVisible);
   };
 
   //비밀번호 일치 여부
   const handleChangePwEqual = (e) => {
-    if (pwEqual === -1) setpwEqual(0); //PW Equal 검사 시작
     const inputPwCheck = e.target.value;
-    setpwEqual(pw.localeCompare(inputPwCheck) === 0 ? 1 : 0); //Equal 여부
+    if (pwEqual === -1) setpwEqual(0); //PWEqual 검사 시작
+    else if (inputPwCheck === "") setpwEqual(-1); // 값이 없을 때 PWEqual 초기화
+    else setpwEqual(pw.localeCompare(inputPwCheck) === 0 ? 1 : 0); //Equal 여부
+  };
+
+  //비밀번호 확인 노출 여부
+  const pwEqaulVisibleToggle = () => {
+    setpwEqualVisible(!pwEqualVisible);
   };
 
   useEffect(() => {
@@ -143,11 +141,6 @@ export default function Signup() {
       idValid == 2 && pwEnglish && pwNumber && pwLength && pwEqual === 1
     ); //나중에 인증기능 추가시 && idAuth 추가
   }, [idValid, pwEnglish, pwNumber, pwLength, pwEqual]); // 동일하게 ", idAuth" 추가
-
-  //관리자 로그인 설정 및 상태를 반전시켜 업데이트
-  const handleAdminLogin = () => {
-    setAdminLogin(!adminLogin);
-  };
 
   //회원가입 제출 후 다음으로 이동
   const handleSubmit = (e) => {
@@ -176,21 +169,21 @@ export default function Signup() {
           <div className="FormDetail">
             <div style={{ width: "100%" }}>
               {/* 이메일(아이디) 관련 */}
-              <EmailArea>
-                <EmailInputArea>
+              <IDArea>
+                <IDInputArea>
                   <input
                     className="FormInput"
                     type="email"
-                    placeholder="이메일(아이디)"
+                    placeholder="아이디"
                     value={id}
                     onChange={handleChangeId}
                   />
                   <div className="FormInputUnderline" />
-                </EmailInputArea>
-                <EmailAuth onClick={onClickAuth} disabled={idValid !== 1}>
-                  인증
-                </EmailAuth>
-              </EmailArea>
+                </IDInputArea>
+                <IDAuth onClick={onClickAuth} disabled={idValid === -1}>
+                  중복 확인
+                </IDAuth>
+              </IDArea>
               <div
                 className="ValidText"
                 style={{
@@ -199,10 +192,10 @@ export default function Signup() {
                 }}
               >
                 {idValid == 2
-                  ? "이메일이 인증되었습니다."
+                  ? "사용 가능한 아이디입니다."
                   : idValid == 1
-                    ? "이메일이 인증되지 않았습니다."
-                    : "이메일 형식이 정확하지 않습니다."}
+                    ? "이미 사용 중인 아이디입니다."
+                    : ""}
               </div>
               <InputGap />
 
@@ -216,9 +209,12 @@ export default function Signup() {
                   onChange={handleChangePw}
                 />
                 {!pwVisible ? (
-                  <IconEyeOff className="PasswordEye" onClick={toggleVisible} />
+                  <IconEyeOff
+                    className="PasswordEye"
+                    onClick={pwVisibleToggle}
+                  />
                 ) : (
-                  <IconEye className="PasswordEye" onClick={toggleVisible} />
+                  <IconEye className="PasswordEye" onClick={pwVisibleToggle} />
                 )}
               </PwArea>
               <div
@@ -229,17 +225,17 @@ export default function Signup() {
               {/* 비밀번호 조건 관련 */}
               <PwConditionArea>
                 <PwCondition
-                  style={{ color: pwEnglish ? "#014171" : "#d62117" }}
+                  style={{ color: pwEnglish ? "#014171" : "#9C9AAB" }}
                 >
                   <IconCheck /> <span>영문</span>
                 </PwCondition>
                 <PwCondition
-                  style={{ color: pwNumber ? "#014171" : "#d62117" }}
+                  style={{ color: pwNumber ? "#014171" : "#9C9AAB" }}
                 >
                   <IconCheck /> <span>숫자</span>
                 </PwCondition>
                 <PwCondition
-                  style={{ color: pwLength ? "#014171" : "#d62117" }}
+                  style={{ color: pwLength ? "#014171" : "#9C9AAB" }}
                 >
                   <IconCheck /> <span>8~16자</span>
                 </PwCondition>
@@ -247,13 +243,29 @@ export default function Signup() {
               <InputGap />
 
               {/* 비밀번호 확인 관련 */}
-              <input
-                className="FormInput"
-                type="password"
-                placeholder="비밀번호 확인"
-                onInput={handleChangePwEqual}
+              <PwArea>
+                <input
+                  className="FormInput"
+                  type={pwEqualVisible ? "text" : "password"}
+                  placeholder="비밀번호 확인"
+                  onInput={handleChangePwEqual}
+                />
+                {!pwEqualVisible ? (
+                  <IconEyeOff
+                    className="PasswordEye"
+                    onClick={pwEqaulVisibleToggle}
+                  />
+                ) : (
+                  <IconEye
+                    className="PasswordEye"
+                    onClick={pwEqaulVisibleToggle}
+                  />
+                )}
+              </PwArea>
+              <div
+                className="FormInputUnderline"
+                style={{ minHeight: "0.2rem" }}
               />
-              <div className="FormInputUnderline" />
               <div
                 className="ValidText"
                 style={{
@@ -264,30 +276,6 @@ export default function Signup() {
                 {pwEqual === 1
                   ? "비밀번호가 일치합니다."
                   : "비밀번호가 일치하지 않습니다."}
-              </div>
-
-              {/* 관리자 회원가입 여부 */}
-              <div className="FormCheckArea">
-                <input
-                  id="adminLogin"
-                  type="checkbox"
-                  checked={adminLogin}
-                  onChange={handleAdminLogin}
-                />
-                <label htmlFor="adminLogin" className="FormCheckCustom">
-                  {adminLogin ? (
-                    <IconSquareCheckFilled
-                      htmlFor="autoLogin"
-                      className="FormCheckCustom"
-                    />
-                  ) : (
-                    <IconSquare
-                      htmlFor="autoLogin"
-                      className="FormCheckCustom"
-                    />
-                  )}
-                </label>
-                <span>관리자 회원가입</span>
               </div>
 
               {/* 다음 버튼 */}
