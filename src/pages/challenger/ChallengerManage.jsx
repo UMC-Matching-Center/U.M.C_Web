@@ -295,8 +295,6 @@ const projectsDummy = [
 ];
 
 function ChallengerList() {
-  //const [matchingState,useMatchingState]=useState(false);
-  //const [matchingTeam,setMatchingTeam] = useState(1);
   const [showDetail, setShowDetail] = useState([]);
   const [arrowState, setArrowState] = useState([]);
   const [radiusState, setRadiusState] = useState([]);
@@ -373,7 +371,7 @@ function ChallengerList() {
             (infobox, index) =>
               (currentValue == "전체" ||
                 currentValue == infobox.currentstate) && (
-                <div key={index}>
+                <div key={infobox.id}>
                   <div
                     className="box__container_main"
                     onClick={() => handleDetail(index)}

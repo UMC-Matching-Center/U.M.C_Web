@@ -103,7 +103,7 @@ export default function ChallengerNew() {
       <div className="box">
       <div className="box__container">
         {infoboxData.map((infobox, index) => (
-          <div key={index} className="box__container_main">
+          <div key={infobox.id} className="box__container_main">
             <div className="box__container_list">{infobox.chapter}</div>
             <div className="box__container_list">{infobox.nickname}</div>
             <div className="box__container_list">{infobox.name}</div>
@@ -120,7 +120,6 @@ export default function ChallengerNew() {
         ))}
         {allButtonsClicked && (
           <NoApplicantsMessage>
-            {" "}
             죄송합니다. 신청한 인원이 없습니다. 나중에 다시 확인해주세요.
           </NoApplicantsMessage>
         )}
