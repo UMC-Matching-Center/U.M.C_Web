@@ -10,7 +10,6 @@ import {
 } from "@tabler/icons-react";
 import Signup from "./Signup";
 import SignupDetail from "./SignupDetail";
-import SignupSuccess from "./SignupSuccess";
 
 // input간 간격
 const InputGap = styled.div`
@@ -28,7 +27,6 @@ function Login() {
   const [pwValid, setPwValid] = useState(true); //비밀번호 valid 확인
   const [pwVisible, setPwVisible] = useState(false); //비밀번호 노출 여부
   const [autoLogin, setAutoLogin] = useState(false); //자동 로그인 설정
-  const [adminLogin, setAdminLogin] = useState(false); //관리자 로그인 설정
   const [ableBtn, setAbleBtn] = useState(false); //버튼 Enable 여부
   const navigate = useNavigate();
 
@@ -49,11 +47,6 @@ function Login() {
   //자동 로그인 설정 및 상태를 반전시켜 업데이트
   const handleAutoLogin = () => {
     setAutoLogin(!autoLogin);
-  };
-
-  //관리자 로그인 설정 및 상태를 반전시켜 업데이트
-  const handleAdminLogin = () => {
-    setAdminLogin(!adminLogin);
   };
 
   //비밀번호 노출 여부
@@ -126,7 +119,7 @@ function Login() {
               </p>
               {/* --------------------- */}
 
-              {/* 자동 로그인 및 관리자 로그인 관련 */}
+              {/* 자동 로그인 관련 */}
               <div className="FormCheckArea">
                 <input
                   id="autoLogin"
@@ -148,27 +141,6 @@ function Login() {
                   )}
                 </label>
                 <span style={{ marginRight: "4.3rem" }}>자동 로그인</span>
-
-                <input
-                  id="adminLogin"
-                  type="checkbox"
-                  checked={adminLogin}
-                  onChange={handleAdminLogin}
-                />
-                <label htmlFor="adminLogin" className="FormCheckCustom">
-                  {adminLogin ? (
-                    <IconSquareCheckFilled
-                      htmlFor="autoLogin"
-                      className="FormCheckCustom"
-                    />
-                  ) : (
-                    <IconSquare
-                      htmlFor="autoLogin"
-                      className="FormCheckCustom"
-                    />
-                  )}
-                </label>
-                <span>관리자 로그인</span>
               </div>
 
               {/* 로그인 버튼 관련 */}
@@ -211,7 +183,6 @@ function Register() {
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/detail" element={<SignupDetail />} />
-        <Route path="/complete" element={<SignupSuccess />} />
       </Routes>
     </div>
   );
