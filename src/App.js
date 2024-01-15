@@ -1,7 +1,7 @@
 import { Route, Routes, BrowserRouter } from "react-router-dom";
-import styled from "styled-components";
 
 import Navbar from "./common/Navbar/Navbar";
+import RegisterNavbar from "./common/Navbar/RegisterNavbar";
 import Home from "./pages/Home";
 import Register from "./pages/register/Register";
 import ProjectDetail from "./components/ProjectDetail";
@@ -9,23 +9,18 @@ import ChallengerManage from "./pages/challenger/ChallengerManage";
 import MyPage from "./pages/myPage/MyPage";
 
 function App() {
-  const Headers = styled.div`
-    display: flex;
-    justify-content: center;
-    padding: 3.9rem 8.6rem;
-  `;
-
   return (
     <BrowserRouter>
-      <Headers>
-        <Navbar />
-      </Headers>
       <Routes>
-        <Route path="/*" element={<Home />} />
-        <Route path="/project/*" element={<ProjectDetail />} />
-        <Route path="/register/*" element={<Register />} />
-        <Route path="/challenger/*" element={<ChallengerManage />} />
-        <Route path="/mypage/*" element={<MyPage />} />
+        <Route element={<Navbar />}>
+          <Route path="/*" element={<Home />} />
+          <Route path="/project/*" element={<ProjectDetail />} />
+          <Route path="/mypage/*" element={<MyPage />} />
+          <Route path="/challenger/*" element={<ChallengerManage />} />
+        </Route>
+        <Route element={<RegisterNavbar />}>
+          <Route path="/register/*" element={<Register />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
