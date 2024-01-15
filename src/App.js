@@ -12,15 +12,21 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<Navbar />}>
-          <Route path="/*" element={<Home />} />
-          <Route path="/project/*" element={<ProjectDetail />} />
-          <Route path="/mypage/*" element={<MyPage />} />
-          <Route path="/challenger/*" element={<ChallengerManage />} />
+        <Route path="/" element={<Navbar />}>
+          <Route index element={<Home />} />
+          <Route path="project/*" element={<ProjectDetail />} />
+          <Route path="mypage/*" element={<MyPage />} />
+          <Route path="challenger/*" element={<ChallengerManage />} />
         </Route>
-        <Route element={<RegisterNavbar />}>
-          <Route path="/register/*" element={<Register />} />
-        </Route>
+        <Route
+          path="/register/*"
+          element={
+            <>
+              <RegisterNavbar />
+              <Register />
+            </>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

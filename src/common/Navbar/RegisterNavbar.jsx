@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import Logo from "../../images/logo_crop.svg";
 import "./Navbar.css";
@@ -16,7 +16,6 @@ const RegisterNavbar = () => {
           </div>
         </div>
       </div>
-      <Outlet />
     </>
   );
 };
