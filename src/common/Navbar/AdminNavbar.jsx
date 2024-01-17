@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, Outlet } from "react-router-dom";
 import {
   IconPin,
   IconBell,
@@ -76,8 +76,7 @@ const UserNavMenuItem = styled.div`
 const SubMenuWrapper = styled.div`
   padding-top: 1.8rem;
   position: absolute;
-  top: 100%;
-  left: 0;
+  top: 9rem;
   display: none;
   flex-direction: column;
   z-index: 1;
@@ -267,170 +266,173 @@ const AdminNavbar = () => {
   };
 
   return (
-    <div className="app__nav">
-      <div className="nav_area">
-        <div className="nav_logo">
-          <Link to="/">
-            <img src={Logo} />
-          </Link>
-        </div>
-        <ul className="nav_center">
-          <UserNavMenuItem className={`${selectIndex === 0 && "active"}`}>
-            <Link
-              to="/challenger/manage"
-              onClick={() => {
-                handleNavIndex(0);
-              }}
-            >
-              Challenger
+    <>
+      <div className="app__nav">
+        <div className="nav_area">
+          <div className="nav_logo">
+            <Link to="/">
+              <img src={Logo} />
             </Link>
-            <SubMenuWrapper>
-              <SubMenuItem>
-                <Link
-                  to="/challenger/manage"
-                  onClick={() => {
-                    handleNavIndex(0);
-                  }}
-                >
-                  챌린저 관리
-                </Link>
-              </SubMenuItem>
-              <SubMenuItem>
-                <Link
-                  to="/challenger/new"
-                  onClick={() => {
-                    handleNavIndex(0);
-                  }}
-                >
-                  신규 챌린저
-                </Link>
-              </SubMenuItem>
-            </SubMenuWrapper>
-          </UserNavMenuItem>
-          <UserNavMenuItem
-            className={`${selectIndex === 1 && "active"}`}
-            style={{ margin: "0 3.1rem" }}
-          >
-            <Link
-              to="/schedule"
-              onClick={() => {
-                handleNavIndex(1);
-              }}
+          </div>
+          <ul className="nav_center">
+            <UserNavMenuItem className={`${selectIndex === 0 && "active"}`}>
+              <Link
+                to="/challenger/manage"
+                onClick={() => {
+                  handleNavIndex(0);
+                }}
+              >
+                Challenger
+              </Link>
+              <SubMenuWrapper>
+                <SubMenuItem>
+                  <Link
+                    to="/challenger/manage"
+                    onClick={() => {
+                      handleNavIndex(0);
+                    }}
+                  >
+                    챌린저 관리
+                  </Link>
+                </SubMenuItem>
+                <SubMenuItem>
+                  <Link
+                    to="/challenger/new"
+                    onClick={() => {
+                      handleNavIndex(0);
+                    }}
+                  >
+                    신규 챌린저
+                  </Link>
+                </SubMenuItem>
+              </SubMenuWrapper>
+            </UserNavMenuItem>
+            <UserNavMenuItem
+              className={`${selectIndex === 1 && "active"}`}
+              style={{ margin: "0 3.1rem" }}
             >
-              Schedule
-            </Link>
-          </UserNavMenuItem>
-          <UserNavMenuItem className={`${selectIndex === 2 && "active"}`}>
-            <Link
-              to="/matching"
-              onClick={() => {
-                handleNavIndex(2);
-              }}
-            >
-              Matching
-            </Link>
-          </UserNavMenuItem>
-        </ul>
-        <div className="nav_right">
-          <IconPin
-            strokeWidth={1}
-            color={"#cecdd5"}
-            size={36}
-            onClick={() => {
-              navigate("/");
-            }}
-          />
-          <div
-            style={{
-              position: "relative",
-              margin: "0 2.4rem",
-            }}
-          >
-            <IconBell
+              <Link
+                to="/schedule"
+                onClick={() => {
+                  handleNavIndex(1);
+                }}
+              >
+                Schedule
+              </Link>
+            </UserNavMenuItem>
+            <UserNavMenuItem className={`${selectIndex === 2 && "active"}`}>
+              <Link
+                to="/matching"
+                onClick={() => {
+                  handleNavIndex(2);
+                }}
+              >
+                Matching
+              </Link>
+            </UserNavMenuItem>
+          </ul>
+          <div className="nav_right">
+            <IconPin
               strokeWidth={1}
               color={"#cecdd5"}
               size={36}
-              style={{ display: "block" }}
-              onClick={handleIconBellClick}
+              onClick={() => {
+                navigate("/");
+              }}
             />
-            <RedCircleFilled aliveAlarm={aliveAlarm} />
-            <AlarmModal display={isViewModal}>
-              <ModalContentBox>
-                <ContentBoxTitle>알림</ContentBoxTitle>
-                <ContentBoxSubTitle onClick={deleteAlarm}>
-                  읽은 알림 삭제
-                </ContentBoxSubTitle>
-                <ModalContent>
-                  {alarmContent.map((alarm, idx) => {
-                    return (
-                      <AlarmContent
-                        key={idx}
-                        onClick={() => {
-                          navigate("/challenger/manage"),
-                            handleIconBellClick(),
-                            handleNavIndex(0);
-                        }}
-                      >
-                        <AlarmContentDetail>
-                          {alarm.type === "match" ? (
-                            <IconUsers
-                              color={"#131313"}
-                              size={24}
-                              strokeWidth={1}
-                            />
-                          ) : (
-                            <IconUserPlus
-                              color={"#131313"}
-                              size={24}
-                              strokeWidth={1}
-                            />
+            <div
+              style={{
+                position: "relative",
+                margin: "0 2.4rem",
+              }}
+            >
+              <IconBell
+                strokeWidth={1}
+                color={"#cecdd5"}
+                size={36}
+                style={{ display: "block" }}
+                onClick={handleIconBellClick}
+              />
+              <RedCircleFilled aliveAlarm={aliveAlarm} />
+              <AlarmModal display={isViewModal}>
+                <ModalContentBox>
+                  <ContentBoxTitle>알림</ContentBoxTitle>
+                  <ContentBoxSubTitle onClick={deleteAlarm}>
+                    읽은 알림 삭제
+                  </ContentBoxSubTitle>
+                  <ModalContent>
+                    {alarmContent.map((alarm, idx) => {
+                      return (
+                        <AlarmContent
+                          key={idx}
+                          onClick={() => {
+                            navigate("/challenger/manage"),
+                              handleIconBellClick(),
+                              handleNavIndex(0);
+                          }}
+                        >
+                          <AlarmContentDetail>
+                            {alarm.type === "match" ? (
+                              <IconUsers
+                                color={"#131313"}
+                                size={24}
+                                strokeWidth={1}
+                              />
+                            ) : (
+                              <IconUserPlus
+                                color={"#131313"}
+                                size={24}
+                                strokeWidth={1}
+                              />
+                            )}
+                            <ContentDetailWrap>
+                              <ContentDetailText
+                                color="#02010b"
+                                size="1.6rem"
+                                margin="0.4rem"
+                              >
+                                {alarm.type === "match" ? "매칭" : "가입"}
+                              </ContentDetailText>
+                              <ContentDetailText
+                                color="#6b6880"
+                                size="1.4rem"
+                                margin="1.4rem"
+                              >
+                                {alarm.content}
+                              </ContentDetailText>
+                              <ContentDetailText
+                                color="#9c9aab"
+                                size="1rem"
+                                margin="1rem"
+                              >
+                                {alarm.date}
+                              </ContentDetailText>
+                            </ContentDetailWrap>
+                          </AlarmContentDetail>
+                          {!alarm.is_confirm && <BlueCircleFilled />}
+                          {alarmContent.length - 1 !== idx && (
+                            <AlarmSeperateBar />
                           )}
-                          <ContentDetailWrap>
-                            <ContentDetailText
-                              color="#02010b"
-                              size="1.6rem"
-                              margin="0.4rem"
-                            >
-                              {alarm.type === "match" ? "매칭" : "가입"}
-                            </ContentDetailText>
-                            <ContentDetailText
-                              color="#6b6880"
-                              size="1.4rem"
-                              margin="1.4rem"
-                            >
-                              {alarm.content}
-                            </ContentDetailText>
-                            <ContentDetailText
-                              color="#9c9aab"
-                              size="1rem"
-                              margin="1rem"
-                            >
-                              {alarm.date}
-                            </ContentDetailText>
-                          </ContentDetailWrap>
-                        </AlarmContentDetail>
-                        {!alarm.is_confirm && <BlueCircleFilled />}
-                        {alarmContent.length - 1 !== idx && (
-                          <AlarmSeperateBar />
-                        )}
-                      </AlarmContent>
-                    );
-                  })}
-                </ModalContent>
-              </ModalContentBox>
-            </AlarmModal>
+                        </AlarmContent>
+                      );
+                    })}
+                  </ModalContent>
+                </ModalContentBox>
+              </AlarmModal>
+            </div>
+            <IconUser
+              strokeWidth={1}
+              color={"#cecdd5"}
+              size={36}
+              onClick={() => {
+                navigate("/mypage"), handleNavIndex(3);
+              }}
+            />
           </div>
-          <IconUser
-            strokeWidth={1}
-            color={"#cecdd5"}
-            size={36}
-            onClick={() => {
-              navigate("/mypage"), handleNavIndex(3);
-            }}
-          />
         </div>
       </div>
-    </div>
+      <Outlet />
+    </>
   );
 };
 

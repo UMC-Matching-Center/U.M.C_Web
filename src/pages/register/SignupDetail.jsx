@@ -427,7 +427,7 @@ export default function UserSignup() {
                   marginTop: "3.2rem",
                   backgroundColor: ableBtn ? "#014171" : "#01417180",
                 }}
-                // disabled={!ableBtn}
+                disabled={!ableBtn}
               >
                 회원가입
               </button>
