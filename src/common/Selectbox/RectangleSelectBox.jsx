@@ -42,7 +42,7 @@ const SelectOptions = styled.ul`
   border-width: 0.5px 1px 1px 1px;
   border-style: solid;
   border-color: #6b6880;
-  display: ${(props) => (props.visible === "true" ? "block" : "none")};
+  display: ${(props) => (props.$visible ? "block" : "none")};
 `;
 
 const Option = styled.li`

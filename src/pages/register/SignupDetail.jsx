@@ -273,7 +273,7 @@ export default function UserSignup() {
                 ref={schoolSelectRef}
               >
                 <label>{school[0]}</label>
-                <SelectOptions visible={schoolOptionVisible.toString()}>
+                <SelectOptions $visible={schoolOptionVisible}>
                   {SchoolDummy.map((option, i) => (
                     <Option
                       onClick={() => setSchool([option.name, i])}
@@ -297,7 +297,7 @@ export default function UserSignup() {
                     ref={yearSelectRef}
                   >
                     <label>{year[0]}</label>
-                    <SelectOptions visible={yearOptionVisible.toString()}>
+                    <SelectOptions $visible={yearOptionVisible}>
                       {YearDummy.map((option, i) => (
                         <Option
                           onClick={() => setYear([option.name, i])}
@@ -319,7 +319,7 @@ export default function UserSignup() {
                     ref={partSelectRef}
                   >
                     <label>{part[0]}</label>
-                    <SelectOptions visible={partOptionVisible.toString()}>
+                    <SelectOptions $visible={partOptionVisible}>
                       {PartsDummy.map((option, i) => (
                         <Option
                           onClick={() => setPart([option.name, i])}

@@ -8,7 +8,7 @@ const FormArea = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  margin-bottom: ${(props) => props.bottom && props.bottom};
+  margin-bottom: 3.2rem;
   & * {
     display: flex;
     align-items: center;
@@ -142,7 +142,7 @@ const UserModify = () => {
         </div>
         <div className="infoBox">
           <div className="boxForm">
-            <FormArea bottom="3.2rem">
+            <FormArea>
               <div className="form-label" style={{ marginRight: "4.1rem" }}>
                 학교
               </div>
@@ -151,7 +151,7 @@ const UserModify = () => {
                 onChange={(e) => setSchool(e.target.value)}
               />
             </FormArea>
-            <FormArea bottom="3.2rem">
+            <FormArea>
               <div className="form-label" style={{ marginRight: "4.1rem" }}>
                 기수
               </div>
@@ -172,7 +172,7 @@ const UserModify = () => {
                 width="10rem"
               />
             </FormArea>
-            <FormArea bottom="3.2rem">
+            <FormArea>
               <div className="form-label" style={{ marginRight: "2rem" }}>
                 전화번호
               </div>
@@ -182,7 +182,7 @@ const UserModify = () => {
                 onChange={handlePhoneNumber}
               />
             </FormArea>
-            <FormArea bottom="3.2rem">
+            <FormArea>
               <div className="form-label" style={{ marginRight: "1rem" }}>
                 포트폴리오
               </div>
@@ -265,13 +265,13 @@ const UserInfo = () => {
         </div>
         <div className="infoBox">
           <div className="boxForm">
-            <FormArea bottom="3.2rem">
+            <FormArea>
               <div className="form-label" style={{ marginRight: "4.1rem" }}>
                 학교
               </div>
               <MyPageInput value={school} disabled />
             </FormArea>
-            <FormArea bottom="3.2rem">
+            <FormArea>
               <div className="form-label" style={{ marginRight: "4.1rem" }}>
                 기수
               </div>
@@ -284,13 +284,13 @@ const UserInfo = () => {
               </div>
               <MyPageInput value={part} disabled width="10rem" />
             </FormArea>
-            <FormArea bottom="3.2rem">
+            <FormArea>
               <div className="form-label" style={{ marginRight: "2rem" }}>
                 전화번호
               </div>
               <MyPageInput value={phoneNumber} type="num" disabled />
             </FormArea>
-            <FormArea bottom="4.3rem">
+            <FormArea style={{ marginBottom: "4.3rem" }}>
               <div className="form-label" style={{ marginRight: "1rem" }}>
                 포트폴리오
               </div>
