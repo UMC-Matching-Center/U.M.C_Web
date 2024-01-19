@@ -25,7 +25,7 @@ const IDInputArea = styled.div`
 const IDAuth = styled.button`
   border: 1px solid #6b6880;
   background-color: #fafafa00;
-  font-family: "KBO Dia Gothic";
+  font-family: "KBO-Dia-Gothic";
   font-size: 1rem;
   font-weight: 300;
   color: #6b6880;
@@ -73,6 +73,7 @@ export default function Signup() {
   const [pwEnglish, setPwEnglish] = useState(false); //비밀번호 영문 여부
   const [pwNumber, setPwNumber] = useState(false); //비밀번호 숫자 여부
   const [pwLength, setPwLength] = useState(false); //비밀번호 길이 여부
+  const [pwSpecial, setPwSpecial] = useState(false); //비밀번호 길이 여부
 
   const [pwEqual, setpwEqual] = useState(-1); //비밀번호 일치 확인 (-1: 초기 설정, 0: 중복 확인 필요, 1: 아이디 중복, 2: 중복 확인 완료)
   const [pwEqualVisible, setpwEqualVisible] = useState(false); //비밀번호 확인 노출 여부
@@ -110,11 +111,13 @@ export default function Signup() {
     const pwEnglishReg = /[a-zA-Z]+/;
     const pwNumberReg = /[0-9]+/;
     const pwLengtReg = /^.{8,16}$/;
+    const pwSpecialReg = /[!@#$%^&*?_]/;
     setPw(inputPw);
     pwEqual === -1 ? null : setpwEqual(0); //PW Equal 초기화
     setPwEnglish(pwEnglishReg.test(inputPw)); //영문 여부
     setPwNumber(pwNumberReg.test(inputPw)); //숫자 여부
     setPwLength(pwLengtReg.test(inputPw)); //길이 여부
+    setPwSpecial(pwSpecialReg.test(inputPw)); //특수문자 여부
   };
 
   //비밀번호 노출 여부
@@ -138,9 +141,14 @@ export default function Signup() {
   useEffect(() => {
     //버튼 여부
     setAbleBtn(
-      idValid == 2 && pwEnglish && pwNumber && pwLength && pwEqual === 1
+      idValid == 2 &&
+        pwEnglish &&
+        pwNumber &&
+        pwLength &&
+        pwSpecial &&
+        pwEqual === 1
     ); //나중에 인증기능 추가시 && idAuth 추가
-  }, [idValid, pwEnglish, pwNumber, pwLength, pwEqual]); // 동일하게 ", idAuth" 추가
+  }, [idValid, pwEnglish, pwNumber, pwLength, pwSpecial, pwEqual]); // 동일하게 ", idAuth" 추가
 
   //회원가입 제출 후 다음으로 이동
   const handleSubmit = (e) => {
@@ -238,6 +246,11 @@ export default function Signup() {
                   style={{ color: pwLength ? "#014171" : "#9C9AAB" }}
                 >
                   <IconCheck /> <span>8~16자</span>
+                </PwCondition>
+                <PwCondition
+                  style={{ color: pwSpecial ? "#014171" : "#9C9AAB" }}
+                >
+                  <IconCheck /> <span>특수문자</span>
                 </PwCondition>
               </PwConditionArea>
               <InputGap />
