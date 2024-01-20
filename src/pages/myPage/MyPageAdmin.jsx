@@ -289,9 +289,7 @@ const AdminInfo = () => {
                 지부 선택
               </div>
               <div style={{ width: "20rem", position: "relative" }}>
-                <SelectBox>
-                  <label>{office}</label>
-                </SelectBox>
+                <MyPageInput value={office} type="num" disabled />
                 <FormInputUnderline />
               </div>
             </FormArea>
