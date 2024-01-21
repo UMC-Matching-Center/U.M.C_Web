@@ -57,7 +57,7 @@ const AdminModify = () => {
   ); // 대표전화 입력 값
   const [phoneValid, setPhoneValid] = useState(false); //전화번호 유효성 점검
 
-  const [office, setOfiice] = useState(["GACI 지부", 0]); //지부
+  const [office, setOffice] = useState(["GACI 지부", 0]); //지부
   const [officeOptionVisible, setOfficeOptionVisible] = useState(false); //지부 option 보이기 여부
   const officeSelectRef = useRef(null);
 
@@ -86,6 +86,7 @@ const AdminModify = () => {
   /* ---- 전화번호 관련 ----- */
   const validTelephone = (e) => {
     const tmpNumber = e.target.value;
+    console.log(tmpNumber);
     setPhoneNumber(
       tmpNumber
         .replace(/[^0-9]/g, "")
@@ -192,10 +193,10 @@ const AdminModify = () => {
                   ref={officeSelectRef}
                 >
                   <label>{office[0]}</label>
-                  <SelectOptions $visible={officeOptionVisible} style={{}}>
+                  <SelectOptions $visible={officeOptionVisible}>
                     {OfficeOptionsDummy.map((option, i) => (
                       <Option
-                        onClick={() => setOfiice([option.name, i])}
+                        onClick={() => setOffice([option.name, i])}
                         key={option.value}
                         className={i === office[1] ? "selected" : ""}
                       >

@@ -73,7 +73,7 @@ export default function Signup() {
   const [pwEnglish, setPwEnglish] = useState(false); //비밀번호 영문 여부
   const [pwNumber, setPwNumber] = useState(false); //비밀번호 숫자 여부
   const [pwLength, setPwLength] = useState(false); //비밀번호 길이 여부
-  const [pwSpecial, setPwSpecial] = useState(false); //비밀번호 길이 여부
+  const [pwSpecial, setPwSpecial] = useState(false); //비밀번호 특수 문자 여부
 
   const [pwEqual, setpwEqual] = useState(-1); //비밀번호 일치 확인 (-1: 초기 설정, 0: 중복 확인 필요, 1: 아이디 중복, 2: 중복 확인 완료)
   const [pwEqualVisible, setpwEqualVisible] = useState(false); //비밀번호 확인 노출 여부
@@ -250,7 +250,7 @@ export default function Signup() {
                 <PwCondition
                   style={{ color: pwSpecial ? "#014171" : "#9C9AAB" }}
                 >
-                  <IconCheck /> <span>특수문자</span>
+                  <IconCheck /> <span>특수 문자</span>
                 </PwCondition>
               </PwConditionArea>
               <InputGap />
