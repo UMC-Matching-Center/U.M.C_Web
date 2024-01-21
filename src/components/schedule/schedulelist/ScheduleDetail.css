@@ -1,0 +1,112 @@
+/* 전체 스케쥴 컨테이너 */
+.schedulecontainer {
+  display: flex;
+  margin: 4.1rem 0 0 13.8rem;
+  width: 40.8rem;
+  line-height: 150%;
+  flex-direction: column;
+}
+
+/* 해당 스케쥴 박스 */
+.schedulebox {
+  border-bottom: 0.1rem solid #dcdeee;
+  width: 40.8rem;
+  height: 13.6rem;
+  margin-top: 2.4rem;
+}
+
+.schedulebox:first-child {
+  margin-top: 0rem;
+}
+
+/* 스케쥴 제목 (닷+제목) 컨테이너 */
+.schduletitlecontainer {
+  display: flex;
+  flex-direction: row;
+}
+
+/* 스케쥴 제목 */
+.scheduletitle {
+  display: flex;
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin: 0 0 0 0.8rem;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 스케쥴 날짜 */
+.scheduledate {
+  display: flex;
+  margin: 1.5rem 0 0 1rem;
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+
+/* 스케쥴 메모 */
+.scheduletext {
+  display: flex;
+  margin: 1rem 0 0 1rem;
+  font-size: 1rem;
+  font-weight: 300;
+}
+
+/* Dot svg */
+.scheduledotsvg {
+  margin: 1.2rem 0 1.2rem 1rem;
+}
+
+/* 일정 버튼 컨테이너 */
+.schedulebuttoncontainer {
+    display: flex;
+    flex-direction: row;
+    margin: 3.8rem 0 0 0;
+    font-weight: 300;
+    font-size: 1.4rem;
+  }
+  
+  /* 일정 추가, 편집 버튼 */
+  .schedulebutton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 19.3rem; 
+    height: 3.4rem;
+    cursor: pointer;
+    border-radius: 0.8rem;
+    background-color: #0261aa;
+    &:active {
+      background-color: #014171;
+    }
+  }
+
+  /* 일정 완료 버튼 */
+  .schedulebuttonfinish {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40.8rem; 
+    height: 3.4rem;
+    cursor: pointer;
+    border-radius: 0.8rem;
+    background-color: #0261aa;
+    &:active {
+      background-color: #014171;
+    }
+  }
+
+  /* 첫 번째 친구만 오른쪽 */
+  .schedulebutton:first-child {
+    margin-right: 2.2rem;
+  }
+  .scheduleeditbox {
+    position: absolute;
+    width :6rem;
+    height : 2.1rem;
+    font-size : 1.4rem;
+    font-weight: 300;
+    margin-left: 33.8rem;
+  }
+  .scheduleedit {
+    cursor: pointer;
+  }

@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Register from "./pages/register/Register";
 import ProjectDetail from "./components/ProjectDetail";
 import ChallengerManage from "./pages/challenger/ChallengerManage";
+import Schedule from "./pages/schedule/Schedule";
 
 function App() {
   const Headers = styled.div`
@@ -23,6 +24,7 @@ function App() {
         <Route path="/project/*" element={<ProjectDetail />} />
         <Route path="/register/*" element={<Register />} />
         <Route path="/challenger/*" element={<ChallengerManage />} />
+        <Route path="/schedule/*" element={<Schedule/>}/>
       </Routes>
     </BrowserRouter>
   );
