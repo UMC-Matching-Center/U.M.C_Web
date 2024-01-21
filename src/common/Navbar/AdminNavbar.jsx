@@ -237,6 +237,7 @@ const AdminNavbar = () => {
   /*선택된 메뉴 표시*/
   const [selectIndex, setSelectIndex] = useState(0);
   const handleNavIndex = (idx) => {
+    setIsViewModal(false);
     setSelectIndex(idx);
   };
 
@@ -332,14 +333,22 @@ const AdminNavbar = () => {
             </UserNavMenuItem>
           </ul>
           <div className="nav_right">
-            <IconPin
-              strokeWidth={1}
-              color={"#cecdd5"}
-              size={36}
-              onClick={() => {
-                navigate("/");
+            <div
+              className="icon-bg"
+              style={{
+                background: selectIndex === 3 && "#0261AA",
               }}
-            />
+            >
+              <IconPin
+                strokeWidth={selectIndex === 3 ? 1.5 : 1}
+                color={"#cecdd5"}
+                size={36}
+                onClick={() => {
+                  navigate("/notice");
+                  handleNavIndex(3);
+                }}
+              />
+            </div>
             <div
               style={{
                 position: "relative",
@@ -351,7 +360,9 @@ const AdminNavbar = () => {
                 color={"#cecdd5"}
                 size={36}
                 style={{ display: "block" }}
-                onClick={handleIconBellClick}
+                onClick={() => {
+                  handleIconBellClick();
+                }}
               />
               <RedCircleFilled aliveAlarm={aliveAlarm} />
               <AlarmModal display={isViewModal}>
@@ -420,14 +431,21 @@ const AdminNavbar = () => {
                 </ModalContentBox>
               </AlarmModal>
             </div>
-            <IconUser
-              strokeWidth={1}
-              color={"#cecdd5"}
-              size={36}
-              onClick={() => {
-                navigate("/mypage"), handleNavIndex(3);
+            <div
+              className="icon-bg"
+              style={{
+                background: selectIndex === 5 && "#0261AA",
               }}
-            />
+            >
+              <IconUser
+                strokeWidth={selectIndex === 5 ? 1.5 : 1}
+                color={"#cecdd5"}
+                size={36}
+                onClick={() => {
+                  navigate("/mypage"), handleNavIndex(5);
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>

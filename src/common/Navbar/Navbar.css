@@ -37,6 +37,24 @@
     font-weight: 300;
     cursor: pointer;
   }
+
+  .icon-bg {
+    width: 4.8rem;
+    height: 4.8rem;
+    border-radius: 2.4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      background-color: #0261aa80;
+    }
+    > svg {
+      &:hover {
+        stroke-width: 1.5;
+      }
+    }
+  }
 }
 
 /* Nav바 연결*/
