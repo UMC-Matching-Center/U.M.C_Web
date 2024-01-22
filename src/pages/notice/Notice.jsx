@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import IconNewNotice from "../../images/ic_new_notice.png";
 import { IconSearch } from "@tabler/icons-react";
@@ -47,6 +48,8 @@ const noticeDummy = [
     date: "2024년 1월 10일 15:00",
   },
 ];
+
+/*---------공지사항 페이지 전체 wrap-----------*/
 const NoticeWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -54,6 +57,8 @@ const NoticeWrapper = styled.div`
   width: 120rem;
   margin: 0 auto;
 `;
+
+/*---------공지사항 검색과 추가-----------*/
 const NoticeSearch = styled.div`
   display: flex;
   width: 120rem;
@@ -103,6 +108,7 @@ const NoticeSearch = styled.div`
     margin-left: 1.8rem;
     width: 7.8rem;
     height: 7.8rem;
+    border-radius: 0 1rem 0 0;
     background: #0261aa;
 
     display: flex;
@@ -110,6 +116,8 @@ const NoticeSearch = styled.div`
     align-items: center;
   }
 `;
+
+/*---------공지사항 리스트-----------*/
 const NoticeList = styled.div`
   width: 120rem;
   max-height: 58vh;
@@ -163,13 +171,15 @@ const NoticeList = styled.div`
     }
   }
 `;
-const Notice = () => {
+const NoticeBasic = ({ type }) => {
+  const navigation = useNavigate();
   const [searchText, setSearchText] = useState("");
   const [list, setList] = useState(noticeDummy);
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
   };
-  /*-------------*/
+
+  /*------검색창 값에 따른 출력 관련 함수-------*/
   const onClickSearchIcon = () => {
     const filterData = noticeDummy.filter((data) =>
       data.title.includes(searchText)
@@ -183,71 +193,99 @@ const Notice = () => {
     }
   };
   return (
-    <NoticeWrapper>
-      <NoticeSearch>
-        <div className="notice-searchBar">
-          <div className="searchInput-box">
-            <input
-              placeholder="검색어를 입력해주세요."
-              value={searchText}
-              onChange={handleSearchChange}
-              onKeyPress={handleOnKeyPress}
-            />
-          </div>
-          <div className="searchIcon-box">
-            <IconSearch size={36} stroke={1.5} onClick={onClickSearchIcon} />
-          </div>
-        </div>
-        <div className="notice-new">
-          <img
-            src={IconNewNotice}
-            alt="newNotice"
-            width="36"
-            onClick={() => {
-              /*클릭 시, 새 공지 작성 페이지로 이동*/
-            }}
-          />
-        </div>
-      </NoticeSearch>
-      <NoticeList>
-        {list.length === 0 ? (
+    <>
+      <NoticeWrapper>
+        <NoticeSearch>
           <div
-            style={{ textAlign: "center", padding: "3rem", fontSize: "2.4rem" }}
+            className="notice-searchBar"
+            style={{
+              width: type !== "MANAGER" && "120rem",
+              borderRadius: type !== "MANAGER" && "1rem 1rem 0 0",
+            }}
           >
-            검색 결과가 존재하지 않습니다.
+            <div className="searchInput-box">
+              <input
+                placeholder="검색어를 입력해주세요."
+                value={searchText}
+                onChange={handleSearchChange}
+                onKeyPress={handleOnKeyPress}
+              />
+            </div>
+            <div className="searchIcon-box">
+              <IconSearch size={36} stroke={1.5} onClick={onClickSearchIcon} />
+            </div>
           </div>
-        ) : (
-          list.map((notice) => {
-            return (
-              <>
-                <div
-                  className="notice-component"
-                  key={notice.id}
-                  onClick={() => {
-                    /*클릭시 상세 notice 페이지로 이동*/
-                  }}
-                >
-                  <div className="notice-top">
-                    <div className="notice-title">{notice.title}</div>
-                    <div className="notice-date">{notice.date}</div>
+          {type === "MANAGER" && (
+            <div className="notice-new">
+              <img
+                src={IconNewNotice}
+                alt="newNotice"
+                width="36"
+                onClick={() => {
+                  /*클릭 시, 새 공지 작성 페이지로 이동*/
+                  navigation("../new");
+                }}
+              />
+            </div>
+          )}
+        </NoticeSearch>
+        <NoticeList>
+          {list.length === 0 ? (
+            <div
+              style={{
+                textAlign: "center",
+                padding: "3rem",
+                fontSize: "2.4rem",
+              }}
+            >
+              검색 결과가 존재하지 않습니다.
+            </div>
+          ) : (
+            list.map((notice) => {
+              return (
+                <>
+                  <div
+                    className="notice-component"
+                    key={notice.id}
+                    onClick={() => {
+                      /*클릭시 상세 notice 페이지로 이동*/
+                      navigation(`../detail/${notice.title}`, {
+                        state: {
+                          item: { notice },
+                        },
+                      });
+                    }}
+                  >
+                    <div className="notice-top">
+                      <div className="notice-title">{notice.title}</div>
+                      <div className="notice-date">{notice.date}</div>
+                    </div>
+                    <div className="notice-content">{notice.content}</div>
                   </div>
-                  <div className="notice-content">{notice.content}</div>
-                </div>
-                <div
-                  style={{
-                    width: "113.4rem",
-                    height: "0.1rem",
-                    background: "#9C9AAB",
-                    margin: "0 0 0 3.3rem",
-                  }}
-                ></div>
-              </>
-            );
-          })
-        )}
-      </NoticeList>
-    </NoticeWrapper>
+                  <div
+                    style={{
+                      width: "113.4rem",
+                      height: "0.1rem",
+                      background: "#9C9AAB",
+                      margin: "0 0 0 3.3rem",
+                    }}
+                  ></div>
+                </>
+              );
+            })
+          )}
+        </NoticeList>
+      </NoticeWrapper>
+    </>
   );
 };
 
+function Notice() {
+  const user = { type: "MANAGER" };
+  return (
+    <Routes>
+      <Route path="/" exact element={<NoticeBasic type={user.type} />}></Route>
+    </Routes>
+  );
+}
 export default Notice;
