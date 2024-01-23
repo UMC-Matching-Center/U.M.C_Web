@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import "../pages/register/Register.css";
 import { useDispatch } from "react-redux";
-import { signupCompleteOpen } from "../modules/userInfo";
+import { SIGNUP_COMPLETE } from "../modules/signupState";
 
 const CompleteTitle = styled.div`
   color: #014171;
@@ -68,7 +68,7 @@ export default function SignupComplete() {
           문의는 각 학교 회장단에게 연락해 주세요. <br />
         </CompleteDetail>
       </div>
-      <ModalCloseArea onClick={() => dispatch(signupCompleteOpen(false))} />
+      <ModalCloseArea onClick={() => dispatch(SIGNUP_COMPLETE(false))} />
     </div>
   );
 }

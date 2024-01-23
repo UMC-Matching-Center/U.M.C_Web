@@ -1,39 +1,40 @@
-/* ----------------- 액션 타입 ------------------ */
-const SIGNUP_COMPLETE = "userInfo/SIGNUP_COMPLETE"; // 회원가입 완료한 직후 상태
-const USER_TYPE = "userInfo/USER_TYPE"; // 로그인 상태
-// 덕스 패턴에서는 액션 타입을 정의할 때 이와 같이 접두사를 붙임.
-// 다른 모듈과 이름이 중복되지 않게 하기 위함.
+import { createSlice } from "@reduxjs/toolkit";
 
-/* ----------------- 액션 생성 함수 ------------------ */
-export const signupCompleteOpen = (modalOpen) => ({
-  type: SIGNUP_COMPLETE,
-  modalOpen,
-});
-export const userType = (userType) => ({
-  type: USER_TYPE,
-  userType,
-});
-
-/* ----------------- 모듈의 초기 상태 ------------------ */
+// 모듈의 초기 상태
 const initialState = {
-  modalOpen: false,
-  userType: "Register",
+  userType: "REGISTER",
+  userName: "",
+  autoLogin: false,
 };
 
-/* ----------------- 리듀서 ------------------ */
-export default function userInfoReducer(state = initialState, action) {
-  switch (action.type) {
-    case SIGNUP_COMPLETE:
-      return {
-        ...state,
-        modalOpen: action.modalOpen,
-      };
-    case USER_TYPE:
-      return {
-        ...state,
-        userType: action.userType,
-      };
-    default:
-      return state;
-  }
-}
+// 액션 타입 없이 createSlice를 사용하여 리듀서를 간결하게 작성
+const userInfoSlice = createSlice({
+  name: "userInfo",
+  initialState,
+  reducers: {
+    // 로그인
+    USER_LOGIN: (state, action) => {
+      state.userType = action.payload.role;
+      state.userName = action.payload.name;
+      state.autoLogin = action.payload.autoLogin;
+    },
+    // 자동 로그인
+    USER_AUTO_LOGIN: (state, action) => {
+      state.userType = action.payload.role;
+      state.userName = action.payload.name;
+    },
+    // 유저 역할
+    USER_TYPE: (state, action) => {
+      state.userType = action.payload;
+    },
+    // 유저 이름
+    USER_NAME: (state, action) => {
+      state.userName = action.payload;
+    },
+  },
+});
+
+// Export actions and reducer from the slice
+export const { USER_LOGIN, USER_AUTO_LOGIN, USER_TYPE, USER_NAME } =
+  userInfoSlice.actions;
+export default userInfoSlice.reducer;
