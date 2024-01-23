@@ -84,6 +84,7 @@ const NoticeSearch = styled.div`
         height: 3.6rem;
         font-size: 2.4rem;
         font-family: KBO-Dia-Gothic;
+        font-weight: 300;
         color: #9c9aab;
         width: 100%;
 
@@ -281,7 +282,7 @@ const NoticeBasic = ({ type }) => {
 };
 
 function Notice() {
-  const user = { type: "MANAGER" };
+  const user = { type: "ROLE_ADMIN" };
   return (
     <Routes>
       <Route path="/" exact element={<NoticeBasic type={user.type} />}></Route>
