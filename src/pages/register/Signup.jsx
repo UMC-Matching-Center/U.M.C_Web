@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import "./Register.css";
 import { IconEyeOff, IconEye, IconCheck } from "@tabler/icons-react";
+import { idCheckAPI } from "../../api";
+import { useDispatch, useSelector } from "react-redux";
+import { SINGUP_DURING, SIGNUP_RESET } from "../../modules/signupState";
 
 // input간 간격
 const InputGap = styled.div`
@@ -65,8 +68,7 @@ const PwCondition = styled.div`
 
 export default function Signup() {
   const [id, setId] = useState(""); //ID 세팅
-  const [idValid, setIdValid] = useState(-1); //ID 유효 (-1: 초기 설정, 0: 비인증, 1: 인증)
-  const [idAuth, setIdAuth] = useState(false); //ID Auth 확인
+  const [idValid, setIdValid] = useState(-1); //ID 유효 (-1: 초기 설정, 0: 비인증, 1: 인증(중복), 2: 인증(중복 X))
 
   const [pw, setPw] = useState(""); //비밀번호 세팅
   const [pwVisible, setPwVisible] = useState(false); //비밀번호 노출 여부
@@ -79,7 +81,19 @@ export default function Signup() {
   const [pwEqualVisible, setpwEqualVisible] = useState(false); //비밀번호 확인 노출 여부
 
   const [ableBtn, setAbleBtn] = useState(true); //버튼 Enable 여부
+
   const navigate = useNavigate();
+  const dispatch = useDispatch(); // action을 reducer한테 보내서 state를 update시키는 함수
+
+  /*--- Redux 관련 ---*/
+  const { signupID, access } = useSelector((state) => state.signupState);
+  useEffect(() => {
+    // register/detail 페이지에서 뒤로 돌아온 경우
+    if (access) {
+      setId(signupID);
+      dispatch(SIGNUP_RESET());
+    }
+  }, []);
 
   /* ---- ID 관련 ----- */
   const handleChangeId = (e) => {
@@ -88,20 +102,20 @@ export default function Signup() {
     if (!idRegulation.test(inputId)) return; //ID 정규식에 맞지 않으면 return
     else {
       if (idValid === -1) setIdValid(0); //ID 중복확인 여부 확인 시작
-      else if (idValid === 1) setIdValid(0); //ID 중복 확인 기록 삭제
+      else if (idValid === 2) setIdValid(0); //ID 중복 확인 기록 삭제
       setId(inputId);
-      setIdAuth(false); //ID 작성 시 인증 여부 초기화
-      //setIdAuth(AuthatEmail(inputId)); //이메일 인증 여부
     }
   };
 
   //ID 인증 여부
   const onClickAuth = () => {
-    //API 연동 필요!!!
-    setIdAuth(!idAuth); //임시로 인증 여부 변경
-
-    if (idAuth) setIdValid(2); // (2: 중복 확인 완료)
-    else setIdValid(1); // (0: 중복 확인 필요)
+    idCheckAPI(id).then((response) => {
+      if (response.isSuccess) {
+        setIdValid(2); // (2: 인증(중복 X))
+      } else {
+        setIdValid(1); // (1: 인증(중복))
+      }
+    });
   };
 
   /* ---- PW 관련 ----- */
@@ -153,7 +167,8 @@ export default function Signup() {
   //회원가입 제출 후 다음으로 이동
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate("../detail", { state: { id: id, pw: pw } });
+    dispatch(SINGUP_DURING({ id: id, pw: pw, access: true }));
+    navigate("../detail");
   };
 
   return (

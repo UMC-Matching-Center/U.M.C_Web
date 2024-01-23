@@ -2,13 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import "./Register.css";
-import { useDispatch } from "react-redux";
-import { signupCompleteOpen } from "../../modules/userInfo";
 import {
   SelectBox,
   SelectOptions,
   Option,
 } from "../../common/Selectbox/RectangleSelectBox";
+import { useDispatch, useSelector } from "react-redux";
+import { SIGNUP_COMPLETE } from "../../modules/signupState";
+import { emailRequestAPI, signupAPI } from "../../api";
 
 // input간 간격
 const InputGap = styled.div`
@@ -42,7 +43,7 @@ const EmailAuth = styled.button`
   margin-left: 0.6rem;
 `;
 
-const YearAndPartArea = styled.div`
+const GenerationAndPartArea = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -61,13 +62,13 @@ export default function UserSignup() {
   const [name, setName] = useState(""); //이름
   const [nickname, setNickname] = useState(""); //닉네임
 
-  const [school, setSchool] = useState(["학교", -1]); //학교
-  const [schoolOptionVisible, setSchoolOptionVisible] = useState(false); //학교 option 보이기 여부
-  const schoolSelectRef = useRef(null);
+  const [university, setUniversity] = useState(["학교", -1, -1]); //학교
+  const [universityOptionVisible, setuniversityOptionVisible] = useState(false); //학교 option 보이기 여부
+  const universitySelectRef = useRef(null);
 
-  const [year, setYear] = useState(["기수", -1]); //기수
-  const [yearOptionVisible, setYearOptionVisible] = useState(false); //학교 option 보이기 여부
-  const yearSelectRef = useRef(null);
+  const [generation, setgeneration] = useState(["기수", -1, -1]); //기수
+  const [generationOptionVisible, setgenerationOptionVisible] = useState(false); //학교 option 보이기 여부
+  const generationSelectRef = useRef(null);
 
   const [part, setPart] = useState(["파트", -1]); //파트
   const [partOptionVisible, setPartOptionVisible] = useState(false); //학교 option 보이기 여부
@@ -80,8 +81,18 @@ export default function UserSignup() {
   const navigate = useNavigate();
   const dispatch = useDispatch(); // action을 reducer한테 보내서 state를 update시키는 함수
 
+  /*--- Redux 관련 ---*/
+  const { signupID, signupPW, access } = useSelector(
+    (state) => state.signupState
+  );
+
+  useEffect(() => {
+    // 앞 단계 (id, pw)를 입력하지 않고 넘어온 경우 또는 새로고침된 경우 /register/signup 페이지로 이동
+    if (!access) navigate("../signup");
+  }, []);
+
   /* ---- Email 관련 ----- */
-  const handleChangeId = (e) => {
+  const handleChangeEmail = (e) => {
     if (emailValid === -1) setEmailValid(0); //Email Valid 검사 시작
     const inputId = e.target.value;
     setEmail(inputId);
@@ -99,10 +110,18 @@ export default function UserSignup() {
 
   //Email 인증 여부
   const onClickAuth = () => {
-    //API 연동 필요!!!
-    setEmailAuth(!emailAuth);
-    if (emailValid === 1 && emailAuth) setEmailValid(2); // (2: 형식 일치•인증)
-    else setEmailValid(1); // (1: 형식 일치•비인증)
+    //email 인증 코드 작성 레이아웃 디자인 필요!!!
+    emailRequestAPI(email).then((response) => {
+      if (response.isSuccess && emailValid === 1) {
+        setEmailAuth(true);
+        setEmailValid(2); // (2: 형식 일치•인증)
+        console.log(response); // 임시
+        console.log(emailAuth); // 임시
+      } else {
+        //
+        setEmailValid(1); // (1: 형식 일치•비인증)
+      }
+    });
   };
 
   /* ---- 이름•닉네임 관련 ----- */
@@ -125,42 +144,50 @@ export default function UserSignup() {
 
     // 이벤트 리스너에 handleFocus 함수 등록
     document.addEventListener("mousedown", (event) => {
-      handleOutsideClick(event, schoolSelectRef, setSchoolOptionVisible);
-      handleOutsideClick(event, yearSelectRef, setYearOptionVisible);
+      handleOutsideClick(
+        event,
+        universitySelectRef,
+        setuniversityOptionVisible
+      );
+      handleOutsideClick(
+        event,
+        generationSelectRef,
+        setgenerationOptionVisible
+      );
       handleOutsideClick(event, partSelectRef, setPartOptionVisible);
     });
 
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, [schoolSelectRef, yearSelectRef, partSelectRef]);
+  }, [universitySelectRef, generationSelectRef, partSelectRef]);
 
   // 학교 option들 정의
-  const SchoolDummy = [
-    { key: "Gachon", name: "가천대학교" },
-    { key: "Ajou", name: "아주대학교" },
-    { key: "Catholic", name: "가톨릭대학교" },
-    { key: "Inha", name: "인하대학교" },
+  const UniversityDummy = [
+    { key: "Gachon", name: "가천대학교", numCode: 1 },
+    { key: "Catholic", name: "가톨릭대학교", numCode: 2 },
+    { key: "Ajou", name: "아주대학교", numCode: 3 },
+    { key: "Inha", name: "인하대학교", numCode: 4 },
   ];
 
   //기수 option들 정의
-  const YearDummy = [
-    { key: "1st", name: "1기" },
-    { key: "2nd", name: "2기" },
-    { key: "3rd", name: "3기" },
-    { key: "4th", name: "4기" },
-    { key: "5th", name: "5기" },
+  const generationDummy = [
+    { key: "1st", name: "1기", numCode: 1 },
+    { key: "2nd", name: "2기", numCode: 2 },
+    { key: "3rd", name: "3기", numCode: 3 },
+    { key: "4th", name: "4기", numCode: 4 },
+    { key: "5th", name: "5기", numCode: 5 },
   ];
 
   //파트들 정의
   const PartsDummy = [
-    { key: "Android", name: "Android" },
+    { key: "ANDROID", name: "Android" },
     { key: "IOS", name: "IOS" },
-    { key: "Web", name: "Web(React)" },
-    { key: "ServerNode", name: "Server(Node)" },
-    { key: "ServerSpring", name: "Server(Spring)" },
-    { key: "Design", name: "Design" },
-    { key: "Plan", name: "Plan" },
+    { key: "WEB", name: "Web(React)" },
+    { key: "NODEJS", name: "Server(Node)" },
+    { key: "SPRINGBOOT", name: "Server(Spring)" },
+    { key: "DESIGN", name: "Design" },
+    { key: "PLAN", name: "Plan" },
   ];
 
   //전화번호 정규식 및 '-' 자동 추가
@@ -175,22 +202,43 @@ export default function UserSignup() {
 
   /* ---- 회원가입 버튼 관련 ----- */
   useEffect(() => {
+    let phoneExp = /^010-\d{4}-\d{4}$/; //전화번호 정규식
     //이메일, 이름, 닉네임, 전화번호, 기수, 파트가 모두 정상일 때 버튼 활성화
     setAbleBtn(
-      emailValid === 2 &&
-        name !== "" &&
+      // emailValid === 2 &&
+      name !== "" &&
         nickname !== "" &&
         phoneNumber !== "" &&
-        year !== "기수" &&
-        part !== "파트"
+        phoneExp.test(phoneNumber) &&
+        generation[0] !== "기수" &&
+        part[0] !== "파트"
     );
-  }, [emailValid, name, nickname, phoneNumber, year, part]);
+  }, [emailValid, name, nickname, phoneNumber, generation, part]);
 
   //회원가입 제출 후 홈으로 이동
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(signupCompleteOpen(true));
-    navigate("../../");
+    signupAPI(
+      signupID,
+      signupPW,
+      email,
+      name,
+      nickname,
+      university[2],
+      generation[2],
+      part[2],
+      phoneNumber,
+      portfolio
+    ).then((response) => {
+      console.log("response: ", response);
+      if (response.isSuccess) {
+        dispatch(SIGNUP_COMPLETE({ open: true }));
+        navigate("../../");
+      } else {
+        console.log("회원가입 실패");
+        //
+      }
+    });
   };
 
   return (
@@ -221,7 +269,7 @@ export default function UserSignup() {
                     type="email"
                     placeholder="이메일"
                     value={email}
-                    onChange={handleChangeId}
+                    onChange={handleChangeEmail}
                   />
                   <div className="FormInputUnderline" />
                 </EmailInputArea>
@@ -269,16 +317,20 @@ export default function UserSignup() {
 
               {/* 학교 부분 */}
               <SelectBox
-                onClick={() => setSchoolOptionVisible(!schoolOptionVisible)}
-                ref={schoolSelectRef}
+                onClick={() =>
+                  setuniversityOptionVisible(!universityOptionVisible)
+                }
+                ref={universitySelectRef}
               >
-                <label>{school[0]}</label>
-                <SelectOptions $visible={schoolOptionVisible}>
-                  {SchoolDummy.map((option, i) => (
+                <label>{university[0]}</label>
+                <SelectOptions $visible={universityOptionVisible}>
+                  {UniversityDummy.map((option, i) => (
                     <Option
-                      onClick={() => setSchool([option.name, i])}
+                      onClick={() =>
+                        setUniversity([option.name, i, option.numCode])
+                      }
                       key={option.key}
-                      className={i === school[1] ? "selected" : ""}
+                      className={i === university[1] ? "selected" : ""}
                     >
                       {option.name}
                     </Option>
@@ -289,20 +341,24 @@ export default function UserSignup() {
               <InputGap />
 
               {/* 기수, 파트 부분 */}
-              <YearAndPartArea>
+              <GenerationAndPartArea>
                 {/* 기수 */}
                 <DropDownArea>
                   <SelectBox
-                    onClick={() => setYearOptionVisible(!yearOptionVisible)}
-                    ref={yearSelectRef}
+                    onClick={() =>
+                      setgenerationOptionVisible(!generationOptionVisible)
+                    }
+                    ref={generationSelectRef}
                   >
-                    <label>{year[0]}</label>
-                    <SelectOptions $visible={yearOptionVisible}>
-                      {YearDummy.map((option, i) => (
+                    <label>{generation[0]}</label>
+                    <SelectOptions $visible={generationOptionVisible}>
+                      {generationDummy.map((option, i) => (
                         <Option
-                          onClick={() => setYear([option.name, i])}
+                          onClick={() =>
+                            setgeneration([option.name, i, option.numCode])
+                          }
                           key={option.key}
-                          className={i === year[1] ? "selected" : ""}
+                          className={i === generation[1] ? "selected" : ""}
                         >
                           {option.name}
                         </Option>
@@ -322,7 +378,7 @@ export default function UserSignup() {
                     <SelectOptions $visible={partOptionVisible}>
                       {PartsDummy.map((option, i) => (
                         <Option
-                          onClick={() => setPart([option.name, i])}
+                          onClick={() => setPart([option.name, i, option.key])}
                           key={option.key}
                           className={i === part[1] ? "selected" : ""}
                         >
@@ -333,7 +389,7 @@ export default function UserSignup() {
                   </SelectBox>
                   <div className="FormInputUnderline" />
                 </DropDownArea>
-              </YearAndPartArea>
+              </GenerationAndPartArea>
               <InputGap />
 
               {/* 전화번호 부분 */}
