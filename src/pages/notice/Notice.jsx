@@ -56,6 +56,7 @@ const NoticeWrapper = styled.div`
   justify-content: center;
   width: 120rem;
   margin: 0 auto;
+  margin-bottom: 2.2rem;
 `;
 
 /*---------공지사항 검색과 추가-----------*/
@@ -121,8 +122,7 @@ const NoticeSearch = styled.div`
 /*---------공지사항 리스트-----------*/
 const NoticeList = styled.div`
   width: 120rem;
-  max-height: 58vh;
-  margin-bottom: 2.2rem;
+  height: 56rem;
   background: #fafafa;
   border-radius: 0 0 1rem 1rem;
 
@@ -200,8 +200,8 @@ const NoticeBasic = ({ type }) => {
           <div
             className="notice-searchBar"
             style={{
-              width: type !== "MANAGER" && "120rem",
-              borderRadius: type !== "MANAGER" && "1rem 1rem 0 0",
+              width: type !== "ROLE_ADMIN" && "120rem",
+              borderRadius: type !== "ROLE_ADMIN" && "1rem 1rem 0 0",
             }}
           >
             <div className="searchInput-box">
@@ -216,7 +216,7 @@ const NoticeBasic = ({ type }) => {
               <IconSearch size={36} stroke={1.5} onClick={onClickSearchIcon} />
             </div>
           </div>
-          {type === "MANAGER" && (
+          {type === "ROLE_ADMIN" && (
             <div className="notice-new">
               <img
                 src={IconNewNotice}
@@ -235,8 +235,9 @@ const NoticeBasic = ({ type }) => {
             <div
               style={{
                 textAlign: "center",
-                padding: "3rem",
-                fontSize: "2.4rem",
+                padding: "8.5rem 3rem",
+                fontSize: "1.8rem",
+                fontWeight: "300",
               }}
             >
               검색 결과가 존재하지 않습니다.
