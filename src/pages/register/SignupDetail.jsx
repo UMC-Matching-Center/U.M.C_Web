@@ -9,7 +9,7 @@ import {
 } from "../../common/Selectbox/RectangleSelectBox";
 import { useDispatch, useSelector } from "react-redux";
 import { SIGNUP_COMPLETE } from "../../modules/signupState";
-import { emailRequestAPI, signupAPI } from "../../api";
+import { emailRequestAPI, emailCodeCheckAPI, signupAPI } from "../../api";
 
 // input간 간격
 const InputGap = styled.div`
@@ -38,26 +38,28 @@ const EmailAuth = styled.button`
   font-weight: 300;
   color: #6b6880;
   box-sizing: border-box;
-  width: 2.6rem;
   padding: 0.3rem;
   margin-left: 0.6rem;
+  cursor: pointer;
 `;
 
-const GenerationAndPartArea = styled.div`
+const LineWithTwoAreasArea = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 `;
-
-const DropDownArea = styled.div`
+// 1 internal area in the line
+const InnerAreaOfLineArea = styled.div`
   position: relative;
-  min-width: 13rem;
+  width: 13rem;
 `;
 
 export default function UserSignup() {
   const [email, setEmail] = useState(""); //Email 세팅
-  const [emailValid, setEmailValid] = useState(-1); //Email 유효 (-1: 초기 설정 / 0:[형식 X •인증 X] / 1:[형식 O•인증 X] / 2:[형식 O•인증 O])
-  const [emailAuth, setEmailAuth] = useState(false); //Email Auth 확인
+  const [emailAuthCode, setEmailAuthCode] = useState(""); //Email 인증 코드
+  const [emailValid, setEmailValid] = useState(-1); //Email 형식 확인 여부 (-1: 초기 설정 / 0: 형식 X / 1: 형식 O)
+  const [emailRequest, setEmailRequest] = useState(0); //Email 인증 요청 여부 (-1: 인증 미요청 / 0: 인증 실패 / 1: 인증 요청 api 대기 / 2: 인증 성공)
+  const [emailAuth, setEmailAuth] = useState(-1); //Email 인증 코드 확인 여부 (-1: 초기 설정 / 0: 인증 실패 / 1: 인증 확인 api 대기 / 2: 인증 성공)
 
   const [name, setName] = useState(""); //이름
   const [nickname, setNickname] = useState(""); //닉네임
@@ -96,9 +98,9 @@ export default function UserSignup() {
     if (emailValid === -1) setEmailValid(0); //Email Valid 검사 시작
     const inputId = e.target.value;
     setEmail(inputId);
-    setEmailAuth(false); //Email 작성 시 인증 여부 초기화
     setEmailValid(validatEmail(inputId)); //Email 형식 여부
-    //setEmailAuth(AuthatEmail(inputId)); //Email 인증 여부
+    setEmailRequest(-1); //Email 작성 시 인증 여부 초기화
+    setEmailAuth(-1); //Email 작성 시 인증 여부 초기화
   };
 
   //Email 형식 조건
@@ -108,20 +110,58 @@ export default function UserSignup() {
     return emailtest.test(e) ? 1 : 0; // (0: 형식 X •인증 X, 1: 형식 O•인증 X)
   };
 
-  //Email 인증 여부
-  const onClickAuth = () => {
-    //email 인증 코드 작성 레이아웃 디자인 필요!!!
+  //Email 인증 요청 이벤트
+  const onClickRequest = () => {
+    setEmailRequest(1); //인증 요청 api 대기 상태로 변환
     emailRequestAPI(email).then((response) => {
       if (response.isSuccess && emailValid === 1) {
-        setEmailAuth(true);
-        setEmailValid(2); // (2: 형식 일치•인증)
-        console.log(response); // 임시
-        console.log(emailAuth); // 임시
+        // 인증 요청 성공
+        setEmailRequest(2);
+        setEmailAuth(-1);
       } else {
-        //
-        setEmailValid(1); // (1: 형식 일치•비인증)
+        // 인증 요청 실패
+        setEmailRequest(0);
+        setEmailAuth(-1);
       }
     });
+  };
+
+  //Email 인증 코드 요청 영역 안내 문구
+  const emailInfoText = () => {
+    if (emailValid === 0) return "올바르지 않은 이메일 형식입니다.";
+    else if (emailValid === 1 && emailRequest === -1)
+      return "이메일 인증을 요청해주세요.";
+    else if (emailRequest === 0) return "이메일 인증에 실패했습니다.";
+    else if (emailRequest === 1) return "이메일 인증을 요청 중입니다.";
+    else if (emailRequest === 2) return "이메일 인증에 성공했습니다.";
+    else return "";
+  };
+
+  //Email 인증 코드 입력 이벤트
+  const handleChangeEmailAuthCode = (e) => {
+    setEmailAuthCode(e.target.value);
+  };
+
+  //Email 인증 코드 확인 이벤트
+  const onClickAuth = () => {
+    setEmailAuth(1); //인증 확인 api 대기 상태로 변환
+    emailCodeCheckAPI(email, emailAuthCode).then((response) => {
+      if (response.isSuccess) {
+        // 인증 확인 성공
+        setEmailAuth(2);
+      } else {
+        // 인증 확인 실패
+        setEmailAuth(0);
+      }
+    });
+  };
+
+  //Email 인증 코드 요청 영역 안내 문구
+  const authoInfoText = () => {
+    if (emailAuth === 2) return "이메일이 인증되었습니다.";
+    else if (emailAuth === 1) return "인증 코드를 확인 중입니다.";
+    else if (emailAuth === 0) return "잘못된 인증 코드 입니다.";
+    else return "";
   };
 
   /* ---- 이름•닉네임 관련 ----- */
@@ -205,15 +245,26 @@ export default function UserSignup() {
     let phoneExp = /^010-\d{4}-\d{4}$/; //전화번호 정규식
     //이메일, 이름, 닉네임, 전화번호, 기수, 파트가 모두 정상일 때 버튼 활성화
     setAbleBtn(
-      // emailValid === 2 &&
-      name !== "" &&
+      emailValid === 1 &&
+        emailRequest === 2 &&
+        emailAuth === 2 &&
+        name !== "" &&
         nickname !== "" &&
         phoneNumber !== "" &&
         phoneExp.test(phoneNumber) &&
         generation[0] !== "기수" &&
         part[0] !== "파트"
     );
-  }, [emailValid, name, nickname, phoneNumber, generation, part]);
+  }, [
+    emailValid,
+    emailRequest,
+    emailAuth,
+    name,
+    nickname,
+    phoneNumber,
+    generation,
+    part,
+  ]);
 
   //회원가입 제출 후 홈으로 이동
   const handleSubmit = (e) => {
@@ -261,7 +312,7 @@ export default function UserSignup() {
           {/* 일반 유저 회원가입 폼 */}
           <div className="FormDetail" style={{ marginTop: "5.3rem" }}>
             <div style={{ width: "100%" }}>
-              {/* 이메일(아이디) 관련 */}
+              {/* 이메일 관련 */}
               <EmailArea>
                 <EmailInputArea>
                   <input
@@ -273,46 +324,81 @@ export default function UserSignup() {
                   />
                   <div className="FormInputUnderline" />
                 </EmailInputArea>
-                <EmailAuth onClick={onClickAuth} disabled={emailValid !== 1}>
-                  인증
+                <EmailAuth
+                  onClick={onClickRequest}
+                  disabled={emailValid !== 1 || emailRequest === 1}
+                >
+                  인증 요청
                 </EmailAuth>
               </EmailArea>
               <div
                 className="ValidText"
                 style={{
                   visibility: emailValid === -1 ? "hidden" : "visible",
-                  color: emailValid === 2 ? "#014171" : "#d62117",
+                  color: emailRequest === 2 ? "#014171" : "#d62117",
                 }}
               >
-                {emailValid == 2
-                  ? "이메일이 인증되었습니다."
-                  : emailValid == 1
-                    ? "이메일이 인증되지 않았습니다."
-                    : "이메일 형식이 정확하지 않습니다."}
+                {emailInfoText()}
               </div>
               <InputGap style={{ marginTop: "2.3rem" }} />
 
-              {/* 이름 부분 */}
-              <input
-                className="FormInput"
-                type="text"
-                name="text"
-                placeholder="이름"
-                value={name}
-                onChange={(e) => KoreanValid(e.target.value, "name")}
-              />
-              <div className="FormInputUnderline" />
-              <InputGap />
+              {/* 인증 코드 관련 */}
+              <EmailArea>
+                <EmailInputArea>
+                  <input
+                    className="FormInput"
+                    type="text"
+                    placeholder="인증 코드"
+                    value={emailAuthCode}
+                    onChange={handleChangeEmailAuthCode}
+                  />
+                  <div className="FormInputUnderline" />
+                </EmailInputArea>
+                <EmailAuth
+                  onClick={onClickAuth}
+                  disabled={emailAuthCode === "" || emailAuth === 1}
+                >
+                  코드 확인
+                </EmailAuth>
+              </EmailArea>
+              <div
+                className="ValidText"
+                style={{
+                  visibility: emailAuth === -1 ? "hidden" : "visible",
+                  color: emailAuth === 2 ? "#014171" : "#d62117",
+                }}
+              >
+                {authoInfoText()}
+              </div>
+              <InputGap style={{ marginTop: "2.3rem" }} />
 
-              {/* 닉네임 부분 */}
-              <input
-                className="FormInput"
-                type="text"
-                placeholder="닉네임"
-                value={nickname}
-                onChange={(e) => KoreanValid(e.target.value, "nickname")}
-              />
-              <div className="FormInputUnderline" />
+              {/* 이름, 닉네임 부분 */}
+              <LineWithTwoAreasArea>
+                {/* 이름 부분 */}
+                <InnerAreaOfLineArea>
+                  <input
+                    className="FormInput"
+                    type="text"
+                    name="text"
+                    placeholder="이름"
+                    value={name}
+                    onChange={(e) => KoreanValid(e.target.value, "name")}
+                  />
+                  <div className="FormInputUnderline" />
+                </InnerAreaOfLineArea>
+
+                {/* 닉네임 부분 */}
+                <InnerAreaOfLineArea>
+                  <input
+                    className="FormInput"
+                    type="text"
+                    placeholder="닉네임"
+                    value={nickname}
+                    onChange={(e) => KoreanValid(e.target.value, "nickname")}
+                  />
+                  <div className="FormInputUnderline" />
+                </InnerAreaOfLineArea>
+              </LineWithTwoAreasArea>
               <InputGap />
 
               {/* 학교 부분 */}
@@ -341,9 +427,9 @@ export default function UserSignup() {
               <InputGap />
 
               {/* 기수, 파트 부분 */}
-              <GenerationAndPartArea>
+              <LineWithTwoAreasArea>
                 {/* 기수 */}
-                <DropDownArea>
+                <InnerAreaOfLineArea>
                   <SelectBox
                     onClick={() =>
                       setgenerationOptionVisible(!generationOptionVisible)
@@ -366,10 +452,10 @@ export default function UserSignup() {
                     </SelectOptions>
                   </SelectBox>
                   <div className="FormInputUnderline" />
-                </DropDownArea>
+                </InnerAreaOfLineArea>
 
                 {/* 파트 */}
-                <DropDownArea>
+                <InnerAreaOfLineArea>
                   <SelectBox
                     onClick={() => setPartOptionVisible(!partOptionVisible)}
                     ref={partSelectRef}
@@ -388,8 +474,8 @@ export default function UserSignup() {
                     </SelectOptions>
                   </SelectBox>
                   <div className="FormInputUnderline" />
-                </DropDownArea>
-              </GenerationAndPartArea>
+                </InnerAreaOfLineArea>
+              </LineWithTwoAreasArea>
               <InputGap />
 
               {/* 전화번호 부분 */}

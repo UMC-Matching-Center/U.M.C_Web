@@ -60,7 +60,7 @@ export const emailRequestAPI = async (email) => {
 };
 
 // email 인증 코드 확인
-export const emailCodeChekAPI = async (email, authCode) => {
+export const emailCodeCheckAPI = async (email, authCode) => {
   //서버로 보낼 데이터
   const body = {
     email: email,
@@ -76,7 +76,7 @@ export const emailCodeChekAPI = async (email, authCode) => {
   //서버로 로그인 요청
   try {
     const { data } = await publicAxios.post(
-      "/emails/auth-code/certification",
+      `/emails/auth-code/certification`,
       body
     );
     if (
