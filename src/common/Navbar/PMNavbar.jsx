@@ -34,20 +34,14 @@ const AlarmDummy = [
     is_confirm: false,
   },
   {
-    type: "match_complete",
-    content: "000 팀과 매칭이 완료되었습니다.",
+    type: "match",
+    content: "새로운 지원이 있습니다.",
     date: "2023년 12월 12일",
     is_confirm: false,
   },
   {
-    type: "match_incomplete",
-    content: "000 팀과 매칭이 이루어지지 않았습니다.",
-    date: "2023년 12월 12일",
-    is_confirm: true,
-  },
-  {
-    type: "match_apply",
-    content: "000에 지원이 완료되었습니다.",
+    type: "match",
+    content: "새로운 지원이 있습니다.",
     date: "2023년 12월 12일",
     is_confirm: true,
   },
@@ -115,7 +109,7 @@ const SubMenuItem = styled(UserNavMenuItem)`
   }
 `;
 
-const UserNavbar = () => {
+const PMNavbar = () => {
   const navigate = useNavigate();
 
   /*읽지 않은 알람이 존재하는 지 여부*/
@@ -218,6 +212,16 @@ const UserNavbar = () => {
                       handleNavIndex(3);
                     }}
                   >
+                    지원 현황 보기
+                  </Link>
+                </SubMenuItem>
+                <SubMenuItem>
+                  <Link
+                    to="/"
+                    onClick={() => {
+                      handleNavIndex(3);
+                    }}
+                  >
                     팀원 상호 평가
                   </Link>
                 </SubMenuItem>
@@ -279,50 +283,36 @@ const UserNavbar = () => {
                         <AlarmContent
                           key={idx}
                           onClick={() => {
-                            if (alarm.type !== "match_incomplete") {
-                              if (alarm.type === "notice") {
-                                navigate("/notice");
-                              } else if (alarm.type === "match_complete") {
-                                navigate("팀원 상호 평가 화면 url");
-                              } else if (alarm.type === "match_apply") {
-                                navigate("해당 프로젝트 상세보기 화면 url");
-                              } else {
-                                navigate("/");
-                              }
-
-                              handleIconBellClick();
+                            navigate(
+                              alarm.type === "match"
+                                ? "/내프로젝트지원현황url"
+                                : "/notice"
+                            ),
+                              handleIconBellClick(),
                               handleNavIndex(0);
-                            }
                           }}
                         >
                           <AlarmContentDetail>
-                            {(() => {
-                              switch (alarm.type) {
-                                case "notice":
-                                  return (
-                                    <IconUserPlus
-                                      color={"#131313"}
-                                      size={24}
-                                      strokeWidth={1}
-                                    />
-                                  );
-                                default:
-                                  return (
-                                    <IconUsers
-                                      color={"#131313"}
-                                      size={24}
-                                      strokeWidth={1}
-                                    />
-                                  );
-                              }
-                            })()}
+                            {alarm.type === "match" ? (
+                              <IconUsers
+                                color={"#131313"}
+                                size={24}
+                                strokeWidth={1}
+                              />
+                            ) : (
+                              <IconUserPlus
+                                color={"#131313"}
+                                size={24}
+                                strokeWidth={1}
+                              />
+                            )}
                             <ContentDetailWrap>
                               <ContentDetailText
                                 color="#02010b"
                                 size="1.6rem"
                                 margin="0.4rem"
                               >
-                                {alarm.type === "notice" ? "공지" : "매칭"}
+                                {alarm.type === "match" ? "매칭" : "공지"}
                               </ContentDetailText>
                               <ContentDetailText
                                 color="#6b6880"
@@ -374,4 +364,4 @@ const UserNavbar = () => {
   );
 };
 
-export default UserNavbar;
+export default PMNavbar;

@@ -79,10 +79,23 @@ const UserNavMenuItem = styled.div`
 
   > a {
     text-decoration: none;
+    text-align: center;
     font-family: KBO-Dia-Gothic;
     font-size: 2.4rem;
     font-weight: 300;
     color: #cecdd5;
+
+    &:hover {
+      font-weight: 500;
+    }
+
+    &::after {
+      content: attr(title);
+      display: block;
+      font-weight: 500;
+      height: 0px;
+      visibility: hidden;
+    }
   }
 `;
 
@@ -161,7 +174,7 @@ const AdminNavbar = () => {
       <div className="app__nav">
         <div className="nav_area">
           <div className="nav_logo">
-            <Link to="/">
+            <Link to="/challenger/manage">
               <img src={Logo} />
             </Link>
           </div>
@@ -172,6 +185,7 @@ const AdminNavbar = () => {
                 onClick={() => {
                   handleNavIndex(0);
                 }}
+                title="Challenger"
               >
                 Challenger
               </Link>
@@ -207,6 +221,7 @@ const AdminNavbar = () => {
                 onClick={() => {
                   handleNavIndex(1);
                 }}
+                title="Schedule"
               >
                 Schedule
               </Link>
@@ -217,6 +232,7 @@ const AdminNavbar = () => {
                 onClick={() => {
                   handleNavIndex(2);
                 }}
+                title="Matching"
               >
                 Matching
               </Link>
@@ -267,7 +283,11 @@ const AdminNavbar = () => {
                         <AlarmContent
                           key={idx}
                           onClick={() => {
-                            navigate("/challenger/manage"),
+                            navigate(
+                              alarm.type === "match"
+                                ? "/challenger/manage"
+                                : "/challenger/new"
+                            ),
                               handleIconBellClick(),
                               handleNavIndex(0);
                           }}

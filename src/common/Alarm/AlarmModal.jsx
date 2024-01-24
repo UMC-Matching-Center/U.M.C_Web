@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const RedCircleFilled = styled.div`
-  display: ${(props) => !props.$aliveAlarm && "none"};
+  display: ${(props) => !props.aliveAlarm && "none"};
   position: absolute;
   width: 0.8rem;
   height: 0.8rem;
@@ -11,7 +11,7 @@ const RedCircleFilled = styled.div`
   right: 0.4rem;
 `;
 const AlarmModal = styled.div`
-  display: ${(props) => !props.$display && "none"};
+  display: ${(props) => !props.display && "none"};
   z-index: 2;
   position: absolute;
   top: 6.5rem;
@@ -99,11 +99,11 @@ const ContentDetailWrap = styled.div`
 `;
 
 const ContentDetailText = styled.div`
-  color: ${(props) => props.$color};
+  color: ${(props) => props.color};
   font-family: KBO-Dia-Gothic;
-  font-size: ${(props) => props.$size};
+  font-size: ${(props) => props.size};
   font-weight: 300;
-  margin-top: ${(props) => props.$margin};
+  margin-top: ${(props) => props.margin};
 `;
 const BlueCircleFilled = styled.div`
   position: absolute;
