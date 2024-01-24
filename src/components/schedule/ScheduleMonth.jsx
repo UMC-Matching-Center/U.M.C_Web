@@ -32,6 +32,10 @@ const OtherMonthBox = styled.span`
 
 const StyledArrow = styled.svg`
   cursor: pointer;
+  transition: fill 0.3s; 
+  &:hover {
+    fill: #fafafa; 
+  }
 `;
 
 const Arrow = styled.div`

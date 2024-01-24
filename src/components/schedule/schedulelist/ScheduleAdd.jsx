@@ -40,6 +40,9 @@ const AddTitleInput = styled.input`
   font-weight: 500;
   color: #fafafa;
   font-family: KBO-Dia-Gothic;
+  &:focus {
+    outline: none;
+  }
 `;
 
 //일정 컨테이너(시작,종료)
@@ -67,6 +70,10 @@ const AddDateInput = styled.input`
   font-weight: 500;
   color: #fafafa;
   font-family: KBO-Dia-Gothic;
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 //메모 텍스트
@@ -88,6 +95,9 @@ const AddMemoInputBox = styled.textarea`
   line-height: 150%;
 
   resize: none;
+  &:focus {
+    outline: none;
+  }
 `;
 
 export default function ScheduleEdit({
@@ -101,7 +111,8 @@ export default function ScheduleEdit({
   const [isStartDateFilled, setIsStartDateFilled] = useState(false); // 시작 날짜가 입력된 상태인지
   const [isEndDateFilled, setIsEndDateFilled] = useState(false); // 종료 날짜가 입력된 상태인지
   const [ableBtn, setAbleBtn] = useState(false); // 추가버튼 able 여부
-  
+  const [isStartDateBigger, setIsStartDateBigger] = useState(false); //시작 날짜 큰 여부 설정
+
   //제목 세팅
   const handleTitleChange = (e) => {
     setFormData({ ...formData, title: e.target.value });
@@ -173,10 +184,21 @@ export default function ScheduleEdit({
     setFormData({ ...formData, memo: e.target.value });
   };
 
+  //해당 endday가 startday보다 클 경우 처리
+  useEffect(() => {
+    setIsStartDateBigger(
+      formData.startday <= formData.endday ||
+        formData.startmonth < formData.endmonth ||
+        formData.startyear < formData.endyear
+    );
+  }, [formData]);
+
   // 제목, 시작,종료일이 채워지면 버튼 클릭 여부 키기
   useEffect(() => {
-    setAbleBtn(isTitleFilled && isStartDateFilled && isEndDateFilled); 
-  }, [isTitleFilled, isStartDateFilled, isEndDateFilled]); 
+    setAbleBtn(
+      isTitleFilled && isStartDateFilled && isEndDateFilled && isStartDateBigger
+    );
+  }, [isTitleFilled, isStartDateFilled, isEndDateFilled, isStartDateBigger]);
 
   return (
     <div className="schedulecontainer">

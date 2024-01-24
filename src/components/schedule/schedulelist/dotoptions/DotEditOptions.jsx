@@ -40,7 +40,7 @@ const SelectOptions = styled.ul`
   left: -0.1rem;
   top: 1.3rem;
   max-height: 20.8rem;
-  max-height: ${(props) => (props.show ? "none" : "0")};
+  max-height: ${(props) => (props.$show ? "none" : "0")};
   background-color: #fafafa;
   color: #010004;
   font-weight: 300;
@@ -143,7 +143,7 @@ export default function DotEditOptions({
           </StyledSVG>
         }
       </Label>
-      <SelectOptions show={isShowOptions}>
+      <SelectOptions $show={isShowOptions}>
         {DotOptions.map((option) => (
           <Option
             onClick={() => handleColorChange(option.value)}

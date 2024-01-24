@@ -14,7 +14,13 @@
   height: 13.6rem;
   margin-top: 2.4rem;
 }
-
+.noschedulebox {
+  border-bottom: 0.1rem solid #dcdeee;
+  width: 40.8rem;
+  height: 6.9rem;
+  font-size: 1.6rem;
+  font-weight: 300;
+}
 .schedulebox:first-child {
   margin-top: 0rem;
 }

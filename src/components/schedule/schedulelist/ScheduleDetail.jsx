@@ -24,15 +24,24 @@ export default function ScheduleDetail({
       </StyledSVG>
     ),
   }));
+  
+  //해당 달력에 날짜가 있는지 처리
+  const isDataInMonth = dummyData.some(
+    (infobox) =>
+      infobox.startmonth == currentMonthIndex + 1 ||
+      infobox.endmonth == currentMonthIndex + 1 ||
+      (infobox.endmonth > currentMonthIndex + 1 &&
+        currentMonthIndex + 1 > infobox.startmonth)
+  );
 
   return (
     <div className="schedulecontainer">
-      {dummyData.map(
-        (infobox) =>
-          (infobox.startmonth == currentMonthIndex + 1 ||
-            infobox.endmonth == currentMonthIndex + 1 ||
-            (infobox.endmonth > currentMonthIndex + 1 &&
-              currentMonthIndex + 1 > infobox.startmonth)) && ( //해당 달이 출력되도록 설정
+      {isDataInMonth ? (
+        dummyData.map((infobox) =>
+          infobox.startmonth == currentMonthIndex + 1 ||
+          infobox.endmonth == currentMonthIndex + 1 ||
+          (infobox.endmonth > currentMonthIndex + 1 &&
+            currentMonthIndex + 1 > infobox.startmonth) ? (
             <div className="schedulebox" key={infobox.id}>
               <div className="schduletitlecontainer">
                 {
@@ -47,15 +56,26 @@ export default function ScheduleDetail({
               </div>
               <div className="scheduletext">{infobox.text}</div>
             </div>
-          )
+          ) : null
+        )
+      ) : (
+        <div className="noschedulebox">등록된 일정이 없습니다.</div>
       )}
       <div className="schedulebuttoncontainer">
-        <div className="schedulebutton" onClick={handlemoveScheduleAdd}>
-          일정 추가하기
-        </div>
-        <div className="schedulebutton" onClick={handleScheduleEdit}>
-          일정 편집하기
-        </div>
+        {isDataInMonth ? (
+          <>
+            <div className="schedulebutton" onClick={handlemoveScheduleAdd}>
+              일정 추가하기
+            </div>
+            <div className="schedulebutton" onClick={handleScheduleEdit}>
+              일정 편집하기
+            </div>
+          </>
+        ) : (
+          <div className="schedulebuttonfinish" onClick={handlemoveScheduleAdd}>
+            일정 추가하기
+          </div>
+        )}
       </div>
     </div>
   );

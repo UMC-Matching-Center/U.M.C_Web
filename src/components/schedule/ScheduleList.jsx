@@ -20,6 +20,12 @@ export default function ScheduleList({
   };
 
   const handleScheduleEditFinish = () => {
+    setDummyData((prevInfoboxData) => {
+      const updatedProjectDummy = prevInfoboxData.map((infobox) =>
+        infobox.editOn ? { ...infobox, editOn: false } : infobox
+      );
+      return updatedProjectDummy;
+    });
     setScheduleEdit(false);
   };
   const handleScheduleAdd = () => {

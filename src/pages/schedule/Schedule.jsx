@@ -14,19 +14,20 @@ const ScheduleBox = styled.div`
 `;
 
 //캘린더와 일정 추가 부분을 가로로 만들기 위해 생성
-const ScheduleDeContainer = styled.div`
+const ScheduleContainer = styled.div`
   display: flex;
   flex-direction: row;
+  margin-top : 1.5rem;
 `;
 const projectDummy = [
   {
     id: 1,
     title: "기말고사",
     startyear: "24",
-    startmonth: "12",
+    startmonth: "1",
     startday: "8",
     endyear: "24",
-    endmonth: "12",
+    endmonth: "1",
     endday: "10",
     text: "가천대학교 기말고사",
     color: "#DCDEEE",
@@ -35,10 +36,10 @@ const projectDummy = [
     id: 2,
     title: "개발자 매칭",
     startyear: "24",
-    startmonth: "12",
+    startmonth: "1",
     startday: "8",
     endyear: "24",
-    endmonth: "12",
+    endmonth: "1",
     endday: "11",
     text: "",
     color: "#FF7676",
@@ -47,20 +48,8 @@ const projectDummy = [
     id: 3,
     title: "기말고사",
     startyear: "24",
-    startmonth: "12",
-    startday: "8",
-    endyear: "24",
-    endmonth: "12",
-    endday: "23",
-    text: "",
-    color: "#DCDEEE",
-  },
-  {
-    id: 4,
-    title: "하하",
-    startyear: "24",
     startmonth: "1",
-    startday: "2",
+    startday: "8",
     endyear: "24",
     endmonth: "1",
     endday: "23",
@@ -118,7 +107,7 @@ export default function Schedule() {
         handleBeforeMonth={handleBeforeMonth} //저번 달 이동 handle 값 get
         handleAfterMonth={handleAfterMonth} //다음 달 이동 handle 값 get
       />
-      <ScheduleDeContainer>
+      <ScheduleContainer>
         <CustomCalendar
           currentMonthIndex={currentMonthIndex} //현재 달 index값 give
           dummyData={dummyData} //해당 데이터 give
@@ -132,7 +121,7 @@ export default function Schedule() {
           formData={formData} //추가하는 데이터에 대한 반응하기 위해 give
           setFormData={setFormData} //데이터 값을 주기 위한 것
         />
-      </ScheduleDeContainer>
+      </ScheduleContainer>
     </ScheduleBox>
   );
 }
