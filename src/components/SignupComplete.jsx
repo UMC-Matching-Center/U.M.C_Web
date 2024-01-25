@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import "../pages/register/Register.css";
-import { useDispatch } from "react-redux";
-import { SIGNUP_COMPLETE } from "../modules/signupState";
 
 const CompleteTitle = styled.div`
   color: #014171;
@@ -42,8 +40,7 @@ const ModalCloseArea = styled.div`
   background: url("data:image/svg+xml;base64, ${ModalCloseIcon}") no-repeat;
 `;
 
-export default function SignupComplete() {
-  const dispatch = useDispatch(); // action을 reducer한테 보내서 state를 update시키는 함수
+export default function SignupComplete({ isClose }) {
   return (
     <div className="MainBox">
       {/* 좌측 로고 부분 */}
@@ -68,7 +65,7 @@ export default function SignupComplete() {
           문의는 각 학교 회장단에게 연락해 주세요. <br />
         </CompleteDetail>
       </div>
-      <ModalCloseArea onClick={() => dispatch(SIGNUP_COMPLETE(false))} />
+      <ModalCloseArea onClick={isClose} />
     </div>
   );
 }

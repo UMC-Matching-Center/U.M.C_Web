@@ -176,7 +176,7 @@ const Home = () => {
         onRequestClose={() => setModalOpen(false)}
         style={ModalStyles}
       >
-        <SignupComplete />
+        <SignupComplete isClose={() => setModalOpen(false)} />
       </Modal>
       <div className="app__main">
         <div className="app__main-projects">
