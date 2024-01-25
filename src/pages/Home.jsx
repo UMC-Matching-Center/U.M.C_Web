@@ -5,7 +5,7 @@ import Card from "../common/Card/Card";
 import SignupComplete from "../components/SignupComplete";
 import "./Home.css";
 import { useDispatch, useSelector } from "react-redux";
-import { signupCompleteOpen } from "../modules/userInfo";
+import { SIGNUP_COMPLETE } from "../modules/signupState";
 
 const projectsDummy = [
   {
@@ -129,10 +129,11 @@ const ModalStyles = {
 
 const Home = () => {
   /*--- Redux 관련 ---*/
-  const { modalOpen } = useSelector((state) => state.userInfo);
+  const { signupCompleteModalOpen } = useSelector((state) => state.signupState);
   const dispatch = useDispatch();
-  const setModalOpen = (modalOpen) => dispatch(signupCompleteOpen(modalOpen));
-  
+  const setModalOpen = (modalOpen) => dispatch(SIGNUP_COMPLETE(modalOpen));
+  Modal.setAppElement("#root");
+
   /*--- 프로젝트 카드 관련---*/
   const [cardCount, setCardCount] = useState(15);
 
@@ -171,17 +172,21 @@ const Home = () => {
   return (
     <div>
       <Modal
-        isOpen={modalOpen}
+        isOpen={signupCompleteModalOpen}
         onRequestClose={() => setModalOpen(false)}
         style={ModalStyles}
       >
-        <SignupComplete />
+        <SignupComplete isClose={() => setModalOpen(false)} />
       </Modal>
       <div className="app__main">
         <div className="app__main-projects">
           {projectsDummy.slice(0, cardCount).map((project, index) => {
             return (
-              <Card project={project} key={index} onClick={handleProjectClick} />
+              <Card
+                project={project}
+                key={index}
+                onClick={handleProjectClick}
+              />
             );
           })}
         </div>

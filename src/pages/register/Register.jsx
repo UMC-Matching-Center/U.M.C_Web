@@ -10,6 +10,8 @@ import {
 } from "@tabler/icons-react";
 import Signup from "./Signup";
 import SignupDetail from "./SignupDetail";
+import { useDispatch } from "react-redux";
+import { loginAPI } from "../../api";
 
 // input간 간격
 const InputGap = styled.div`
@@ -24,24 +26,26 @@ const PwArea = styled.div`
 function Login() {
   const [id, setId] = useState(""); //ID 세팅
   const [pw, setPw] = useState(""); //비밀번호 세팅
-  const [pwValid, setPwValid] = useState(true); //비밀번호 valid 확인
+  const [loginInfo, setLoginInfo] = useState(""); //비밀번호 안내문구 확인
   const [pwVisible, setPwVisible] = useState(false); //비밀번호 노출 여부
   const [autoLogin, setAutoLogin] = useState(false); //자동 로그인 설정
   const [ableBtn, setAbleBtn] = useState(false); //버튼 Enable 여부
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   //로그인 정보 일치 확인 여부
   const handleLogin = (e) => {
     e.preventDefault();
-    if (id === "exampleUser") {
-      if (pw === "examplePassword") {
-        navigate("/Home");
+    //로그인 API 호출
+    loginAPI(id, pw, autoLogin, dispatch).then((response) => {
+      if (response.isSuccess) {
+        setLoginInfo("");
+        navigate("/");
       } else {
-        setPwValid(false);
+        setLoginInfo(response.message);
       }
-    } else {
-      setPwValid(false);
-    }
+    });
   };
 
   //자동 로그인 설정 및 상태를 반전시켜 업데이트
@@ -83,7 +87,7 @@ function Login() {
               <input
                 className="FormInput"
                 type="email"
-                placeholder="이메일(아이디)"
+                placeholder="아이디"
                 value={id}
                 onChange={(e) => setId(e.target.value)}
               />
@@ -111,11 +115,8 @@ function Login() {
               />
 
               {/* 해당부분은 기획에 따라 변경됨 */}
-              <p
-                className="ValidText"
-                style={{ display: pwValid ? "none" : "block" }}
-              >
-                올바른 비밀번호를 입력해주세요
+              <p className="ValidText" style={{ color: "#d62117" }}>
+                {loginInfo}
               </p>
               {/* --------------------- */}
 

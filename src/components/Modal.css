@@ -1,0 +1,101 @@
+/* 모달 전체 */
+.ModalBox {
+  display: flex;
+  width: 56.5rem;
+  height: 35rem;
+  min-width: 56.5rem;
+  min-height: 35rem;
+}
+
+.IconCircleBackground {
+  z-index: 1;
+  position: absolute;
+  left: 23.25rem;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 5rem;
+  background-color: #fafafa;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .IconCircleGreen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 9rem;
+    height: 9rem;
+    border-radius: 5rem;
+    background-color: #2ab22a;
+  }
+}
+
+.ModalConentBox {
+  position: absolute;
+  width: 56.5rem;
+  height: 30rem;
+  background-color: #fafafa;
+  border-radius: 1rem;
+  bottom: 0;
+}
+
+.MoalContentCenter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.ModalInfo {
+  color: var(--base-300, #6b6880);
+  text-align: center;
+  font-family: "KBO-Dia-Gothic";
+  font-size: 2rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 2rem; /* 100% */
+}
+
+.ModalBtnArea {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 2rem;
+  width: 26rem;
+  height: 4rem;
+}
+
+.ModalBtnWhite {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  width: 12rem;
+  height: 4rem;
+  border-radius: 1rem;
+  border: 0.1rem solid var(--base-300, #6b6880);
+  color: var(--base-300, #6b6880);
+
+  font-family: "KBO-Dia-Gothic";
+  font-size: 1.4rem;
+  font-weight: 300;
+  line-height: 2rem; /* 142.857% */
+}
+
+.ModalBtnGreen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  width: 12rem;
+  height: 4rem;
+  border-radius: 1rem;
+  background: #2ab22a;
+  color: #ffffff;
+
+  font-family: "KBO-Dia-Gothic";
+  font-size: 1.4rem;
+  font-weight: 300;
+  line-height: 2rem; /* 142.857% */
+}

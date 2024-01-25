@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Routes, Route, useLocation } from "react-router-dom";
 import { IconPhotoPlus, IconPencil } from "@tabler/icons-react";
-
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { challengerDataAPI } from "../../api";
+import useGetAccessToken from "../../utils/getAccessToken";
 
 const FormArea = styled.div`
   display: flex;
@@ -33,8 +35,8 @@ const UserModify = () => {
   const location = useLocation();
   const [profileImage, setProfileImage] = useState(null); // 실제 파일 저장
   const [profileImageURL, setProfileImageURL] = useState(null); // 이미지 데이터 URL 저장
-  const [school, setSchool] = useState(location.state?.school); // 학교
-  const [year, setYear] = useState(location.state?.year); // 기수
+  const [university, setUniversity] = useState(location.state?.university); // 학교
+  const [generation, setGeneration] = useState(location.state?.generation); // 기수
   const [part, setPart] = useState(location.state?.part); // 파트
   const [phoneNumber, setPhoneNumber] = useState(
     location.state?.phoneNumber
@@ -84,8 +86,8 @@ const UserModify = () => {
     e.preventDefault();
     navigate("..", {
       state: {
-        school: school,
-        year: year,
+        university: university,
+        generation: generation,
         part: part,
         phoneNumber: phoneNumber,
         portfolio: portfolio,
@@ -97,14 +99,14 @@ const UserModify = () => {
   useEffect(() => {
     //이름, 닉네임, 전화번호, 학교, 파트가 모두 입력•선택되었을 때 버튼 활성화
     setAbleBtn(
-      school !== "" &&
-        year !== "" &&
+      university !== "" &&
+        generation !== "" &&
         part !== "" &&
         phoneNumber !== "" &&
         phoneValid &&
         portfolio !== ""
     );
-  }, [school, year, part, phoneNumber, portfolio, phoneValid]);
+  }, [university, generation, part, phoneNumber, portfolio, phoneValid]);
 
   return (
     <div className="container">
@@ -147,8 +149,8 @@ const UserModify = () => {
                 학교
               </div>
               <MyPageInput
-                value={school}
-                onChange={(e) => setSchool(e.target.value)}
+                value={university}
+                onChange={(e) => setUniversity(e.target.value)}
               />
             </FormArea>
             <FormArea>
@@ -156,8 +158,8 @@ const UserModify = () => {
                 기수
               </div>
               <MyPageInput
-                value={year}
-                onChange={(e) => setYear(e.target.value)}
+                value={generation}
+                onChange={(e) => setGeneration(e.target.value)}
                 width="5.2rem"
               />
               <div
@@ -210,17 +212,38 @@ const UserModify = () => {
 
 const UserInfo = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [school] = useState(location.state?.school); // 학교
-  const [year] = useState(location.state?.year); // 기수
-  const [part] = useState(location.state?.part); // 파트
-  const [phoneNumber] = useState(
-    location.state?.phoneNumber.replace(
-      /^(\d{2,3})(\d{3,4})(\d{4})$/,
-      `$1-$2-$3`
-    )
-  ); // 전화 입력 값
-  const [portfolio] = useState(location.state?.portfolio); // 포트폴리오
+  const dispatch = useDispatch();
+  const accessToken = useGetAccessToken();
+
+  const [nicknameName, setNicknameName] = useState(""); // 닉네임/이름
+  const [email, setEmail] = useState(""); // 이메일
+  const [university, setUniversity] = useState(""); // 학교
+  const [generation, setgeneration] = useState(""); // 기수
+  const [part, setPart] = useState(""); // 파트
+  const [phoneNumber, setPhoneNumber] = useState(""); // 전화 입력 값
+  const [portfolio, setPortfolio] = useState(location.state?.portfolio); // 포트폴리오
+
+  // 첫 실행시 API 호출
+  useEffect(() => {
+    challengerDataAPI(accessToken, dispatch).then((response) => {
+      if (response.isSuccess) {
+        setNicknameName(response.nicknameName);
+        setEmail(response.email);
+        setUniversity(response.university);
+        setgeneration(response.generation);
+        setPart(response.part);
+        setPhoneNumber(
+          response.phoneNumber.replace(
+            /^(\d{2,3})(\d{3,4})(\d{4})$/,
+            `$1-$2-$3`
+          )
+        );
+        setPortfolio(response.portfolio);
+      } else {
+        alert(response.message);
+      }
+    });
+  }, []);
 
   return (
     <div className="container">
@@ -248,8 +271,8 @@ const UserInfo = () => {
               onClick={() => {
                 navigate("/mypage/modify", {
                   state: {
-                    year: year,
-                    school: school,
+                    generation: generation,
+                    university: university,
                     part: part,
                     phoneNumber: phoneNumber,
                     portfolio: portfolio,
@@ -258,8 +281,8 @@ const UserInfo = () => {
               }}
             />
             <div className="profileBox-content">
-              <div className="profile-name">루나/고지민</div>
-              <div className="profile-email">gachonumc@gmail.com</div>
+              <div className="profile-name">{nicknameName}</div>
+              <div className="profile-email">{email}</div>
             </div>
           </div>
         </div>
@@ -269,32 +292,32 @@ const UserInfo = () => {
               <div className="form-label" style={{ marginRight: "4.1rem" }}>
                 학교
               </div>
-              <MyPageInput value={school} disabled />
+              <MyPageInput value={university || ""} disabled />
             </FormArea>
             <FormArea>
               <div className="form-label" style={{ marginRight: "4.1rem" }}>
                 기수
               </div>
-              <MyPageInput value={year} disabled width="5.2rem" />
+              <MyPageInput value={generation || ""} disabled width="5.2rem" />
               <div
                 className="form-label"
                 style={{ marginLeft: "2.2rem", marginRight: "0.9rem" }}
               >
                 파트
               </div>
-              <MyPageInput value={part} disabled width="10rem" />
+              <MyPageInput value={part || ""} disabled width="10rem" />
             </FormArea>
             <FormArea>
               <div className="form-label" style={{ marginRight: "2rem" }}>
                 전화번호
               </div>
-              <MyPageInput value={phoneNumber} type="num" disabled />
+              <MyPageInput value={phoneNumber || ""} type="num" disabled />
             </FormArea>
             <FormArea style={{ marginBottom: "4.3rem" }}>
               <div className="form-label" style={{ marginRight: "1rem" }}>
                 포트폴리오
               </div>
-              <MyPageInput value={portfolio} disabled />
+              <MyPageInput value={portfolio || ""} disabled />
             </FormArea>
             <div className="boxForm-button-wrap">
               <div className="boxForm-button" onClick={() => navigate("/")}>
