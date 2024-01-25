@@ -289,7 +289,7 @@ const PMNavbar = () => {
                                 : "/notice"
                             ),
                               handleIconBellClick(),
-                              handleNavIndex(0);
+                              handleNavIndex(alarm.type === "match" ? 3 : 4);
                           }}
                         >
                           <AlarmContentDetail>

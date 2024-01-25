@@ -282,16 +282,16 @@ const UserNavbar = () => {
                             if (alarm.type !== "match_incomplete") {
                               if (alarm.type === "notice") {
                                 navigate("/notice");
+                                handleNavIndex(4);
                               } else if (alarm.type === "match_complete") {
                                 navigate("팀원 상호 평가 화면 url");
+                                handleNavIndex(3);
                               } else if (alarm.type === "match_apply") {
                                 navigate("해당 프로젝트 상세보기 화면 url");
-                              } else {
-                                navigate("/");
+                                handleNavIndex(3);
                               }
 
                               handleIconBellClick();
-                              handleNavIndex(0);
                             }
                           }}
                         >
