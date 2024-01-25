@@ -84,4 +84,7 @@ const createPrivateAxios = (accessToken, dispatch) => {
   return privateInstance;
 };
 
+const privateAxios = (accessToken, dispatch) =>
+  createPrivateAxios(accessToken, dispatch);
+
 export { publicAxios, refreshAxios, privateAxios };
