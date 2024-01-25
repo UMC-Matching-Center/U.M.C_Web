@@ -251,7 +251,6 @@ const AdminNavbar = () => {
                   handleIconBellClick();
                 }}
               />
-
               <AlarmContainer
                 aliveAlarm={aliveAlarm}
                 isViewModal={isViewModal}

@@ -1,95 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, Routes, Route, useLocation } from "react-router-dom";
 import { IconPhotoPlus, IconPencil } from "@tabler/icons-react";
+import {
+  SelectBox,
+  SelectOptions,
+  Option,
+} from "../../common/Selectbox/RectangleSelectBox";
 
 import styled from "styled-components";
 
 const FormArea = styled.div`
   display: flex;
+  width: 28.2rem;
   align-items: center;
-  margin-bottom: ${(props) => props.bottom && props.bottom};
-  & * {
-    display: inline;
-    color: #6b6880;
-    font-family: KBO-Dia-Gothic;
-    font-size: 1.2rem;
-    font-weight: 300;
-  }
 `;
 
 const MyPageInput = styled.input`
   outline: none;
   border: none;
-  width: 20rem;
-  border-bottom: 0.1rem solid #6b6880;
+  padding: 0 0.5rem;
+  width: 100%;
   background: transparent;
-`;
-
-{
-  /*드롭박스 커스텀*/
-}
-const SelectBox = styled.div`
-  z-index: 1;
-  position: relative;
-  min-width: 20rem;
-  border-bottom: 0.1rem solid #6b6880;
-  align-self: center;
-  cursor: pointer;
-  &::before {
-    content: ${(props) =>
-      props.show
-        ? `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-up" width="15" height="15" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 15l6 -6l6 6" /></svg>')`
-        : `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-down" width="15" height="15" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg>')`};
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
-`;
-const Label = styled.label`
   font-size: 1.2rem;
-  text-align: center;
+  font-weight: 300;
+  font-family: "KBO-Dia-Gothic";
+  color: #6b6880;
 `;
-const SelectOptions = styled.ul`
-  position: absolute;
-  list-style: none;
-  left: 0;
-  top: 0.45rem;
-  width: 20rem;
-  height: 12rem;
-  padding: 0;
-  border-left: 0.1rem solid #6b6880;
-  border-right: 0.1rem solid #6b6880;
-  overflow-y: scroll;
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  max-height: ${(props) => (props.show ? "none" : "0")};
-  background-color: #fafafa;
-
-  color: #010004;
-  font-family: KBO-Dia-Gothic;
-
-  display: flex;
-  flex-direction: column;
-`;
-const Option = styled.li`
-  position: relative;
-  font-size: 1rem;
-  padding: 0.5rem 0.4rem;
-  border-bottom: 0.1rem solid #6b6880;
-  &:hover {
-    background-color: #e7e6ea;
-  }
-  &::after {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    content: ${(props) =>
-      props.check === "true" &&
-      `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-check" width="10" height="10" viewBox="0 0 20 20" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>')`};
-  }
+const FormInputUnderline = styled.div`
+  min-height: 0.4rem;
+  box-sizing: border-box;
+  border-bottom: 1px solid #6b6880;
 `;
 
 // 지부 option들 정의
@@ -105,17 +46,21 @@ const OfficeOptionsDummy = [
 const AdminModify = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
   const [profileImage, setProfileImage] = useState(null); // 실제 파일 저장
   const [profileImageURL, setProfileImageURL] = useState(null); // 이미지 데이터 URL 저장
+
   const [phoneNumber, setPhoneNumber] = useState(
     location.state?.phoneNumber
       ? location.state.phoneNumber.replace(/[^0-9]/g, "")
       : ""
   ); // 대표전화 입력 값
   const [phoneValid, setPhoneValid] = useState(false); //전화번호 유효성 점검
-  const [isShowOptions, setIsShowOptions] = useState(false); // 옵션 리스트 오픈 여부
-  const [office, setOffice] = useState(location.state?.office); // 선택된 옵션 표시
-  const [isCheck, setIsCheck] = useState("GACI"); //선택 옵션 체크
+
+  const [office, setOffice] = useState(["GACI 지부", 0]); //지부
+  const [officeOptionVisible, setOfficeOptionVisible] = useState(false); //지부 option 보이기 여부
+  const officeSelectRef = useRef(null);
+
   const [ableBtn, setAbleBtn] = useState(false); //버튼 Enable 여부
 
   /* ---- 이미지 파일 관련 ----- */
@@ -139,22 +84,18 @@ const AdminModify = () => {
   };
 
   /* ---- 전화번호 관련 ----- */
-  const handlePhoneNumber = (e) => {
-    const phone = e.target.value;
+  const validTelephone = (e) => {
+    const tmpNumber = e.target.value;
+    console.log(tmpNumber);
+    setPhoneNumber(
+      tmpNumber
+        .replace(/[^0-9]/g, "")
+        .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/, "$1-$2-$3")
+        .replace(/(-{1,2})$/, "")
+    );
 
-    setPhoneNumber(phone);
-    setPhoneValid(validPhone(phone));
-  };
-
-  const validPhone = (phone) => {
-    var regExp = /^010\d{8}$/;
-    return regExp.test(phone) ? 1 : 0; // 정규식에 부합하다면 1 반환
-  };
-
-  /* ---- 지부 선택 관련 ----- */
-  const handleOnChangeOption = (value, name) => {
-    setIsCheck(value);
-    setOffice(name);
+    let phoneExp = /^010-\d{4}-\d{4}$/;
+    setPhoneValid(phoneExp.test(tmpNumber) ? 1 : 0);
   };
 
   const handleSubmit = (e) => {
@@ -169,6 +110,25 @@ const AdminModify = () => {
     //버튼 여부
     setAbleBtn(phoneValid);
   }, [phoneValid]);
+
+  /* ---- select 관련 ----- */
+  useEffect(() => {
+    // 특정 영역 외 클릭 시 발생하는 이벤트
+    const handleOutsideClick = (event, ref, setVisibility) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setVisibility(false);
+      }
+    };
+
+    // 이벤트 리스너에 handleFocus 함수 등록
+    document.addEventListener("mousedown", (event) => {
+      handleOutsideClick(event, officeSelectRef, setOfficeOptionVisible);
+    });
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [officeSelectRef]);
 
   return (
     <div className="container">
@@ -206,42 +166,49 @@ const AdminModify = () => {
         </div>
         <div className="infoBox">
           <div className="boxForm">
-            <FormArea bottom="3.2rem">
-              <div className="form-label" style={{ marginRight: "3.7rem" }}>
+            <FormArea style={{ marginBottom: "3.2rem" }}>
+              <div className="form-label" style={{ flexGrow: 1 }}>
                 대표 번호
               </div>
-              <MyPageInput
-                value={phoneNumber}
-                onChange={handlePhoneNumber}
-                type="number"
-                placeholder="숫자만 입력해주세요"
-              />
+              <div style={{ width: "20rem" }}>
+                <MyPageInput
+                  type="tel"
+                  placeholder="숫자만 입력해주세요"
+                  value={phoneNumber}
+                  onChange={(e) => validTelephone(e)}
+                  maxLength={13}
+                />
+                <FormInputUnderline />
+              </div>
             </FormArea>
-            <FormArea bottom="8.1rem">
-              <div className="form-label" style={{ marginRight: "3.7rem" }}>
+
+            {/* 지부 부분 */}
+            <FormArea style={{ marginBottom: "8.1rem" }}>
+              <div className="form-label" style={{ flexGrow: 1 }}>
                 지부 선택
               </div>
-              <SelectBox
-                className="app__main-filter-content"
-                onClick={() => setIsShowOptions((pre) => !pre)}
-                show={isShowOptions}
-              >
-                <Label>{office}</Label>
-                <SelectOptions show={isShowOptions}>
-                  {OfficeOptionsDummy.map((option, i) => (
-                    <Option
-                      onClick={() =>
-                        handleOnChangeOption(option.value, option.name)
-                      }
-                      key={i}
-                      check={isCheck === option.value ? "true" : "false"}
-                    >
-                      {option.name}
-                    </Option>
-                  ))}
-                </SelectOptions>
-              </SelectBox>
+              <div style={{ width: "20rem", position: "relative" }}>
+                <SelectBox
+                  onClick={() => setOfficeOptionVisible(!officeOptionVisible)}
+                  ref={officeSelectRef}
+                >
+                  <label>{office[0]}</label>
+                  <SelectOptions $visible={officeOptionVisible}>
+                    {OfficeOptionsDummy.map((option, i) => (
+                      <Option
+                        onClick={() => setOffice([option.name, i])}
+                        key={option.value}
+                        className={i === office[1] ? "selected" : ""}
+                      >
+                        {option.name}
+                      </Option>
+                    ))}
+                  </SelectOptions>
+                </SelectBox>
+                <FormInputUnderline />
+              </div>
             </FormArea>
+
             <button
               className="mypage-button"
               onClick={handleSubmit}
@@ -258,6 +225,7 @@ const AdminModify = () => {
     </div>
   );
 };
+
 const AdminInfo = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -306,19 +274,25 @@ const AdminInfo = () => {
         </div>
         <div className="infoBox">
           <div className="boxForm">
-            <FormArea bottom="3.2rem">
-              <div className="form-label" style={{ marginRight: "3.7rem" }}>
+            <FormArea style={{ marginBottom: "3.2rem" }}>
+              <div className="form-label" style={{ flexGrow: 1 }}>
                 대표 번호
               </div>
-              <MyPageInput value={phoneNumber} type="num" disabled />
+              <div style={{ width: "20rem" }}>
+                <MyPageInput value={phoneNumber} type="num" disabled />
+                <FormInputUnderline />
+              </div>
             </FormArea>
-            <FormArea bottom="9.2rem">
-              <div className="form-label" style={{ marginRight: "3.7rem" }}>
+
+            {/* 지부 부분 */}
+            <FormArea style={{ marginBottom: "9.2rem" }}>
+              <div className="form-label" style={{ flexGrow: 1 }}>
                 지부 선택
               </div>
-              <SelectBox className="app__main-filter-content">
-                <Label>{office}</Label>
-              </SelectBox>
+              <div style={{ width: "20rem", position: "relative" }}>
+                <MyPageInput value={office} type="num" disabled />
+                <FormInputUnderline />
+              </div>
             </FormArea>
             <div className="boxForm-button-wrap">
               <div className="boxForm-button" onClick={() => navigate("/")}>
