@@ -9,38 +9,20 @@ import "./Navbar.css";
 
 const AlarmDummy = [
   {
-    type: "match",
-    content: "00 챌린저의 매칭이 완료되었습니다.",
+    type: "notice",
+    content: "새로운 공지사항이 등록되었습니다.",
     date: "2023년 12월 12일",
     is_confirm: false,
   },
   {
     type: "match",
-    content: "새로운 챌린저의 가입신청이 등록되었습니다.",
+    content: "새로운 지원이 있습니다.",
     date: "2023년 12월 12일",
     is_confirm: false,
   },
   {
-    type: "join",
-    content: "00 챌린저의 매칭이 완료되었습니다.",
-    date: "2023년 12월 12일",
-    is_confirm: true,
-  },
-  {
     type: "match",
-    content: "00 챌린저의 매칭이 완료되었습니다.",
-    date: "2023년 12월 12일",
-    is_confirm: true,
-  },
-  {
-    type: "join",
-    content: "새로운 챌린저의 가입신청이 등록되었습니다.",
-    date: "2023년 12월 12일",
-    is_confirm: true,
-  },
-  {
-    type: "match",
-    content: "00 챌린저의 매칭이 완료되었습니다.",
+    content: "새로운 지원이 있습니다.",
     date: "2023년 12월 12일",
     is_confirm: true,
   },
@@ -50,6 +32,7 @@ const UserNavMenuItem = styled.div`
   height: 3.4rem;
   display: flex;
   justify-content: center;
+  margin: 0 1.8rem;
 
   &.active {
     border-bottom: 0.1rem #cecdd5 solid;
@@ -69,7 +52,6 @@ const UserNavMenuItem = styled.div`
     &:hover {
       font-weight: 500;
     }
-
     &::after {
       content: attr(title);
       display: block;
@@ -108,7 +90,7 @@ const SubMenuItem = styled(UserNavMenuItem)`
   }
 `;
 
-const AdminNavbar = () => {
+const PMNavbar = () => {
   const navigate = useNavigate();
 
   /*읽지 않은 알람이 존재하는 지 여부*/
@@ -155,48 +137,23 @@ const AdminNavbar = () => {
       <div className="app__nav">
         <div className="nav_area">
           <div className="nav_logo">
-            <Link to="/challenger/manage">
+            <Link to="/">
               <img src={Logo} />
             </Link>
           </div>
           <ul className="nav_center">
             <UserNavMenuItem className={`${selectIndex === 0 && "active"}`}>
               <Link
-                to="/challenger/manage"
+                to="/"
                 onClick={() => {
                   handleNavIndex(0);
                 }}
-                title="Challenger"
+                title="Home"
               >
-                Challenger
+                Home
               </Link>
-              <SubMenuWrapper>
-                <SubMenuItem>
-                  <Link
-                    to="/challenger/manage"
-                    onClick={() => {
-                      handleNavIndex(0);
-                    }}
-                  >
-                    챌린저 관리
-                  </Link>
-                </SubMenuItem>
-                <SubMenuItem>
-                  <Link
-                    to="/challenger/new"
-                    onClick={() => {
-                      handleNavIndex(0);
-                    }}
-                  >
-                    신규 챌린저
-                  </Link>
-                </SubMenuItem>
-              </SubMenuWrapper>
             </UserNavMenuItem>
-            <UserNavMenuItem
-              className={`${selectIndex === 1 && "active"}`}
-              style={{ margin: "0 3.1rem" }}
-            >
+            <UserNavMenuItem className={`${selectIndex === 1 && "active"}`}>
               <Link
                 to="/schedule"
                 onClick={() => {
@@ -209,7 +166,7 @@ const AdminNavbar = () => {
             </UserNavMenuItem>
             <UserNavMenuItem className={`${selectIndex === 2 && "active"}`}>
               <Link
-                to="/matching"
+                to="/match"
                 onClick={() => {
                   handleNavIndex(2);
                 }}
@@ -218,21 +175,64 @@ const AdminNavbar = () => {
                 Matching
               </Link>
             </UserNavMenuItem>
+            <UserNavMenuItem className={`${selectIndex === 3 && "active"}`}>
+              <Link
+                to="/"
+                onClick={() => {
+                  handleNavIndex(3);
+                }}
+                title="My Project"
+              >
+                My Project
+              </Link>
+              <SubMenuWrapper>
+                <SubMenuItem>
+                  <Link
+                    to="/"
+                    onClick={() => {
+                      handleNavIndex(3);
+                    }}
+                  >
+                    지원 현황 보기
+                  </Link>
+                </SubMenuItem>
+                <SubMenuItem>
+                  <Link
+                    to="/"
+                    onClick={() => {
+                      handleNavIndex(3);
+                    }}
+                  >
+                    팀원 상호 평가
+                  </Link>
+                </SubMenuItem>
+                <SubMenuItem>
+                  <Link
+                    to="/"
+                    onClick={() => {
+                      handleNavIndex(3);
+                    }}
+                  >
+                    랜딩페이지 보기
+                  </Link>
+                </SubMenuItem>
+              </SubMenuWrapper>
+            </UserNavMenuItem>
           </ul>
           <div className="nav_right">
             <div
               className="icon-bg"
               style={{
-                background: selectIndex === 3 && "#0261AA",
+                background: selectIndex === 4 && "#0261AA",
               }}
             >
               <IconPin
-                strokeWidth={selectIndex === 3 ? 1.5 : 1}
+                strokeWidth={selectIndex === 4 ? 1.5 : 1}
                 color={"#cecdd5"}
                 size={36}
                 onClick={() => {
                   navigate("/notice");
-                  handleNavIndex(3);
+                  handleNavIndex(4);
                 }}
               />
             </div>
@@ -251,6 +251,7 @@ const AdminNavbar = () => {
                   handleIconBellClick();
                 }}
               />
+
               <AlarmContainer
                 aliveAlarm={aliveAlarm}
                 isViewModal={isViewModal}
@@ -283,4 +284,4 @@ const AdminNavbar = () => {
   );
 };
 
-export default AdminNavbar;
+export default PMNavbar;

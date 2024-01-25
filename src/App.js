@@ -8,6 +8,7 @@ import ProjectDetail from "./components/ProjectDetail";
 import ChallengerManage from "./pages/challenger/ChallengerManage";
 import Schedule from "./pages/schedule/Schedule";
 import MyPage from "./pages/myPage/MyPage";
+import Notice from "./pages/notice/Notice";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="project/*" element={<ProjectDetail />} />
           <Route path="mypage/*" element={<MyPage />} />
           <Route path="challenger/*" element={<ChallengerManage />} />
+          <Route path="notice/*" element={<Notice />} />
           <Route path="schedule/*" element={<Schedule/>}/>
         </Route>
         <Route
