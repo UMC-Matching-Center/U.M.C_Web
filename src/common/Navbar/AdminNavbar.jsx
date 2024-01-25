@@ -1,29 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate, Outlet } from "react-router-dom";
-import {
-  IconPin,
-  IconBell,
-  IconUser,
-  IconUsers,
-  IconUserPlus,
-} from "@tabler/icons-react";
+import { IconPin, IconBell, IconUser } from "@tabler/icons-react";
 
 import Logo from "../../images/logo_crop.svg";
-import {
-  RedCircleFilled,
-  AlarmModal,
-  ModalContentBox,
-  ContentBoxTitle,
-  ContentBoxSubTitle,
-  ModalContent,
-  AlarmContent,
-  AlarmContentDetail,
-  ContentDetailWrap,
-  ContentDetailText,
-  BlueCircleFilled,
-  AlarmSeperateBar,
-} from "../Alarm/AlarmModal";
+import { AlarmContainer } from "../Alarm/AlarmModal";
 import "./Navbar.css";
 
 const AlarmDummy = [
@@ -270,76 +251,15 @@ const AdminNavbar = () => {
                   handleIconBellClick();
                 }}
               />
-              <RedCircleFilled aliveAlarm={aliveAlarm} />
-              <AlarmModal display={isViewModal}>
-                <ModalContentBox>
-                  <ContentBoxTitle>알림</ContentBoxTitle>
-                  <ContentBoxSubTitle onClick={deleteAlarm}>
-                    읽은 알림 삭제
-                  </ContentBoxSubTitle>
-                  <ModalContent>
-                    {alarmContent.map((alarm, idx) => {
-                      return (
-                        <AlarmContent
-                          key={idx}
-                          onClick={() => {
-                            navigate(
-                              alarm.type === "match"
-                                ? "/challenger/manage"
-                                : "/challenger/new"
-                            ),
-                              handleIconBellClick(),
-                              handleNavIndex(0);
-                          }}
-                        >
-                          <AlarmContentDetail>
-                            {alarm.type === "match" ? (
-                              <IconUsers
-                                color={"#131313"}
-                                size={24}
-                                strokeWidth={1}
-                              />
-                            ) : (
-                              <IconUserPlus
-                                color={"#131313"}
-                                size={24}
-                                strokeWidth={1}
-                              />
-                            )}
-                            <ContentDetailWrap>
-                              <ContentDetailText
-                                color="#02010b"
-                                size="1.6rem"
-                                margin="0.4rem"
-                              >
-                                {alarm.type === "match" ? "매칭" : "가입"}
-                              </ContentDetailText>
-                              <ContentDetailText
-                                color="#6b6880"
-                                size="1.4rem"
-                                margin="1.4rem"
-                              >
-                                {alarm.content}
-                              </ContentDetailText>
-                              <ContentDetailText
-                                color="#9c9aab"
-                                size="1rem"
-                                margin="1rem"
-                              >
-                                {alarm.date}
-                              </ContentDetailText>
-                            </ContentDetailWrap>
-                          </AlarmContentDetail>
-                          {!alarm.is_confirm && <BlueCircleFilled />}
-                          {alarmContent.length - 1 !== idx && (
-                            <AlarmSeperateBar />
-                          )}
-                        </AlarmContent>
-                      );
-                    })}
-                  </ModalContent>
-                </ModalContentBox>
-              </AlarmModal>
+
+              <AlarmContainer
+                aliveAlarm={aliveAlarm}
+                isViewModal={isViewModal}
+                deleteAlarm={deleteAlarm}
+                alarmContent={alarmContent}
+                handleNavIndex={handleNavIndex}
+                handleIconBellClick={handleIconBellClick}
+              />
             </div>
             <div
               className="icon-bg"

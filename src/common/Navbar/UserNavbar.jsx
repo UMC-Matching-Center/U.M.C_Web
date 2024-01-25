@@ -1,29 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate, Outlet } from "react-router-dom";
-import {
-  IconPin,
-  IconBell,
-  IconUser,
-  IconUsers,
-  IconUserPlus,
-} from "@tabler/icons-react";
+import { IconPin, IconBell, IconUser } from "@tabler/icons-react";
 
 import Logo from "../../images/logo_crop.svg";
-import {
-  RedCircleFilled,
-  AlarmModal,
-  ModalContentBox,
-  ContentBoxTitle,
-  ContentBoxSubTitle,
-  ModalContent,
-  AlarmContent,
-  AlarmContentDetail,
-  ContentDetailWrap,
-  ContentDetailText,
-  BlueCircleFilled,
-  AlarmSeperateBar,
-} from "../Alarm/AlarmModal";
+import { AlarmContainer } from "../Alarm/AlarmModal";
 import "./Navbar.css";
 
 const AlarmDummy = [
@@ -266,91 +247,16 @@ const UserNavbar = () => {
                   handleIconBellClick();
                 }}
               />
-              <RedCircleFilled aliveAlarm={aliveAlarm} />
-              <AlarmModal display={isViewModal}>
-                <ModalContentBox>
-                  <ContentBoxTitle>알림</ContentBoxTitle>
-                  <ContentBoxSubTitle onClick={deleteAlarm}>
-                    읽은 알림 삭제
-                  </ContentBoxSubTitle>
-                  <ModalContent>
-                    {alarmContent.map((alarm, idx) => {
-                      return (
-                        <AlarmContent
-                          key={idx}
-                          onClick={() => {
-                            if (alarm.type !== "match_incomplete") {
-                              if (alarm.type === "notice") {
-                                navigate("/notice");
-                                handleNavIndex(4);
-                              } else if (alarm.type === "match_complete") {
-                                navigate("팀원 상호 평가 화면 url");
-                                handleNavIndex(3);
-                              } else if (alarm.type === "match_apply") {
-                                navigate("해당 프로젝트 상세보기 화면 url");
-                                handleNavIndex(3);
-                              }
-
-                              handleIconBellClick();
-                            }
-                          }}
-                        >
-                          <AlarmContentDetail>
-                            {(() => {
-                              switch (alarm.type) {
-                                case "notice":
-                                  return (
-                                    <IconUserPlus
-                                      color={"#131313"}
-                                      size={24}
-                                      strokeWidth={1}
-                                    />
-                                  );
-                                default:
-                                  return (
-                                    <IconUsers
-                                      color={"#131313"}
-                                      size={24}
-                                      strokeWidth={1}
-                                    />
-                                  );
-                              }
-                            })()}
-                            <ContentDetailWrap>
-                              <ContentDetailText
-                                color="#02010b"
-                                size="1.6rem"
-                                margin="0.4rem"
-                              >
-                                {alarm.type === "notice" ? "공지" : "매칭"}
-                              </ContentDetailText>
-                              <ContentDetailText
-                                color="#6b6880"
-                                size="1.4rem"
-                                margin="1.4rem"
-                              >
-                                {alarm.content}
-                              </ContentDetailText>
-                              <ContentDetailText
-                                color="#9c9aab"
-                                size="1rem"
-                                margin="1rem"
-                              >
-                                {alarm.date}
-                              </ContentDetailText>
-                            </ContentDetailWrap>
-                          </AlarmContentDetail>
-                          {!alarm.is_confirm && <BlueCircleFilled />}
-                          {alarmContent.length - 1 !== idx && (
-                            <AlarmSeperateBar />
-                          )}
-                        </AlarmContent>
-                      );
-                    })}
-                  </ModalContent>
-                </ModalContentBox>
-              </AlarmModal>
+              <AlarmContainer
+                aliveAlarm={aliveAlarm}
+                isViewModal={isViewModal}
+                deleteAlarm={deleteAlarm}
+                alarmContent={alarmContent}
+                handleNavIndex={handleNavIndex}
+                handleIconBellClick={handleIconBellClick}
+              />
             </div>
+
             <div
               className="icon-bg"
               style={{
