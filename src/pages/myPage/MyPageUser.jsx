@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Routes, Route, useLocation } from "react-router-dom";
 import { IconPhotoPlus, IconPencil } from "@tabler/icons-react";
 import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { challengerDataAPI } from "../../api";
+import useGetAccessToken from "../../utils/getAccessToken";
 
 const FormArea = styled.div`
   display: flex;
@@ -212,7 +213,7 @@ const UserModify = () => {
 const UserInfo = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const accessToken = useSelector((state) => state.accessToken.token);
+  const accessToken = useGetAccessToken();
 
   const [nicknameName, setNicknameName] = useState(""); // 닉네임/이름
   const [email, setEmail] = useState(""); // 이메일

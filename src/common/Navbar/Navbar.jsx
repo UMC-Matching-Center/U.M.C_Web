@@ -7,6 +7,7 @@ import AdminNavbar from "./AdminNavbar";
 const Navbar = () => {
   /*--- Redux 관련 ---*/
   const { userType, autoLogin } = useSelector((state) => state.userInfo);
+  const { token: sessionToken } = useSelector((state) => state.session.session);
 
   return (
     <>
@@ -16,7 +17,7 @@ const Navbar = () => {
         ) : (
           <AdminNavbar /> // 관리자
         )
-      ) : userType == "REGISTER" ? (
+      ) : sessionToken === "" ? (
         <InitNavbar /> // 회원가입
       ) : userType == "ROLE_CHALLENGER" ? (
         <AdminNavbar /> // 일반 챌린저

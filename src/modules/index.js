@@ -1,22 +1,37 @@
 import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // localStorage
+import sessionStorage from "redux-persist/lib/storage/session"; // sessionStorage
 
-import accessTokenReducer from "./accessToken";
+import localTokenReducer from "./localToken";
+import sessionTokenReducer from "./sessionToken";
 import userInfoReducer from "./userInfo";
 import signupStateReducer from "./signupState";
 
-// redux-persist의 persistConfig 설정
-const persistConfig = {
-  key: "root",
+/*-- redux-persist의 persistConfig 설정 --*/
+// LocalStorage
+const localPersistConfig = {
+  key: "local",
   storage: storage,
-  whitelist: ["accessToken", "userInfo"],
+  whitelist: ["local", "userInfo"],
 };
 
+// SessionStorage
+const sessionPersistConfig = {
+  key: "session",
+  storage: sessionStorage,
+  whitelist: ["session"],
+};
+
+const seesionReducer = combineReducers({
+  session: sessionTokenReducer,
+});
+
 const rootReducer = combineReducers({
-  accessToken: accessTokenReducer,
+  local: localTokenReducer,
+  session: persistReducer(sessionPersistConfig, seesionReducer),
   userInfo: userInfoReducer,
   signupState: signupStateReducer,
 });
 
-export default persistReducer(persistConfig, rootReducer);
+export default persistReducer(localPersistConfig, rootReducer);

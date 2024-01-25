@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import Modal from "react-modal";
 import styled from "styled-components";
 import "./Register.css";
 import {
@@ -10,6 +11,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { SIGNUP_COMPLETE } from "../../modules/signupState";
 import { emailRequestAPI, emailCodeCheckAPI, signupAPI } from "../../api";
+import EmailRequestModal from "../../components/ModalEmailRequest";
 
 // input간 간격
 const InputGap = styled.div`
@@ -54,12 +56,28 @@ const InnerAreaOfLineArea = styled.div`
   width: 13rem;
 `;
 
+const ModalStyles = {
+  overlay: { width: "100vw", background: "rgba(2, 1, 11, 0.5)" },
+  content: {
+    width: "56.5rem",
+    height: "35rem",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    padding: "0",
+    background: "none",
+    border: "none",
+  },
+};
+
 export default function UserSignup() {
   const [email, setEmail] = useState(""); //Email 세팅
   const [emailAuthCode, setEmailAuthCode] = useState(""); //Email 인증 코드
   const [emailValid, setEmailValid] = useState(-1); //Email 형식 확인 여부 (-1: 초기 설정 / 0: 형식 X / 1: 형식 O)
   const [emailRequest, setEmailRequest] = useState(0); //Email 인증 요청 여부 (-1: 인증 미요청 / 0: 인증 실패 / 1: 인증 요청 api 대기 / 2: 인증 성공)
   const [emailAuth, setEmailAuth] = useState(-1); //Email 인증 코드 확인 여부 (-1: 초기 설정 / 0: 인증 실패 / 1: 인증 확인 api 대기 / 2: 인증 성공)
+  const [requestModal, setRequestModal] = useState(false); //Email 인증 요청 모달 오픈 여부
 
   const [name, setName] = useState(""); //이름
   const [nickname, setNickname] = useState(""); //닉네임
@@ -82,6 +100,8 @@ export default function UserSignup() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch(); // action을 reducer한테 보내서 state를 update시키는 함수
+
+  Modal.setAppElement("#root");
 
   /*--- Redux 관련 ---*/
   const { signupID, signupPW, access } = useSelector(
@@ -116,10 +136,12 @@ export default function UserSignup() {
     emailRequestAPI(email).then((response) => {
       if (response.isSuccess && emailValid === 1) {
         // 인증 요청 성공
+        setRequestModal(true);
         setEmailRequest(2);
         setEmailAuth(-1);
       } else {
         // 인증 요청 실패
+        setRequestModal(false);
         setEmailRequest(0);
         setEmailAuth(-1);
       }
@@ -293,237 +315,251 @@ export default function UserSignup() {
   };
 
   return (
-    <div className="Container">
-      <div className="MainBox">
-        {/* 좌측 로고 부분 */}
-        <div className="CoverBox">
-          UMC
-          <br />
-          Matching
-          <br />
-          Center
-        </div>
+    <div>
+      <Modal
+        isOpen={requestModal}
+        onRequestClose={() => setRequestModal(false)}
+        style={ModalStyles}
+      >
+        <EmailRequestModal
+          request={onClickRequest}
+          isClose={() => setRequestModal(false)}
+        />
+      </Modal>
+      <div className="Container">
+        <div className="MainBox">
+          {/* 좌측 로고 부분 */}
+          <div className="CoverBox">
+            UMC
+            <br />
+            Matching
+            <br />
+            Center
+          </div>
 
-        {/* 우측 회원가입 부분 */}
-        <div className="FormBox">
-          {/* 제목 */}
-          <div className="FormTitle">회원가입</div>
+          {/* 우측 회원가입 부분 */}
+          <div className="FormBox">
+            {/* 제목 */}
+            <div className="FormTitle">회원가입</div>
 
-          {/* 일반 유저 회원가입 폼 */}
-          <div className="FormDetail" style={{ marginTop: "5.3rem" }}>
-            <div style={{ width: "100%" }}>
-              {/* 이메일 관련 */}
-              <EmailArea>
-                <EmailInputArea>
-                  <input
-                    className="FormInput"
-                    type="email"
-                    placeholder="이메일"
-                    value={email}
-                    onChange={handleChangeEmail}
-                  />
-                  <div className="FormInputUnderline" />
-                </EmailInputArea>
-                <EmailAuth
-                  onClick={onClickRequest}
-                  disabled={emailValid !== 1 || emailRequest === 1}
-                >
-                  인증 요청
-                </EmailAuth>
-              </EmailArea>
-              <div
-                className="ValidText"
-                style={{
-                  visibility: emailValid === -1 ? "hidden" : "visible",
-                  color: emailRequest === 2 ? "#014171" : "#d62117",
-                }}
-              >
-                {emailInfoText()}
-              </div>
-              <InputGap style={{ marginTop: "2.3rem" }} />
-
-              {/* 인증 코드 관련 */}
-              <EmailArea>
-                <EmailInputArea>
-                  <input
-                    className="FormInput"
-                    type="text"
-                    placeholder="인증 코드"
-                    value={emailAuthCode}
-                    onChange={handleChangeEmailAuthCode}
-                  />
-                  <div className="FormInputUnderline" />
-                </EmailInputArea>
-                <EmailAuth
-                  onClick={onClickAuth}
-                  disabled={emailAuthCode === "" || emailAuth === 1}
-                >
-                  코드 확인
-                </EmailAuth>
-              </EmailArea>
-              <div
-                className="ValidText"
-                style={{
-                  visibility: emailAuth === -1 ? "hidden" : "visible",
-                  color: emailAuth === 2 ? "#014171" : "#d62117",
-                }}
-              >
-                {authoInfoText()}
-              </div>
-              <InputGap style={{ marginTop: "2.3rem" }} />
-
-              {/* 이름, 닉네임 부분 */}
-              <LineWithTwoAreasArea>
-                {/* 이름 부분 */}
-                <InnerAreaOfLineArea>
-                  <input
-                    className="FormInput"
-                    type="text"
-                    name="text"
-                    placeholder="이름"
-                    value={name}
-                    onChange={(e) => KoreanValid(e.target.value, "name")}
-                  />
-                  <div className="FormInputUnderline" />
-                </InnerAreaOfLineArea>
-
-                {/* 닉네임 부분 */}
-                <InnerAreaOfLineArea>
-                  <input
-                    className="FormInput"
-                    type="text"
-                    placeholder="닉네임"
-                    value={nickname}
-                    onChange={(e) => KoreanValid(e.target.value, "nickname")}
-                  />
-                  <div className="FormInputUnderline" />
-                </InnerAreaOfLineArea>
-              </LineWithTwoAreasArea>
-              <InputGap />
-
-              {/* 학교 부분 */}
-              <SelectBox
-                onClick={() =>
-                  setuniversityOptionVisible(!universityOptionVisible)
-                }
-                ref={universitySelectRef}
-              >
-                <label>{university[0]}</label>
-                <SelectOptions $visible={universityOptionVisible}>
-                  {UniversityDummy.map((option, i) => (
-                    <Option
-                      onClick={() =>
-                        setUniversity([option.name, i, option.numCode])
-                      }
-                      key={option.key}
-                      className={i === university[1] ? "selected" : ""}
-                    >
-                      {option.name}
-                    </Option>
-                  ))}
-                </SelectOptions>
-              </SelectBox>
-              <div className="FormInputUnderline" />
-              <InputGap />
-
-              {/* 기수, 파트 부분 */}
-              <LineWithTwoAreasArea>
-                {/* 기수 */}
-                <InnerAreaOfLineArea>
-                  <SelectBox
-                    onClick={() =>
-                      setgenerationOptionVisible(!generationOptionVisible)
-                    }
-                    ref={generationSelectRef}
+            {/* 일반 유저 회원가입 폼 */}
+            <div className="FormDetail" style={{ marginTop: "5.3rem" }}>
+              <div style={{ width: "100%" }}>
+                {/* 이메일 관련 */}
+                <EmailArea>
+                  <EmailInputArea>
+                    <input
+                      className="FormInput"
+                      type="email"
+                      placeholder="이메일"
+                      value={email}
+                      onChange={handleChangeEmail}
+                    />
+                    <div className="FormInputUnderline" />
+                  </EmailInputArea>
+                  <EmailAuth
+                    onClick={onClickRequest}
+                    disabled={emailValid !== 1 || emailRequest === 1}
                   >
-                    <label>{generation[0]}</label>
-                    <SelectOptions $visible={generationOptionVisible}>
-                      {generationDummy.map((option, i) => (
-                        <Option
-                          onClick={() =>
-                            setgeneration([option.name, i, option.numCode])
-                          }
-                          key={option.key}
-                          className={i === generation[1] ? "selected" : ""}
-                        >
-                          {option.name}
-                        </Option>
-                      ))}
-                    </SelectOptions>
-                  </SelectBox>
-                  <div className="FormInputUnderline" />
-                </InnerAreaOfLineArea>
-
-                {/* 파트 */}
-                <InnerAreaOfLineArea>
-                  <SelectBox
-                    onClick={() => setPartOptionVisible(!partOptionVisible)}
-                    ref={partSelectRef}
-                  >
-                    <label>{part[0]}</label>
-                    <SelectOptions $visible={partOptionVisible}>
-                      {PartsDummy.map((option, i) => (
-                        <Option
-                          onClick={() => setPart([option.name, i, option.key])}
-                          key={option.key}
-                          className={i === part[1] ? "selected" : ""}
-                        >
-                          {option.name}
-                        </Option>
-                      ))}
-                    </SelectOptions>
-                  </SelectBox>
-                  <div className="FormInputUnderline" />
-                </InnerAreaOfLineArea>
-              </LineWithTwoAreasArea>
-              <InputGap />
-
-              {/* 전화번호 부분 */}
-              <input
-                className="FormInput"
-                type="tel"
-                placeholder="전화번호"
-                value={phoneNumber}
-                onChange={(e) => validTelephone(e)}
-                maxLength={13}
-              />
-              <div className="FormInputUnderline" />
-              <InputGap />
-
-              {/* 포트폴리오 부분 */}
-              <input
-                className="FormInput"
-                type="text"
-                placeholder="포트폴리오"
-                value={portfolio}
-                onChange={(e) => setPortfolio(e.target.value)}
-              />
-              <div className="FormInputUnderline" />
-
-              {/* 회원가입 버튼 */}
-              <button
-                className="FormSubmitBtn"
-                type="submit"
-                onClick={handleSubmit}
-                style={{
-                  marginTop: "3.2rem",
-                  backgroundColor: ableBtn ? "#014171" : "#01417180",
-                }}
-                disabled={!ableBtn}
-              >
-                회원가입
-              </button>
-
-              {/* 해당 페이지 기능 이외 기능 관련 */}
-              <div className="FormOtherArea">
-                <span>계정이 있으신가요?</span>
-                <span
-                  onClick={() => {
-                    navigate("..");
+                    인증 요청
+                  </EmailAuth>
+                </EmailArea>
+                <div
+                  className="ValidText"
+                  style={{
+                    visibility: emailValid === -1 ? "hidden" : "visible",
+                    color: emailRequest === 2 ? "#014171" : "#d62117",
                   }}
                 >
-                  로그인
-                </span>
+                  {emailInfoText()}
+                </div>
+                <InputGap style={{ marginTop: "2.3rem" }} />
+
+                {/* 인증 코드 관련 */}
+                <EmailArea>
+                  <EmailInputArea>
+                    <input
+                      className="FormInput"
+                      type="text"
+                      placeholder="인증 코드"
+                      value={emailAuthCode}
+                      onChange={handleChangeEmailAuthCode}
+                    />
+                    <div className="FormInputUnderline" />
+                  </EmailInputArea>
+                  <EmailAuth
+                    onClick={onClickAuth}
+                    disabled={emailAuthCode === "" || emailAuth === 1}
+                  >
+                    코드 확인
+                  </EmailAuth>
+                </EmailArea>
+                <div
+                  className="ValidText"
+                  style={{
+                    visibility: emailAuth === -1 ? "hidden" : "visible",
+                    color: emailAuth === 2 ? "#014171" : "#d62117",
+                  }}
+                >
+                  {authoInfoText()}
+                </div>
+                <InputGap style={{ marginTop: "2.3rem" }} />
+
+                {/* 이름, 닉네임 부분 */}
+                <LineWithTwoAreasArea>
+                  {/* 이름 부분 */}
+                  <InnerAreaOfLineArea>
+                    <input
+                      className="FormInput"
+                      type="text"
+                      name="text"
+                      placeholder="이름"
+                      value={name}
+                      onChange={(e) => KoreanValid(e.target.value, "name")}
+                    />
+                    <div className="FormInputUnderline" />
+                  </InnerAreaOfLineArea>
+
+                  {/* 닉네임 부분 */}
+                  <InnerAreaOfLineArea>
+                    <input
+                      className="FormInput"
+                      type="text"
+                      placeholder="닉네임"
+                      value={nickname}
+                      onChange={(e) => KoreanValid(e.target.value, "nickname")}
+                    />
+                    <div className="FormInputUnderline" />
+                  </InnerAreaOfLineArea>
+                </LineWithTwoAreasArea>
+                <InputGap />
+
+                {/* 학교 부분 */}
+                <SelectBox
+                  onClick={() =>
+                    setuniversityOptionVisible(!universityOptionVisible)
+                  }
+                  ref={universitySelectRef}
+                >
+                  <label>{university[0]}</label>
+                  <SelectOptions $visible={universityOptionVisible}>
+                    {UniversityDummy.map((option, i) => (
+                      <Option
+                        onClick={() =>
+                          setUniversity([option.name, i, option.numCode])
+                        }
+                        key={option.key}
+                        className={i === university[1] ? "selected" : ""}
+                      >
+                        {option.name}
+                      </Option>
+                    ))}
+                  </SelectOptions>
+                </SelectBox>
+                <div className="FormInputUnderline" />
+                <InputGap />
+
+                {/* 기수, 파트 부분 */}
+                <LineWithTwoAreasArea>
+                  {/* 기수 */}
+                  <InnerAreaOfLineArea>
+                    <SelectBox
+                      onClick={() =>
+                        setgenerationOptionVisible(!generationOptionVisible)
+                      }
+                      ref={generationSelectRef}
+                    >
+                      <label>{generation[0]}</label>
+                      <SelectOptions $visible={generationOptionVisible}>
+                        {generationDummy.map((option, i) => (
+                          <Option
+                            onClick={() =>
+                              setgeneration([option.name, i, option.numCode])
+                            }
+                            key={option.key}
+                            className={i === generation[1] ? "selected" : ""}
+                          >
+                            {option.name}
+                          </Option>
+                        ))}
+                      </SelectOptions>
+                    </SelectBox>
+                    <div className="FormInputUnderline" />
+                  </InnerAreaOfLineArea>
+
+                  {/* 파트 */}
+                  <InnerAreaOfLineArea>
+                    <SelectBox
+                      onClick={() => setPartOptionVisible(!partOptionVisible)}
+                      ref={partSelectRef}
+                    >
+                      <label>{part[0]}</label>
+                      <SelectOptions $visible={partOptionVisible}>
+                        {PartsDummy.map((option, i) => (
+                          <Option
+                            onClick={() =>
+                              setPart([option.name, i, option.key])
+                            }
+                            key={option.key}
+                            className={i === part[1] ? "selected" : ""}
+                          >
+                            {option.name}
+                          </Option>
+                        ))}
+                      </SelectOptions>
+                    </SelectBox>
+                    <div className="FormInputUnderline" />
+                  </InnerAreaOfLineArea>
+                </LineWithTwoAreasArea>
+                <InputGap />
+
+                {/* 전화번호 부분 */}
+                <input
+                  className="FormInput"
+                  type="tel"
+                  placeholder="전화번호"
+                  value={phoneNumber}
+                  onChange={(e) => validTelephone(e)}
+                  maxLength={13}
+                />
+                <div className="FormInputUnderline" />
+                <InputGap />
+
+                {/* 포트폴리오 부분 */}
+                <input
+                  className="FormInput"
+                  type="text"
+                  placeholder="포트폴리오"
+                  value={portfolio}
+                  onChange={(e) => setPortfolio(e.target.value)}
+                />
+                <div className="FormInputUnderline" />
+
+                {/* 회원가입 버튼 */}
+                <button
+                  className="FormSubmitBtn"
+                  type="submit"
+                  onClick={handleSubmit}
+                  style={{
+                    marginTop: "3.2rem",
+                    backgroundColor: ableBtn ? "#014171" : "#01417180",
+                  }}
+                  disabled={!ableBtn}
+                >
+                  회원가입
+                </button>
+
+                {/* 해당 페이지 기능 이외 기능 관련 */}
+                <div className="FormOtherArea">
+                  <span>계정이 있으신가요?</span>
+                  <span
+                    onClick={() => {
+                      navigate("..");
+                    }}
+                  >
+                    로그인
+                  </span>
+                </div>
               </div>
             </div>
           </div>
