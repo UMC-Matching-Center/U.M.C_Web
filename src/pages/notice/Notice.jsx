@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import styled from "styled-components";
 import IconNewNotice from "../../images/ic_new_notice.png";
 import { IconSearch } from "@tabler/icons-react";
+import NoticeWrite, { TextAreaProvider } from "./NoticeWrite";
 
 const noticeDummy = [
   {
@@ -285,9 +286,22 @@ const NoticeBasic = ({ type }) => {
 function Notice() {
   const user = { type: "ROLE_ADMIN" };
   return (
-    <Routes>
-      <Route path="/" exact element={<NoticeBasic type={user.type} />}></Route>
-    </Routes>
+    <TextAreaProvider>
+      <Routes>
+        <Route
+          path="/"
+          exact
+          element={<NoticeBasic type={user.type} />}
+        ></Route>
+        <Route
+          path="/new"
+          exact
+          element={
+            user.type === "ROLE_ADMIN" ? <NoticeWrite /> : <Navigate to=".." />
+          }
+        ></Route>
+      </Routes>
+    </TextAreaProvider>
   );
 }
 export default Notice;
