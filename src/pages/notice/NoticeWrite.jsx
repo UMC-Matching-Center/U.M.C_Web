@@ -1,4 +1,11 @@
-import React, { useState, useRef, createContext, useContext } from "react";
+import React, {
+  useState,
+  useRef,
+  createContext,
+  useContext,
+  useEffect,
+} from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import NoticeEditor from "./NoticeEditor";
 import NoticeView from "./NoticeView";
 import deleteButton from "../../images/ic_close.svg";
@@ -25,10 +32,32 @@ export const TextAreaProvider = ({ children }) => {
 };
 
 function NoticeWrite() {
-  const [title, setTitle] = useState("");
-  const [images, setImages] = useState([]); // 이미지 파일(File) 객체
-  const [imagesURL, setImagesURL] = useState([]); // 이미지 URL - 미리보기 화면에 사용
-  const { text } = useContext(TextAreaContext);
+  const { text, updateText } = useContext(TextAreaContext);
+  const navigation = useNavigate();
+  const locationState = useLocation().state;
+  const notice =
+    locationState && locationState.data ? locationState.data.notice : null;
+
+  const [title, setTitle] = useState(notice ? notice.title : "");
+  const [images, setImages] = useState(notice ? notice.image : []); // 이미지 파일(File) 객체
+  const [imagesURL, setImagesURL] = useState(notice ? notice.image : []); // 이미지 URL - 미리보기 화면에 사용 (% notice 초기값 추후 수정 필요)
+
+  useEffect(() => {
+    // location.state에서 content 값이 있으면 해당 값으로 text를 업데이트
+    if (notice && notice.content) {
+      updateText(notice.content);
+    }
+  }, [notice]);
+
+  /*--------TAB 키 클릭 이벤트 함수---------*/
+  const handleKeyDown = async (e) => {
+    if (e.keyCode === 9) {
+      e.preventDefault();
+      const newText = text + "\t";
+
+      updateText(newText);
+    }
+  };
 
   /*--------이미지 미리보기, 추가 및 삭제 함수---------*/
   const handleAddImages = (e) => {
@@ -63,9 +92,12 @@ function NoticeWrite() {
 
   /*--------공지사항 게시물 서버 전송---------*/
   const onSubmitNotice = () => {
+    /* props.mode에 따라 API 달리하기 1. mode == new 는 새로 작성한 게시물 업로드 2. mode == modify는 수정 게시물 업로드 */
     console.log(title);
     console.log(text);
     console.log(images);
+    // updateText("") - 게시물 업로드 이후, textarea 값 초기화
+    navigation("..", { replace: true });
   };
 
   return (
@@ -85,7 +117,7 @@ function NoticeWrite() {
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
-          <NoticeView />
+          <NoticeView handleKeyDown={handleKeyDown} />
         </div>
         <div className="notice-images-box">
           {imagesURL.map((image, index) => (
@@ -94,6 +126,7 @@ function NoticeWrite() {
               key={index}
               index={index}
               onDelete={handleDeleteImages}
+              onKeyDown={handleKeyDown}
             />
           ))}
           <AddImage handleAddImages={handleAddImages} />

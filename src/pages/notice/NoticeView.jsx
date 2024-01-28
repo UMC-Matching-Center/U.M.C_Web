@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { TextAreaContext } from "./NoticeWrite";
 
-const NoticeView = () => {
+const NoticeView = ({ handleKeyDown }) => {
   const { text, textareaRef, updateText } = useContext(TextAreaContext);
 
   return (
@@ -12,6 +12,9 @@ const NoticeView = () => {
         value={text}
         onChange={(e) => {
           updateText(e.target.value);
+        }}
+        onKeyDown={(e) => {
+          handleKeyDown(e);
         }}
       ></textarea>
     </div>
