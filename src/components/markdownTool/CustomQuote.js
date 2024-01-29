@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { TextAreaContext } from "../NoticeWrite";
+import { TextAreaContext } from "../../context/TextAreaProvider";
 import { IconQuote } from "@tabler/icons-react";
 
 const CustomQuote = () => {

@@ -1,14 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-import CustomHeader1 from "./markdownTool/CustomHeader1";
-import CustomHeader2 from "./markdownTool/CustomHeader2";
-import CustomBold from "./markdownTool/CustomBold";
-import CustomItalic from "./markdownTool/CustomItalic";
-import CustomUnderline from "./markdownTool/CustomUnderline";
-import CustomQuote from "./markdownTool/CustomQuote";
-import CustomCode from "./markdownTool/CustomCode";
-import CustomImage from "./markdownTool/CustomImage";
-import CustomLink from "./markdownTool/CustomLink";
+import CustomHeader1 from "../../components/markdownTool/CustomHeader1";
+import CustomHeader2 from "../../components/markdownTool/CustomHeader2";
+import CustomBold from "../../components/markdownTool/CustomBold";
+import CustomItalic from "../../components/markdownTool/CustomItalic";
+import CustomUnderline from "../../components/markdownTool/CustomUnderline";
+import CustomQuote from "../../components/markdownTool/CustomQuote";
+import CustomCode from "../../components/markdownTool/CustomCode";
+import CustomImage from "../../components/markdownTool/CustomImage";
+import CustomLink from "../../components/markdownTool/CustomLink";
 
 const NoticeEditor = () => {
   return (

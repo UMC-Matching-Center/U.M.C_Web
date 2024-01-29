@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { TextAreaContext } from "../NoticeWrite";
+import { TextAreaContext } from "../../context/TextAreaProvider";
 import { IconUnderline } from "@tabler/icons-react";
 
 const CustomUnderline = () => {

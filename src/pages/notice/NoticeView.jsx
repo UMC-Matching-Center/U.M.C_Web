@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { TextAreaContext } from "./NoticeWrite";
+import { TextAreaContext } from "../../context/TextAreaProvider";
 
 const NoticeView = ({ handleKeyDown }) => {
   const { text, textareaRef, updateText } = useContext(TextAreaContext);

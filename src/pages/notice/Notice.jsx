@@ -3,7 +3,8 @@ import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import styled from "styled-components";
 import IconNewNotice from "../../images/ic_new_notice.png";
 import { IconSearch } from "@tabler/icons-react";
-import NoticeWrite, { TextAreaProvider } from "./NoticeWrite";
+import { TextAreaProvider } from "../../context/TextAreaProvider";
+import NoticeWrite from "./NoticeWrite";
 import NoticeDetail from "./NoticeDetail";
 import sample from "../../images/sample_project.png";
 

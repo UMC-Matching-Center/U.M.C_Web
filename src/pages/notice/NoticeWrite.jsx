@@ -1,35 +1,11 @@
-import React, {
-  useState,
-  useRef,
-  createContext,
-  useContext,
-  useEffect,
-} from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { TextAreaContext } from "../../context/TextAreaProvider";
 import NoticeEditor from "./NoticeEditor";
 import NoticeView from "./NoticeView";
 import deleteButton from "../../images/ic_close.svg";
 import { IconPhotoPlus } from "@tabler/icons-react";
 import "./NoticeWrite.css";
-
-export const TextAreaContext = createContext();
-
-export const TextAreaProvider = ({ children }) => {
-  const [state, setState] = useState({
-    text: "",
-    textareaRef: useRef(null),
-  });
-
-  const updateText = (newText) => {
-    setState((prevState) => ({ ...prevState, text: newText }));
-  };
-
-  return (
-    <TextAreaContext.Provider value={{ ...state, updateText }}>
-      {children}
-    </TextAreaContext.Provider>
-  );
-};
 
 function NoticeWrite() {
   const { text, updateText } = useContext(TextAreaContext);
