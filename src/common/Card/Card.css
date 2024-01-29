@@ -1,0 +1,49 @@
+.card-wrapper {
+  position: relative;
+  width: 38.4rem;
+  height: 29rem;
+  border-radius: 1rem;
+
+  background-color: #fafafa;
+  overflow: hidden;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2rem;
+
+  font-family: KBO-Dia-Gothic;
+  color: #131313;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-img-frame {
+  height: 16rem;
+}
+
+.card-title {
+  width: 100%;
+  font-weight: 500;
+  font-size: 2rem;
+
+  margin-bottom: 1.5rem;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-description {
+  width: 100%;
+  font-weight: lighter;
+  font-size: 1.8rem;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

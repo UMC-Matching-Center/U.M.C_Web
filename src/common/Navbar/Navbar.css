@@ -1,0 +1,77 @@
+.app__nav {
+  display: flex;
+  justify-content: center;
+  margin: 3.9rem 0 14.9rem 0;
+
+  .nav_area {
+    width: 120rem;
+    display: flex;
+  }
+}
+
+/* Nav 바 왼쪽 지정 (로고) */
+.nav_logo {
+  flex-grow: 2;
+  flex-basis: 0;
+}
+
+/* Nav 바 오른쪽 지정 */
+.nav_right {
+  display: flex;
+  flex-grow: 2;
+  flex-basis: 0;
+  align-items: center;
+  justify-content: flex-end;
+
+  /* 로그인 버튼 */
+  .login_button {
+    width: 7.8rem;
+    height: 2.6rem;
+    background: inherit;
+    border-radius: 0.5rem;
+    border: 0.1rem #0261aa solid;
+    color: #fafafa;
+    padding: 0;
+    font-size: 1.4rem;
+    font-family: KBO-Dia-Gothic;
+    font-weight: 300;
+    cursor: pointer;
+  }
+
+  .icon-bg {
+    width: 4.8rem;
+    height: 4.8rem;
+    border-radius: 2.4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      background-color: #0261aa80;
+    }
+    > svg {
+      &:hover {
+        stroke-width: 1.5;
+      }
+    }
+  }
+}
+
+/* Nav바 연결*/
+.nav_center {
+  display: flex;
+  padding: 0;
+  flex-grow: 8;
+  flex-basis: 0;
+  justify-content: center;
+
+  .nav-home > a {
+    text-decoration: none;
+    font-family: KBO-Dia-Gothic;
+    font-size: 2.4rem;
+    font-weight: 500;
+    color: #cecdd5;
+    padding-bottom: 0.5rem;
+    border-bottom: 0.1rem #cecdd5 solid;
+  }
+}

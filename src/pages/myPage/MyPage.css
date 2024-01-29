@@ -1,0 +1,137 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.boxWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 120rem;
+}
+
+.profileBox-wrapper {
+  position: relative;
+  width: 56.5rem;
+  height: 19rem;
+
+  margin-bottom: 4rem;
+}
+
+.profileBox-wrapper > .profile_circle-bg {
+  z-index: 1;
+  position: absolute;
+  left: 23.25rem;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 5rem;
+  background-color: #fafafa;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .profile_circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 9rem;
+    height: 9rem;
+    border-radius: 5rem;
+    background-color: #014171;
+  }
+}
+
+.profileBox {
+  position: absolute;
+  width: 56.5rem;
+  height: 14rem;
+  background-color: #fafafa;
+  border-radius: 1rem;
+  bottom: 0;
+
+  > svg {
+    float: right;
+    margin: 1.6rem 1.6rem 0 0;
+  }
+}
+
+.profileBox-content {
+  display: flex;
+  flex-direction: column;
+
+  margin: 7rem auto 2.9rem auto;
+  text-align: center;
+  font-family: KBO-Dia-Gothic;
+  color: #6b6880;
+
+  > .profile-name {
+    font-size: 1.4rem;
+    font-weight: 300;
+    margin-bottom: 1.1rem;
+  }
+  > .profile-email {
+    font-size: 1.2rem;
+    font-weight: 300;
+  }
+}
+
+.infoBox {
+  position: relative;
+  width: 56.5rem;
+  height: 40.4rem;
+  background-color: #fafafa;
+  border-radius: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.boxForm {
+  width: 28.8rem;
+  height: 40.4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  color: #6b6880;
+  font-family: KBO-Dia-Gothic;
+  font-size: 1.2rem;
+  font-weight: 300;
+}
+
+.boxForm-button-wrap {
+  display: flex;
+  justify-content: center;
+  width: 28.2rem;
+  > .boxForm-button {
+    margin: 0 1rem;
+    color: #014171;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+}
+
+/*수정 저장 버튼*/
+.mypage-button {
+  padding: 0;
+  width: 11.8rem;
+  height: 3rem;
+  background-color: #014171;
+  color: #fafafa;
+  border: none;
+  box-shadow: none;
+  border-radius: 5rem;
+  font-family: KBO-Dia-Gothic;
+  font-size: 1.2rem;
+  font-weight: 300;
+}
+
+/*num type input 초기화*/
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
