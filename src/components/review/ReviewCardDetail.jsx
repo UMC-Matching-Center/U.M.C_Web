@@ -2,8 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import ReviewStar from "./ReviewStar";
 
-import mythus from "../../images/mythus.webp";
-
 //카드 컨테이너
 const Container = styled.div`
   display: flex;
@@ -41,10 +39,14 @@ const ImgContainer = styled.div`
   background-color: #d9d9d9;
 `;
 
-const ProfileImg = styled.img`
+//해당 프로필 동그라미
+const ProfileImg = styled.div`
+  display: flex;
   width: 100%;
   height: 100%;
   border-radius: 61.5rem;
+  justify-content: center;
+  align-items: center;
 `;
 //파트, 이름, 닉네임 넣는 칸
 const HeadTitle = styled.div`
@@ -116,7 +118,12 @@ const TextBox = styled.textarea`
   }
 `;
 
-export default function ReviewCardDetail({ list, handleReview, setDataList }) {
+export default function ReviewCardDetail({
+  list,
+  handleReview,
+  setDataList,
+  DefaultCardImg,
+}) {
   const handleText = (e) => {
     setDataList((prevList) => {
       const updatedList = prevList.map((item) => {
@@ -133,7 +140,9 @@ export default function ReviewCardDetail({ list, handleReview, setDataList }) {
       <DetailContainer>
         <HeadContainer>
           <ImgContainer>
-            <ProfileImg src={mythus} alt="mythus" />
+            <ProfileImg>
+              <DefaultCardImg />
+            </ProfileImg>
           </ImgContainer>
           <HeadTitle>{list.part}</HeadTitle>
           <HeadTitle>

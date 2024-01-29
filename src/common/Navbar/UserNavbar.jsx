@@ -194,7 +194,7 @@ const UserNavbar = () => {
               <SubMenuWrapper>
                 <SubMenuItem>
                   <Link
-                    to="/"
+                    to="/myproject/review"
                     onClick={() => {
                       handleNavIndex(3);
                     }}

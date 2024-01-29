@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ReviewCard from "../../components/review/ReviewCard";
+import ReviewCard from "../../../components/review/ReviewCard";
 import styled from "styled-components";
 
 const WholeContainer = styled.div`

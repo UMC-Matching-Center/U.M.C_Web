@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import ReviewStar from "./ReviewStar";
 import ReviewCardDetail from "./ReviewCardDetail";
-import mythus from "../../images/mythus.webp";
 //카드 전체 컨테이너
 const CardContainer = styled.div`
   display: flex;
@@ -51,13 +50,40 @@ const CardProfileImgContainer = styled.div`
   margin: 4.8rem 0 4.9rem 3.2rem;
 `;
 
-//카드 이미지 출력
-const CardProfileImg = styled.img`
+//해당 프로필 동그라미
+const CardProfileImg = styled.div`
+  display: flex;
   width: 100%;
   height: 100%;
   border-radius: 61.5rem;
+  align-items: center;
+  justify-content: center;
 `;
 
+const DefaultCardImg = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="84"
+    height="84"
+    viewBox="0 0 84 84"
+    fill="none"
+  >
+    <g clipPath="url(#clip0_2734_5309)">
+      <path
+        d="M14 74V65.6667C14 61.2464 15.9667 57.0072 19.4673 53.8816C22.968 50.756 27.716 49 32.6667 49H51.3333C56.284 49 61.032 50.756 64.5327 53.8816C68.0333 57.0072 70 61.2464 70 65.6667V74M28 24.5C28 28.213 29.475 31.774 32.1005 34.3995C34.726 37.025 38.287 38.5 42 38.5C45.713 38.5 49.274 37.025 51.8995 34.3995C54.525 31.774 56 28.213 56 24.5C56 20.787 54.525 17.226 51.8995 14.6005C49.274 11.975 45.713 10.5 42 10.5C38.287 10.5 34.726 11.975 32.1005 14.6005C29.475 17.226 28 20.787 28 24.5Z"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_2734_5309">
+        <rect width="84" height="84" fill="white" />
+      </clipPath>
+    </defs>
+  </svg>
+);
 //카드 우측 컨테이너
 const CardRightContainer = styled.div`
   display: flex;
@@ -113,12 +139,15 @@ export default function ReviewCard({ list, setDataList }) {
           list={list}
           handleReview={handleReview}
           setDataList={setDataList}
+          DefaultCardImg={DefaultCardImg}
         />
       ) : (
         <CardContainer onClick={handleReview}>
           <CardProfileImgContainer>
-            <CardProfileImg src={mythus}
-              alt="mythus"/>
+            <CardProfileImg>
+              {" "}
+              <DefaultCardImg />
+            </CardProfileImg>
           </CardProfileImgContainer>
           <CardRightContainer>
             <CardDetailContainer>
