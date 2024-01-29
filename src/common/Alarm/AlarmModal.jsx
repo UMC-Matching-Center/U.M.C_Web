@@ -16,8 +16,8 @@ const AlarmContainer = ({
 
   return (
     <>
-      <RedCircleFilled aliveAlarm={aliveAlarm} />
-      <AlarmModal display={isViewModal}>
+      <RedCircleFilled $aliveAlarm={aliveAlarm} />
+      <AlarmModal $display={isViewModal}>
         <ModalContentBox>
           <ContentBoxTitle>알림</ContentBoxTitle>
           <ContentBoxSubTitle onClick={deleteAlarm}>
@@ -93,9 +93,9 @@ const AlarmContainer = ({
                     })()}
                     <ContentDetailWrap>
                       <ContentDetailText
-                        color="#02010b"
-                        size="1.6rem"
-                        margin="0.4rem"
+                        $color="#02010b"
+                        $size="1.6rem"
+                        $margin="0.4rem"
                       >
                         {(() => {
                           switch (userType) {
@@ -113,16 +113,16 @@ const AlarmContainer = ({
                         })()}
                       </ContentDetailText>
                       <ContentDetailText
-                        color="#6b6880"
-                        size="1.4rem"
-                        margin="1.4rem"
+                        $color="#6b6880"
+                        $size="1.4rem"
+                        $margin="1.4rem"
                       >
                         {alarm.content}
                       </ContentDetailText>
                       <ContentDetailText
-                        color="#9c9aab"
-                        size="1rem"
-                        margin="1rem"
+                        $color="#9c9aab"
+                        $size="1rem"
+                        $margin="1rem"
                       >
                         {alarm.date}
                       </ContentDetailText>
@@ -141,7 +141,7 @@ const AlarmContainer = ({
 };
 
 const RedCircleFilled = styled.div`
-  display: ${(props) => !props.aliveAlarm && "none"};
+  display: ${(props) => !props.$aliveAlarm && "none"};
   position: absolute;
   width: 0.8rem;
   height: 0.8rem;
@@ -151,7 +151,7 @@ const RedCircleFilled = styled.div`
   right: 0.4rem;
 `;
 const AlarmModal = styled.div`
-  display: ${(props) => !props.display && "none"};
+  display: ${(props) => !props.$display && "none"};
   z-index: 2;
   position: absolute;
   top: 6.5rem;
@@ -239,11 +239,11 @@ const ContentDetailWrap = styled.div`
 `;
 
 const ContentDetailText = styled.div`
-  color: ${(props) => props.color};
+  color: ${(props) => props.$color};
   font-family: KBO-Dia-Gothic;
-  font-size: ${(props) => props.size};
+  font-size: ${(props) => props.$size};
   font-weight: 300;
-  margin-top: ${(props) => props.margin};
+  margin-top: ${(props) => props.$margin};
 `;
 const BlueCircleFilled = styled.div`
   position: absolute;
