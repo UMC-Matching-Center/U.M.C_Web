@@ -43,7 +43,9 @@ const AlarmContainer = ({
                         navigate(
                           alarm.type === "match"
                             ? "/내프로젝트지원현황url"
-                            : "/notice"
+                            : alarm.type === "notice"
+                              ? "/notice"
+                              : "/Q&A 페이지"
                         );
                         handleIconBellClick();
                         handleNavIndex(alarm.type === "match" ? 3 : 4);
@@ -95,18 +97,20 @@ const AlarmContainer = ({
                         size="1.6rem"
                         margin="0.4rem"
                       >
-                        {() => {
+                        {(() => {
                           switch (userType) {
                             case "ROLE_ADMIN":
-                              alarm.type === "match" ? "매칭" : "가입";
-                              break;
+                              return alarm.type === "match" ? "매칭" : "가입";
                             case "ROLE_PLAN":
-                              alarm.type === "match" ? "매칭" : "공지";
-                              break;
+                              return alarm.type === "match"
+                                ? "매칭"
+                                : alarm.type === "notice"
+                                  ? "공지"
+                                  : "문의";
                             case "ROLE_CHALLENGER":
-                              alarm.type === "notice" ? "공지" : "매칭";
+                              return alarm.type === "notice" ? "공지" : "매칭";
                           }
-                        }}
+                        })()}
                       </ContentDetailText>
                       <ContentDetailText
                         color="#6b6880"
