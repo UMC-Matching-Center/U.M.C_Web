@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { TextAreaContext } from "../NoticeWrite";
-import { IconLink } from "@tabler/icons-react";
+import { IconLinkPlus } from "@tabler/icons-react";
 
 const CustomLink = () => {
   const { text, textareaRef, updateText } = useContext(TextAreaContext);
@@ -32,7 +32,7 @@ const CustomLink = () => {
 
   return (
     <button onClick={handleLinkClick}>
-      <IconLink size={24} color="#393556" stroke={1} />
+      <IconLinkPlus size={24} color="#393556" stroke={1} />
     </button>
   );
 };
