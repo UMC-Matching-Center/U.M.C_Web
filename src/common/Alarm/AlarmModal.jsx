@@ -39,7 +39,7 @@ const AlarmContainer = ({
                         handleIconBellClick();
                         handleNavIndex(0);
                         break;
-                      case "ROLE_PM":
+                      case "ROLE_PLAN":
                         navigate(
                           alarm.type === "match"
                             ? "/내프로젝트지원현황url"
@@ -69,6 +69,7 @@ const AlarmContainer = ({
                 >
                   <AlarmContentDetail>
                     {(() => {
+                      /*아이콘 미정*/
                       switch (alarm.type) {
                         case "notice":
                           return (
@@ -94,7 +95,18 @@ const AlarmContainer = ({
                         size="1.6rem"
                         margin="0.4rem"
                       >
-                        {alarm.type === "notice" ? "공지" : "매칭"}
+                        {() => {
+                          switch (userType) {
+                            case "ROLE_ADMIN":
+                              alarm.type === "match" ? "매칭" : "가입";
+                              break;
+                            case "ROLE_PLAN":
+                              alarm.type === "match" ? "매칭" : "공지";
+                              break;
+                            case "ROLE_CHALLENGER":
+                              alarm.type === "notice" ? "공지" : "매칭";
+                          }
+                        }}
                       </ContentDetailText>
                       <ContentDetailText
                         color="#6b6880"
