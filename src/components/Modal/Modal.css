@@ -86,6 +86,7 @@
   border-radius: 1rem;
   border: 0.1rem solid var(--base-300, #6b6880);
   color: var(--base-300, #6b6880);
+  cursor: pointer;
 
   font-family: "KBO-Dia-Gothic";
   font-size: 1.4rem;
@@ -103,6 +104,7 @@
   border-radius: 1rem;
   background: #2ab22a;
   color: #ffffff;
+  cursor: pointer;
 
   font-family: "KBO-Dia-Gothic";
   font-size: 1.4rem;
@@ -120,6 +122,7 @@
   border-radius: 1rem;
   background: #d62117;
   color: #ffffff;
+  cursor: pointer;
 
   font-family: "KBO-Dia-Gothic";
   font-size: 1.4rem;
