@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
-import { persistReducer } from "redux-persist";
+import { configureStore } from "@reduxjs/toolkit";
+import { persistReducer, PURGE } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // localStorage
 import sessionStorage from "redux-persist/lib/storage/session"; // sessionStorage
 
@@ -34,4 +35,17 @@ const rootReducer = combineReducers({
   signupState: signupStateReducer,
 });
 
-export default persistReducer(localPersistConfig, rootReducer);
+const persistedReducer = persistReducer(localPersistConfig, rootReducer);
+
+const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    //미들웨어 작성시 에러 주의
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [PURGE],
+      },
+    }),
+});
+
+export default store;

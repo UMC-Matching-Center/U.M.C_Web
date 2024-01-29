@@ -26,7 +26,6 @@ export const loginAPI = async (id, pw, auto, dispatch) => {
       dispatch(
         USER_LOGIN({
           role: data.result.memberRole,
-          part: data.result.part,
           autoLogin: auto,
         })
       );

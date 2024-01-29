@@ -5,6 +5,10 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { challengerDataAPI } from "../../api";
 import useGetAccessToken from "../../utils/getAccessToken";
+import Modal from "react-modal";
+import { Logout, Withdraw } from "../../components/Modal";
+import { removeCookieToken } from "../../utils/cookies";
+import { persistor } from "../../index";
 
 const FormArea = styled.div`
   display: flex;
@@ -29,6 +33,21 @@ const MyPageInput = styled.input`
   border-bottom: 0.1rem solid #6b6880;
   background: transparent;
 `;
+
+const ModalStyles = {
+  overlay: { width: "100vw", background: "rgba(2, 1, 11, 0.5)", zIndex: "1" },
+  content: {
+    width: "56.5rem",
+    height: "35rem",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    padding: "0",
+    background: "none",
+    border: "none",
+  },
+};
 
 const UserModify = () => {
   const navigate = useNavigate();
@@ -223,6 +242,30 @@ const UserInfo = () => {
   const [phoneNumber, setPhoneNumber] = useState(""); // 전화 입력 값
   const [portfolio, setPortfolio] = useState(location.state?.portfolio); // 포트폴리오
 
+  const [logout, setLogout] = useState(false);
+  const [withdraw, setWithdraw] = useState(false);
+
+  //로그인 정보 초기화 하는 함수
+  const purge = async () => {
+    await persistor.purge();
+    removeCookieToken();
+  };
+
+  // 로그아웃
+  const handleLogout = async () => {
+    setLogout(false); // 모달 닫기
+    navigate("/", { replace: true }); // 메인 페이지로 이동
+    await purge(); // 초기화 실행
+  };
+
+  // 탈퇴
+  const handleWithdraw = async () => {
+    setWithdraw(false); // 모달 닫기
+    // 탈퇴 API 후 성공일 때 아래 코드 실행
+    navigate("/", { replace: true }); // 메인 페이지로 이동
+    await purge(); // 초기화 실행
+  };
+
   // 첫 실행시 API 호출
   useEffect(() => {
     challengerDataAPI(accessToken, dispatch).then((response) => {
@@ -246,89 +289,116 @@ const UserInfo = () => {
   }, []);
 
   return (
-    <div className="container">
-      <div className="boxWrapper">
-        <div className="profileBox-wrapper">
-          <div className="profile_circle-bg">
-            <div
-              className="profile_circle"
-              style={{
-                backgroundImage: `url(${location.state?.url})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center center",
-              }}
-            >
-              {location.state?.url ? null : (
-                <IconPhotoPlus size={36} strokeWidth={1} color={"#E7E6EA"} />
-              )}
-            </div>
-          </div>
-          <div className="profileBox">
-            <IconPencil
-              size={20}
-              strokeWidth={1}
-              color={"#6B6880"}
-              onClick={() => {
-                navigate("/mypage/modify", {
-                  state: {
-                    generation: generation,
-                    university: university,
-                    part: part,
-                    phoneNumber: phoneNumber,
-                    portfolio: portfolio,
-                  },
-                });
-              }}
-            />
-            <div className="profileBox-content">
-              <div className="profile-name">{nicknameName}</div>
-              <div className="profile-email">{email}</div>
-            </div>
-          </div>
-        </div>
-        <div className="infoBox">
-          <div className="boxForm">
-            <FormArea>
-              <div className="form-label" style={{ marginRight: "4.1rem" }}>
-                학교
-              </div>
-              <MyPageInput value={university || ""} disabled />
-            </FormArea>
-            <FormArea>
-              <div className="form-label" style={{ marginRight: "4.1rem" }}>
-                기수
-              </div>
-              <MyPageInput value={generation || ""} disabled width="5.2rem" />
+    <>
+      <Modal
+        isOpen={logout}
+        onRequestClose={() => setLogout(false)}
+        style={ModalStyles}
+      >
+        <Logout
+          isClose={() => setLogout(false)}
+          isLogout={() => handleLogout()}
+        />
+      </Modal>
+      <Modal
+        isOpen={withdraw}
+        onRequestClose={() => setWithdraw(false)}
+        style={ModalStyles}
+      >
+        <Withdraw
+          isClose={() => setWithdraw(false)}
+          isWithdraw={() => handleWithdraw()}
+        />
+      </Modal>
+      <div className="container">
+        <div className="boxWrapper">
+          <div className="profileBox-wrapper">
+            <div className="profile_circle-bg">
               <div
-                className="form-label"
-                style={{ marginLeft: "2.2rem", marginRight: "0.9rem" }}
+                className="profile_circle"
+                style={{
+                  backgroundImage: `url(${location.state?.url})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center center",
+                }}
               >
-                파트
+                {location.state?.url ? null : (
+                  <IconPhotoPlus size={36} strokeWidth={1} color={"#E7E6EA"} />
+                )}
               </div>
-              <MyPageInput value={part || ""} disabled width="10rem" />
-            </FormArea>
-            <FormArea>
-              <div className="form-label" style={{ marginRight: "2rem" }}>
-                전화번호
+            </div>
+            <div className="profileBox">
+              <IconPencil
+                size={20}
+                strokeWidth={1}
+                color={"#6B6880"}
+                onClick={() => {
+                  navigate("/mypage/modify", {
+                    state: {
+                      generation: generation,
+                      university: university,
+                      part: part,
+                      phoneNumber: phoneNumber,
+                      portfolio: portfolio,
+                    },
+                  });
+                }}
+              />
+              <div className="profileBox-content">
+                <div className="profile-name">{nicknameName}</div>
+                <div className="profile-email">{email}</div>
               </div>
-              <MyPageInput value={phoneNumber || ""} type="num" disabled />
-            </FormArea>
-            <FormArea style={{ marginBottom: "4.3rem" }}>
-              <div className="form-label" style={{ marginRight: "1rem" }}>
-                포트폴리오
+            </div>
+          </div>
+          <div className="infoBox">
+            <div className="boxForm">
+              <FormArea>
+                <div className="form-label" style={{ marginRight: "4.1rem" }}>
+                  학교
+                </div>
+                <MyPageInput value={university || ""} disabled />
+              </FormArea>
+              <FormArea>
+                <div className="form-label" style={{ marginRight: "4.1rem" }}>
+                  기수
+                </div>
+                <MyPageInput value={generation || ""} disabled width="5.2rem" />
+                <div
+                  className="form-label"
+                  style={{ marginLeft: "2.2rem", marginRight: "0.9rem" }}
+                >
+                  파트
+                </div>
+                <MyPageInput value={part || ""} disabled width="10rem" />
+              </FormArea>
+              <FormArea>
+                <div className="form-label" style={{ marginRight: "2rem" }}>
+                  전화번호
+                </div>
+                <MyPageInput value={phoneNumber || ""} type="num" disabled />
+              </FormArea>
+              <FormArea style={{ marginBottom: "4.3rem" }}>
+                <div className="form-label" style={{ marginRight: "1rem" }}>
+                  포트폴리오
+                </div>
+                <MyPageInput value={portfolio || ""} disabled />
+              </FormArea>
+              <div className="boxForm-button-wrap">
+                <div className="boxForm-button" onClick={() => setLogout(true)}>
+                  로그아웃
+                </div>
+                <div
+                  className="boxForm-button"
+                  onClick={() => setWithdraw(true)}
+                >
+                  탈퇴하기
+                </div>
               </div>
-              <MyPageInput value={portfolio || ""} disabled />
-            </FormArea>
-            <div className="boxForm-button-wrap">
-              <div className="boxForm-button" onClick={() => navigate("/")}>
-                로그아웃
-              </div>
-              <div className="boxForm-button">탈퇴하기</div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
