@@ -41,7 +41,9 @@ function Login() {
     loginAPI(id, pw, autoLogin, dispatch).then((response) => {
       if (response.isSuccess) {
         setLoginInfo("");
-        navigate("/", { replace: true });
+        response.userType === "ROLE_ADMIN"
+          ? navigate("/challenger/manage", { replace: true })
+          : navigate("/", { replace: true });
       } else {
         setLoginInfo(response.message);
       }
