@@ -1,51 +1,39 @@
 import React, { useState } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import styled from "styled-components";
 import IconNewNotice from "../../images/ic_new_notice.png";
 import { IconSearch } from "@tabler/icons-react";
+import { TextAreaProvider } from "../../context/TextAreaProvider";
+import NoticeWrite from "./NoticeWrite";
+import NoticeDetail from "./NoticeDetail";
+import sample from "../../images/sample_project.png";
 
 const noticeDummy = [
   {
     id: 1,
-    title: "제목이 제목제목",
+    title: "아이디어 페이지 공개",
+    is_modify: false,
     content:
-      "내용내용 내용내용내용 내 용내용 내용 내용내용 내 용내 용내용내 용내용 내용내용 내용내용 내용내용내용 내 용내용 내용 내용내용 내 용내 용내용내 용내용 내용내용 내용내용내 내용내용내 내용내용내",
+      "**GACI 지부 챌린저 여러분**, 안녕하세요. GACI 지부 회장단입니다.\n - 헬로\n\n <u>히히</u>",
     date: "2024년 1월 10일 15:00",
-  },
-  {
-    id: 1,
-    title: "공지1",
-    content:
-      "내용내용 내용내용내용 내 용내용 내용 내용내용 내 용내 용내용내 용내용 내용내용 내용내용 내용내용내용 내 용내용 내용 내용내용 내 용내 용내용내 용내용 내용내용 내용내용내 내용내용내 내용내용내",
-    date: "2024년 1월 10일 15:00",
+    image: [sample, sample, sample],
   },
   {
     id: 2,
-    title: "제목이 제목제목",
+    title: "아이디어 페이지 공개2",
+    is_modify: true,
     content:
-      "내용내용 내용내용내용 내 용내용 내용 내용내용 내 용내 용내용내 용내용 내용내용 내용내용 내용내용내용 내 용내용 내용 내용내용 내 용내 용내용내 용내용 내용내용 내용내용내 내용내용내",
+      "| GACI IDEAS : [https://bit.ly/4799kIp](https://bit.ly/4799kIp)\n - hello\n\t- hel",
     date: "2024년 1월 10일 15:00",
+    image: [sample, sample, sample, sample, sample],
   },
   {
     id: 3,
-    title: "챌린지",
-    content:
-      "내용내용 내용내용내용 내 용내용 내용 내용내용 내 용내 용내용내 용내용 내용내용 내용내용 내용내용내용 내 용내용 내용 내용내용 내 용내 용내용내 용내용 내용내용 내용내용내",
+    title: "아이디어 페이지 공개3",
+    is_modify: true,
+    content: "```js\nconst a=1;\nconst b=3;console.log();\n```",
     date: "2024년 1월 10일 15:00",
-  },
-  {
-    id: 4,
-    title: "제목이 제목제목",
-    content:
-      "내용내용 내용내용내용 내 용내용 내용 내용내용 내 용내 용내용내 용내용 내용내용 내용내용 내용내용내용 내 용내용 내용 내용내용 내 용내 용내용내 용내용 내용내용 내용내용내",
-    date: "2024년 1월 10일 15:00",
-  },
-  {
-    id: 5,
-    title: "제목이 제목제목",
-    content:
-      "내용내용 내용내용내용 내 용내용 내용 내용내용 내 용내 용내용내 용내용 내용내용 내용내용 내용내용내용 내 용내용 내용 내용내용 내 용내 용내용내 용내용 내용내용 내용내용내",
-    date: "2024년 1월 10일 15:00",
+    image: [sample, sample, sample, sample, sample],
   },
 ];
 
@@ -165,7 +153,7 @@ const NoticeList = styled.div`
 
     > .notice-content {
       font-size: 1.6rem;
-      font-weigth: 300;
+      font-weight: 300;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -244,6 +232,12 @@ const NoticeBasic = ({ type }) => {
             </div>
           ) : (
             list.map((notice) => {
+              let content = notice.content;
+              const regExp = /[#*_-`]/gi;
+              content = content
+                .replace("<u>", "")
+                .replace("</u>", "")
+                .replace(regExp, "");
               return (
                 <>
                   <div
@@ -253,7 +247,7 @@ const NoticeBasic = ({ type }) => {
                       /*클릭시 상세 notice 페이지로 이동*/
                       navigation(`../detail/${notice.title}`, {
                         state: {
-                          item: { notice },
+                          data: { notice },
                         },
                       });
                     }}
@@ -262,7 +256,7 @@ const NoticeBasic = ({ type }) => {
                       <div className="notice-title">{notice.title}</div>
                       <div className="notice-date">{notice.date}</div>
                     </div>
-                    <div className="notice-content">{notice.content}</div>
+                    <div className="notice-content">{content}</div>
                   </div>
                   <div
                     style={{
@@ -283,11 +277,43 @@ const NoticeBasic = ({ type }) => {
 };
 
 function Notice() {
-  const user = { type: "ROLE_ADMIN" };
+  const user = { type: "ROLE_ADMIN" }; // API 연결 시 변경 예정
   return (
-    <Routes>
-      <Route path="/" exact element={<NoticeBasic type={user.type} />}></Route>
-    </Routes>
+    <TextAreaProvider>
+      <Routes>
+        <Route
+          path="/"
+          exact
+          element={<NoticeBasic type={user.type} />}
+        ></Route>
+        <Route
+          path="/detail/*"
+          element={<NoticeDetail type={user.type} />}
+        ></Route>
+        <Route
+          path="/new"
+          exact
+          element={
+            user.type === "ROLE_ADMIN" ? (
+              <NoticeWrite mode="new" />
+            ) : (
+              <Navigate to=".." />
+            )
+          }
+        ></Route>
+        <Route
+          path="/modify"
+          exact
+          element={
+            user.type === "ROLE_ADMIN" ? (
+              <NoticeWrite mode="modify" />
+            ) : (
+              <Navigate to=".." />
+            )
+          }
+        ></Route>
+      </Routes>
+    </TextAreaProvider>
   );
 }
 export default Notice;
