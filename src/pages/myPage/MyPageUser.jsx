@@ -252,9 +252,6 @@ const UserInfo = () => {
     challengerWithdrawalAPI(accessToken, dispatch).then((response) => {
       if (response.isSuccess) {
         setWithdraw(false); // 모달 닫기
-        setWithdraw(false); // 모달 닫기
-        // 탈퇴 API 후 성공일 때 아래 코드 실행
-        setWithdraw(false); // 모달 닫기
         // 탈퇴 API 후 성공일 때 아래 코드 실행
         navigate("/", { replace: true }); // 메인 페이지로 이동
         purge(); // 초기화 실행
