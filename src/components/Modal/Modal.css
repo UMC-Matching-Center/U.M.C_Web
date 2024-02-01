@@ -29,6 +29,16 @@
     border-radius: 5rem;
     background-color: #2ab22a;
   }
+
+  .IconCircleRed {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 9rem;
+    height: 9rem;
+    border-radius: 5rem;
+    background-color: #d62117;
+  }
 }
 
 .ModalConentBox {
@@ -76,6 +86,7 @@
   border-radius: 1rem;
   border: 0.1rem solid var(--base-300, #6b6880);
   color: var(--base-300, #6b6880);
+  cursor: pointer;
 
   font-family: "KBO-Dia-Gothic";
   font-size: 1.4rem;
@@ -93,6 +104,25 @@
   border-radius: 1rem;
   background: #2ab22a;
   color: #ffffff;
+  cursor: pointer;
+
+  font-family: "KBO-Dia-Gothic";
+  font-size: 1.4rem;
+  font-weight: 300;
+  line-height: 2rem; /* 142.857% */
+}
+
+.ModalBtnRed {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  width: 12rem;
+  height: 4rem;
+  border-radius: 1rem;
+  background: #d62117;
+  color: #ffffff;
+  cursor: pointer;
 
   font-family: "KBO-Dia-Gothic";
   font-size: 1.4rem;

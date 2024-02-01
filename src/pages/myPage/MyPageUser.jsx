@@ -3,14 +3,23 @@ import { useNavigate, Routes, Route, useLocation } from "react-router-dom";
 import { IconPhotoPlus, IconPencil } from "@tabler/icons-react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { challengerDataAPI } from "../../api";
+import {
+  myPageDataAPI,
+  challengerWithdrawalAPI,
+  challengerModifyAPI,
+} from "../../api";
 import useGetAccessToken from "../../utils/getAccessToken";
+import Modal from "react-modal";
+import { Logout, Withdraw } from "../../components/Modal";
+import { removeCookieToken } from "../../utils/cookies";
+import { persistor } from "../../index";
 
 const FormArea = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
   margin-bottom: 3.2rem;
+  cursor: default;
   & * {
     display: flex;
     align-items: center;
@@ -30,26 +39,43 @@ const MyPageInput = styled.input`
   background: transparent;
 `;
 
+const ModalStyles = {
+  overlay: { width: "100vw", background: "rgba(2, 1, 11, 0.5)", zIndex: "1" },
+  content: {
+    width: "56.5rem",
+    height: "35rem",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    padding: "0",
+    background: "none",
+    border: "none",
+  },
+};
+
 const UserModify = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [profileImage, setProfileImage] = useState(null); // 실제 파일 저장
-  const [profileImageURL, setProfileImageURL] = useState(null); // 이미지 데이터 URL 저장
-  const [university, setUniversity] = useState(location.state?.university); // 학교
-  const [generation, setGeneration] = useState(location.state?.generation); // 기수
-  const [part, setPart] = useState(location.state?.part); // 파트
-  const [phoneNumber, setPhoneNumber] = useState(
-    location.state?.phoneNumber
-      ? location.state.phoneNumber.replace(/[^0-9]/g, "")
-      : ""
-  ); //전화번호 입력 값
-  const [phoneValid, setPhoneValid] = useState(false); //전화번호 유효성 점검
+  const dispatch = useDispatch();
+  const accessToken = location.state?.accessToken;
+
+  const [profileImage, setProfileImage] = useState(null); // 이미지 데이터
+  const [profileImageURL, setProfileImageURL] = useState(
+    location.state.profileImage
+  ); // 이미지 데이터 URL 저장
+  const nicknameName = location.state.nicknameName; // 닉네임/이름
+  const email = location.state.email; // 이메일
+  const university = location.state.university; // 학교
+  const generation = location.state.generation; // 기수
+  const part = location.state.part; // 파트
+  const [phoneNumber, setPhoneNumber] = useState(location.state.phoneNumber); // 전화 입력 값
   const [portfolio, setPortfolio] = useState(location.state?.portfolio); // 포트폴리오
+
   const [ableBtn, setAbleBtn] = useState(false); //버튼 Enable 여부
 
   /* ---- 이미지 파일 관련 ----- */
   const handleProfileImageChange = (e) => {
-    handleUploadImage();
     const file = e.target.files[0];
 
     if (file) {
@@ -62,51 +88,39 @@ const UserModify = () => {
     }
   };
 
-  const handleUploadImage = () => {
-    // 이미지 전송 API 추가
-    console.log("Uploading image:", profileImage);
-  };
-
   /* ---- 전화번호 관련 ----- */
   const handlePhoneNumber = (e) => {
-    const phone = e.target.value;
-
-    setPhoneNumber(phone);
-    setPhoneValid(validPhone(phone));
-  };
-
-  const validPhone = (phone) => {
-    var regExp = /^010\d{8}$/;
-    return regExp.test(phone) ? 1 : 0; // 정규식에 부합하다면 1 반환
+    setPhoneNumber(
+      e.target.value
+        .replace(/[^0-9]/g, "")
+        .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/, "$1-$2-$3")
+        .replace(/(-{1,2})$/, "")
+    );
   };
 
   /*클릭 이벤트*/
   const handleSubmit = (e) => {
-    /*API : 변경된 유저 정보 전송*/
     e.preventDefault();
-    navigate("..", {
-      state: {
-        university: university,
-        generation: generation,
-        part: part,
-        phoneNumber: phoneNumber,
-        portfolio: portfolio,
-        url: profileImageURL,
-      },
+    /* API : 변경된 유저 정보 전송 */
+    challengerModifyAPI(
+      accessToken,
+      dispatch,
+      profileImage,
+      portfolio,
+      phoneNumber
+    ).then((response) => {
+      if (response.isSuccess) {
+        navigate(-1, { replace: true });
+      } else {
+        alert(response.message);
+      }
     });
   };
 
   useEffect(() => {
-    //이름, 닉네임, 전화번호, 학교, 파트가 모두 입력•선택되었을 때 버튼 활성화
-    setAbleBtn(
-      university !== "" &&
-        generation !== "" &&
-        part !== "" &&
-        phoneNumber !== "" &&
-        phoneValid &&
-        portfolio !== ""
-    );
-  }, [university, generation, part, phoneNumber, portfolio, phoneValid]);
+    const phoneExp = /^010-\d{4}-\d{4}$/; //전화번호 정규식
+    setAbleBtn(phoneNumber !== "" && phoneExp.test(phoneNumber));
+  }, [phoneNumber]);
 
   return (
     <div className="container">
@@ -120,6 +134,7 @@ const UserModify = () => {
                   backgroundImage: `url(${profileImageURL})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center center",
+                  cursor: "pointer",
                 }}
               >
                 {profileImageURL ? null : (
@@ -137,8 +152,8 @@ const UserModify = () => {
           />
           <div className="profileBox">
             <div className="profileBox-content">
-              <div className="profile-name">루나/고지민</div>
-              <div className="profile-email">gachonumc@gmail.com</div>
+              <div className="profile-name">{nicknameName}</div>
+              <div className="profile-email">{email}</div>
             </div>
           </div>
         </div>
@@ -148,31 +163,20 @@ const UserModify = () => {
               <div className="form-label" style={{ marginRight: "4.1rem" }}>
                 학교
               </div>
-              <MyPageInput
-                value={university}
-                onChange={(e) => setUniversity(e.target.value)}
-              />
+              <MyPageInput value={university} disabled={true} />
             </FormArea>
             <FormArea>
               <div className="form-label" style={{ marginRight: "4.1rem" }}>
                 기수
               </div>
-              <MyPageInput
-                value={generation}
-                onChange={(e) => setGeneration(e.target.value)}
-                width="5.2rem"
-              />
+              <MyPageInput value={generation} disabled={true} width="5.2rem" />
               <div
                 className="form-label"
                 style={{ marginLeft: "2.2rem", marginRight: "0.9rem" }}
               >
                 파트
               </div>
-              <MyPageInput
-                value={part}
-                onChange={(e) => setPart(e.target.value)}
-                width="10rem"
-              />
+              <MyPageInput value={part} disabled={true} width="10rem" />
             </FormArea>
             <FormArea>
               <div className="form-label" style={{ marginRight: "2rem" }}>
@@ -181,6 +185,7 @@ const UserModify = () => {
               <MyPageInput
                 value={phoneNumber}
                 type="num"
+                maxLength={13}
                 onChange={handlePhoneNumber}
               />
             </FormArea>
@@ -215,6 +220,7 @@ const UserInfo = () => {
   const dispatch = useDispatch();
   const accessToken = useGetAccessToken();
 
+  const [profileImageURL, setProfileImageURL] = useState(""); // 이미지 데이터 URL 저장
   const [nicknameName, setNicknameName] = useState(""); // 닉네임/이름
   const [email, setEmail] = useState(""); // 이메일
   const [university, setUniversity] = useState(""); // 학교
@@ -223,112 +229,182 @@ const UserInfo = () => {
   const [phoneNumber, setPhoneNumber] = useState(""); // 전화 입력 값
   const [portfolio, setPortfolio] = useState(location.state?.portfolio); // 포트폴리오
 
-  // 첫 실행시 API 호출
-  useEffect(() => {
-    challengerDataAPI(accessToken, dispatch).then((response) => {
+  const [logout, setLogout] = useState(false);
+  const [withdraw, setWithdraw] = useState(false);
+  Modal.setAppElement("#root");
+
+  //로그인 정보 초기화 하는 함수
+  const purge = async () => {
+    await persistor.purge();
+    removeCookieToken();
+  };
+
+  // 로그아웃
+  const handleLogout = async () => {
+    setLogout(false); // 모달 닫기
+    navigate("/", { replace: true }); // 메인 페이지로 이동
+    await purge(); // 초기화 실행
+  };
+
+  // 탈퇴
+  const handleWithdraw = async () => {
+    // 탈퇴 API 후 성공일 때 아래 코드 실행
+    challengerWithdrawalAPI(accessToken, dispatch).then((response) => {
       if (response.isSuccess) {
-        setNicknameName(response.nicknameName);
-        setEmail(response.email);
-        setUniversity(response.university);
-        setgeneration(response.generation);
-        setPart(response.part);
-        setPhoneNumber(
-          response.phoneNumber.replace(
-            /^(\d{2,3})(\d{3,4})(\d{4})$/,
-            `$1-$2-$3`
-          )
-        );
-        setPortfolio(response.portfolio);
+        setWithdraw(false); // 모달 닫기
+        // 탈퇴 API 후 성공일 때 아래 코드 실행
+        navigate("/", { replace: true }); // 메인 페이지로 이동
+        purge(); // 초기화 실행
+        alert("탈퇴가 완료되었습니다.");
       } else {
         alert(response.message);
       }
     });
+  };
+
+  // 첫 실행시 API 호출
+  useEffect(() => {
+    if (accessToken !== "") {
+      myPageDataAPI(accessToken, dispatch).then((response) => {
+        if (response.isSuccess) {
+          setProfileImageURL(response.profileImage);
+          setNicknameName(response.nicknameName);
+          setEmail(response.email);
+          setUniversity(response.university);
+          setgeneration(response.generation);
+          setPart(response.part);
+          setPhoneNumber(
+            response.phoneNumber.replace(
+              /^(\d{2,3})(\d{3,4})(\d{4})$/,
+              `$1-$2-$3`
+            )
+          );
+          setPortfolio(response.portfolio);
+        } else {
+          alert(response.message);
+        }
+      });
+    } else {
+      navigate("/register", { replace: true }); // 메인 페이지로 이동
+    }
   }, []);
 
   return (
-    <div className="container">
-      <div className="boxWrapper">
-        <div className="profileBox-wrapper">
-          <div className="profile_circle-bg">
-            <div
-              className="profile_circle"
-              style={{
-                backgroundImage: `url(${location.state?.url})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center center",
-              }}
-            >
-              {location.state?.url ? null : (
-                <IconPhotoPlus size={36} strokeWidth={1} color={"#E7E6EA"} />
-              )}
-            </div>
-          </div>
-          <div className="profileBox">
-            <IconPencil
-              size={20}
-              strokeWidth={1}
-              color={"#6B6880"}
-              onClick={() => {
-                navigate("/mypage/modify", {
-                  state: {
-                    generation: generation,
-                    university: university,
-                    part: part,
-                    phoneNumber: phoneNumber,
-                    portfolio: portfolio,
-                  },
-                });
-              }}
-            />
-            <div className="profileBox-content">
-              <div className="profile-name">{nicknameName}</div>
-              <div className="profile-email">{email}</div>
-            </div>
-          </div>
-        </div>
-        <div className="infoBox">
-          <div className="boxForm">
-            <FormArea>
-              <div className="form-label" style={{ marginRight: "4.1rem" }}>
-                학교
-              </div>
-              <MyPageInput value={university || ""} disabled />
-            </FormArea>
-            <FormArea>
-              <div className="form-label" style={{ marginRight: "4.1rem" }}>
-                기수
-              </div>
-              <MyPageInput value={generation || ""} disabled width="5.2rem" />
+    <>
+      <Modal
+        isOpen={logout}
+        onRequestClose={() => setLogout(false)}
+        style={ModalStyles}
+      >
+        <Logout
+          isClose={() => setLogout(false)}
+          isLogout={() => handleLogout()}
+        />
+      </Modal>
+      <Modal
+        isOpen={withdraw}
+        onRequestClose={() => setWithdraw(false)}
+        style={ModalStyles}
+      >
+        <Withdraw
+          isClose={() => setWithdraw(false)}
+          isWithdraw={() => handleWithdraw()}
+        />
+      </Modal>
+      <div className="container">
+        <div className="boxWrapper">
+          <div className="profileBox-wrapper">
+            <div className="profile_circle-bg">
               <div
-                className="form-label"
-                style={{ marginLeft: "2.2rem", marginRight: "0.9rem" }}
+                className="profile_circle"
+                style={{
+                  backgroundImage: `url(${profileImageURL})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center center",
+                }}
               >
-                파트
+                {profileImageURL !== "" ? null : (
+                  <IconPhotoPlus size={36} strokeWidth={1} color={"#E7E6EA"} />
+                )}
               </div>
-              <MyPageInput value={part || ""} disabled width="10rem" />
-            </FormArea>
-            <FormArea>
-              <div className="form-label" style={{ marginRight: "2rem" }}>
-                전화번호
+            </div>
+            <div className="profileBox">
+              <IconPencil
+                size={20}
+                strokeWidth={1}
+                color={"#6B6880"}
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  navigate("/mypage/modify", {
+                    state: {
+                      profileImage: profileImageURL,
+                      nicknameName: nicknameName,
+                      email: email,
+                      university: university,
+                      generation: generation,
+                      part: part,
+                      phoneNumber: phoneNumber,
+                      portfolio: portfolio,
+                      accessToken: accessToken,
+                    },
+                  });
+                }}
+              />
+              <div className="profileBox-content">
+                <div className="profile-name">{nicknameName}</div>
+                <div className="profile-email">{email}</div>
               </div>
-              <MyPageInput value={phoneNumber || ""} type="num" disabled />
-            </FormArea>
-            <FormArea style={{ marginBottom: "4.3rem" }}>
-              <div className="form-label" style={{ marginRight: "1rem" }}>
-                포트폴리오
+            </div>
+          </div>
+          <div className="infoBox">
+            <div className="boxForm">
+              <FormArea>
+                <div className="form-label" style={{ marginRight: "4.1rem" }}>
+                  학교
+                </div>
+                <MyPageInput value={university || ""} disabled />
+              </FormArea>
+              <FormArea>
+                <div className="form-label" style={{ marginRight: "4.1rem" }}>
+                  기수
+                </div>
+                <MyPageInput value={generation || ""} disabled width="5.2rem" />
+                <div
+                  className="form-label"
+                  style={{ marginLeft: "2.2rem", marginRight: "0.9rem" }}
+                >
+                  파트
+                </div>
+                <MyPageInput value={part || ""} disabled width="10rem" />
+              </FormArea>
+              <FormArea>
+                <div className="form-label" style={{ marginRight: "2rem" }}>
+                  전화번호
+                </div>
+                <MyPageInput value={phoneNumber || ""} type="num" disabled />
+              </FormArea>
+              <FormArea>
+                <div className="form-label" style={{ marginRight: "1rem" }}>
+                  포트폴리오
+                </div>
+                <MyPageInput value={portfolio || ""} disabled />
+              </FormArea>
+              <div className="boxForm-button-wrap">
+                <div className="boxForm-button" onClick={() => setLogout(true)}>
+                  로그아웃
+                </div>
+                <div
+                  className="boxForm-button"
+                  onClick={() => setWithdraw(true)}
+                >
+                  탈퇴하기
+                </div>
               </div>
-              <MyPageInput value={portfolio || ""} disabled />
-            </FormArea>
-            <div className="boxForm-button-wrap">
-              <div className="boxForm-button" onClick={() => navigate("/")}>
-                로그아웃
-              </div>
-              <div className="boxForm-button">탈퇴하기</div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

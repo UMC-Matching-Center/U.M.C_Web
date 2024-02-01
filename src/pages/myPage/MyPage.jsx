@@ -3,18 +3,16 @@ import { Routes, Route } from "react-router-dom";
 import MyPageAdmin from "./MyPageAdmin";
 import MyPageUser from "./MyPageUser";
 import "./MyPage.css";
+import { useSelector } from "react-redux";
 
 const MyPage = () => {
-  const user = { type: "USER" };
+  const { userType } = useSelector((state) => state.userInfo);
   return (
     <Routes>
       <Route
         path="/*"
         element={
-          <>
-            {user.type === "MANAGER" && <MyPageAdmin />}
-            {user.type === "USER" && <MyPageUser />}
-          </>
+          <>{userType === "ROLE_ADMIN" ? <MyPageAdmin /> : <MyPageUser />}</>
         }
       ></Route>
     </Routes>
