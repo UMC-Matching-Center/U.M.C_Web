@@ -71,10 +71,13 @@
     font-size: 1.4rem;
     font-weight: 300;
     margin-bottom: 1.1rem;
+    cursor: default;
   }
+
   > .profile-email {
     font-size: 1.2rem;
     font-weight: 300;
+    cursor: default;
   }
 }
 
@@ -107,11 +110,15 @@
   display: flex;
   justify-content: center;
   width: 28.2rem;
+  height: 3rem;
+
   > .boxForm-button {
+    display: flex;
     margin: 0 1rem;
     color: #014171;
     font-size: 1rem;
     cursor: pointer;
+    align-items: center;
   }
 }
 

@@ -118,8 +118,8 @@ const AdminModify = () => {
       accessToken,
       dispatch,
       profileImage,
-      phoneNumber,
-      office[0]
+      office[0],
+      phoneNumber
     ).then((response) => {
       if (response.isSuccess) {
         navigate(-1, { replace: true });

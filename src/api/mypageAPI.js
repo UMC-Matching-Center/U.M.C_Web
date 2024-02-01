@@ -169,7 +169,7 @@ export const adminModifyAPI = async (
   //서버로 내 정보 수정 요청 (포트폴리오, 전화번호)
   try {
     const { data } = await privateAxios(accessToken, dispatch).patch(
-      "/manager/info",
+      "/manage/info",
       formData
     );
     if (data.code === "COMMON200") {
