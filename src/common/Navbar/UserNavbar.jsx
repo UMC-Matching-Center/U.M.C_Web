@@ -144,7 +144,12 @@ const UserNavbar = () => {
         <div className="nav_area">
           <div className="nav_logo">
             <Link to="/">
-              <img src={Logo} />
+              <img
+                src={Logo}
+                onClick={() => {
+                  handleNavIndex(0);
+                }}
+              />
             </Link>
           </div>
           <ul className="nav_center">
@@ -194,7 +199,7 @@ const UserNavbar = () => {
               <SubMenuWrapper>
                 <SubMenuItem>
                   <Link
-                    to="/"
+                    to="/myproject/review"
                     onClick={() => {
                       handleNavIndex(3);
                     }}

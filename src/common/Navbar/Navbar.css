@@ -1,7 +1,7 @@
 .app__nav {
   display: flex;
   justify-content: center;
-  margin: 3.9rem 0 14.9rem 0;
+  padding: 3.9rem 0 14.9rem 0;
 
   .nav_area {
     width: 120rem;

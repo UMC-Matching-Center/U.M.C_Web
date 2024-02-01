@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { PURGE } from "redux-persist";
 
 // 엑세스 토큰 만료 시간 (1시간)
 export const TOKEN_TIME_OUT = 60 * 60 * 1000;
@@ -22,6 +23,11 @@ export const localTokenSlice = createSlice({
       state.token = null;
       state.expireTime = null;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, () => {
+      return initialState;
+    });
   },
 });
 

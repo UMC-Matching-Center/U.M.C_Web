@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import "../pages/register/Register.css";
+import "../../pages/register/Register.css";
 
 const CompleteTitle = styled.div`
   color: #014171;

@@ -15,6 +15,7 @@ export const loginAPI = async (id, pw, auto, dispatch) => {
   const response = {
     isSuccess: false, //API 성공 여부
     message: "", //API 메시지
+    userType: "", //로그인 유저 타입
   };
 
   //서버로 로그인 요청
@@ -23,10 +24,10 @@ export const loginAPI = async (id, pw, auto, dispatch) => {
     if (data.code === "COMMON200") {
       response.isSuccess = true;
       response.message = data.message;
+      response.userType = data.result.memberRole;
       dispatch(
         USER_LOGIN({
           role: data.result.memberRole,
-          part: data.result.part,
           autoLogin: auto,
         })
       );

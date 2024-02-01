@@ -21,8 +21,8 @@ const AlarmDummy = [
     is_confirm: false,
   },
   {
-    type: "match",
-    content: "새로운 지원이 있습니다.",
+    type: "inquiry",
+    content: "새로운 문의가 있습니다.",
     date: "2023년 12월 12일",
     is_confirm: true,
   },
@@ -138,7 +138,12 @@ const PMNavbar = () => {
         <div className="nav_area">
           <div className="nav_logo">
             <Link to="/">
-              <img src={Logo} />
+              <img
+                src={Logo}
+                onClick={() => {
+                  handleNavIndex(0);
+                }}
+              />
             </Link>
           </div>
           <ul className="nav_center">
@@ -188,7 +193,7 @@ const PMNavbar = () => {
               <SubMenuWrapper>
                 <SubMenuItem>
                   <Link
-                    to="/"
+                    to="/myproject/review"
                     onClick={() => {
                       handleNavIndex(3);
                     }}

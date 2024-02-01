@@ -59,7 +59,6 @@ const createPrivateAxios = (accessToken, dispatch) => {
           dispatch(
             USER_AUTO_LOGIN({
               role: requestResponse.data.result.memberRole,
-              part: requestResponse.data.result.part,
             })
           );
           useSelector((state) => state.userInfo.autoLogin) === "true"

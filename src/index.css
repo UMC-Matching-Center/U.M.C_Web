@@ -1,9 +1,12 @@
 html {
+  min-height: 100vh;
   font-size: 62.5%; /* 62.5% of the base size of 16px = 10px.*/
   background-color: #02010b;
 }
 
 body {
+  height: 100vh;
+  min-width: 120rem;
   font-size: 1.4rem; /* reset 10*1.4 = 14px, to make sure you do not get any 10px around */
   color: #131313;
   margin: 0;
@@ -12,6 +15,10 @@ body {
     "KBO-Dia-Gothic", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  #root {
+    height: 100%;
+  }
 }
 
 code {

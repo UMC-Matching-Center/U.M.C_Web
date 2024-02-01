@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { PURGE } from "redux-persist";
 
 // 모듈의 초기 상태
 const initialState = {
@@ -31,6 +32,11 @@ const userInfoSlice = createSlice({
       state.signupPW = "";
       state.signupCompleteModalOpen = action.payload.open;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, () => {
+      return initialState;
+    });
   },
 });
 
