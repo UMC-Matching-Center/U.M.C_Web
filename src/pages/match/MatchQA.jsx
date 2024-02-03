@@ -139,7 +139,7 @@ const QAList = [
 ];
 
 /*---질문하기&수정하기, 삭제 이벤트 함수 추후 구현---*/
-const MatchChat = () => {
+const MatchQA = () => {
   const [toggles, setToggles] = useState(QAList.map(() => false)); // 각 질문 toggle 변수
   const user = { type: "ROLE_PLAN" };
 
@@ -240,4 +240,4 @@ const MatchChat = () => {
   );
 };
 
-export default MatchChat;
+export default MatchQA;

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Routes, Route, useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ProjectDetail from "../../components/ProjectDetail";
-import MatchChat from "./MatchChat";
+import MatchQA from "./MatchQA";
 import chat from "../../images/ic_chat.svg";
 import { IconLoader, IconCircleCheck } from "@tabler/icons-react";
 
@@ -120,7 +120,7 @@ const MatchProjectDetail = () => {
         <div className="match-question">
           <div
             className="match-question-circle"
-            onClick={() => navigation(window.location.pathname + "/chat")}
+            onClick={() => navigation(window.location.pathname + "/question")}
           >
             <img src={chat} alt="chat-icon" />
             <span>Q&A</span>
@@ -172,7 +172,7 @@ function MatchDetail() {
   return (
     <Routes>
       <Route exact path="/:id" element={<MatchProjectDetail />} />
-      <Route path="/:id/chat" element={<MatchChat />} />
+      <Route path="/:id/question" element={<MatchQA />} />
     </Routes>
   );
 }
