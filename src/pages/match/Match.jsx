@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import MatchCard from "../../common/MatchCard/MatchCard";
 import MatchDetail from "./MatchDetail";
 import MatchWrite from "./MatchWrite";
+import { TextAreaProvider } from "../../context/TextAreaProvider";
 
 const projectsDummy = [
   {
@@ -119,11 +120,33 @@ const MatchList = styled.div`
 function MatchHome() {
   const navigate = useNavigate();
 
+  const [data, setData] = useState(projectsDummy); // 전체 프로젝트 데이터
+  const [, setPage] = useState(1); // 데이터를 불러온 횟수(페이지)
+
+  /*---프로젝트 카드 클릭 이벤트(이동)---*/
   const handleCardClick = (project) => {
     navigate(`../detail/${project.id}`);
   };
 
-  /*---무한 스크롤 추가 예정---*/
+  /*---무한 스크롤---*/
+  const handleScroll = () => {
+    const scrollHeight = document.documentElement.scrollHeight;
+    const scrollTop = document.documentElement.scrollTop;
+    const clientHeight = document.documentElement.clientHeight;
+
+    if (scrollTop + clientHeight >= scrollHeight) {
+      /*API 에서 새로운 데이터(projectDummy=>response.result) 받아와 data에 추가 */
+      setData((preData) => [...preData, ...projectsDummy]);
+      setPage((prePage) => prePage + 1);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <MatchMain>
@@ -131,7 +154,7 @@ function MatchHome() {
         <button onClick={() => navigate("../new")}>Add</button>
       </div>
       <MatchList>
-        {projectsDummy.map((project) => {
+        {data.map((project) => {
           return (
             <MatchCard
               project={project}
@@ -148,34 +171,36 @@ function MatchHome() {
 export default function Match() {
   const user = { type: "ROLE_PM" }; // API 연결 시 변경 예정
   return (
-    <Routes>
-      <Route path="/" exact element={<MatchHome type={user.type} />}></Route>
-      <Route
-        path="/detail/*"
-        element={<MatchDetail type={user.type} />}
-      ></Route>
-      <Route
-        path="/new"
-        exact
-        element={
-          user.type === "ROLE_PM" ? (
-            <MatchWrite mode="new" />
-          ) : (
-            <Navigate to=".." />
-          )
-        }
-      ></Route>
-      <Route
-        path="/modify"
-        exact
-        element={
-          user.type === "ROLE_PM" ? (
-            <MatchWrite mode="modify" />
-          ) : (
-            <Navigate to=".." />
-          )
-        }
-      ></Route>
-    </Routes>
+    <TextAreaProvider>
+      <Routes>
+        <Route path="/" exact element={<MatchHome type={user.type} />}></Route>
+        <Route
+          path="/detail/*"
+          element={<MatchDetail type={user.type} />}
+        ></Route>
+        <Route
+          path="/new"
+          exact
+          element={
+            user.type === "ROLE_PM" ? (
+              <MatchWrite mode="new" />
+            ) : (
+              <Navigate to=".." />
+            )
+          }
+        ></Route>
+        <Route
+          path="/modify"
+          exact
+          element={
+            user.type === "ROLE_PM" ? (
+              <MatchWrite mode="modify" />
+            ) : (
+              <Navigate to=".." />
+            )
+          }
+        ></Route>
+      </Routes>
+    </TextAreaProvider>
   );
 }
