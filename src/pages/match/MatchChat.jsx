@@ -231,9 +231,11 @@ const MatchChat = () => {
           </QAContent>
         </QAWrapper>
       </QAContainer>
-      <QARequest>
-        <button>질문하기</button>
-      </QARequest>
+      {user.type === "ROLE_CHALLENGER" && (
+        <QARequest>
+          <button>질문하기</button>
+        </QARequest>
+      )}
     </>
   );
 };

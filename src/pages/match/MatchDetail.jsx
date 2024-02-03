@@ -109,6 +109,10 @@ const MatchProjectDetail = () => {
     console.log(id);
   }, []);
 
+  const ApplyProject = () => {
+    /*지원 하시겠습니까 모달 창 오픈?*/
+  };
+
   return (
     <>
       <ProjectDetail project={DATA} type={user.type} />
@@ -155,7 +159,9 @@ const MatchProjectDetail = () => {
               </>
             );
           })}
-          {user.type === "ROLE_CHALLENGER" && <button>지원하기</button>}
+          {user.type === "ROLE_CHALLENGER" && (
+            <button onClick={ApplyProject}>지원하기</button>
+          )}
         </div>
       </MatchBar>
     </>
