@@ -345,7 +345,7 @@ export default function ViewBody({ selectedOptionIndex }) {
         ) : (
           filteredApps.length === 0 &&
             (selectedOptionIndex === option.display ||
-              (selectedOptionIndex === "전체보기" && i == 1)) && (
+              (selectedOptionIndex === "전체보기" && AppList.length == 0 && i == 0)) && (
               <NoPartContainer key={option.num}>
                 해당 파트에 지원한 사람이 없습니다.
               </NoPartContainer>
