@@ -3,32 +3,57 @@ import { TextAreaContext } from "../../context/TextAreaProvider";
 import { IconCode } from "@tabler/icons-react";
 
 const CustomCode = () => {
-  const { text, textareaRef, updateText } = useContext(TextAreaContext);
+  const {
+    text,
+    textareaRef,
+    updateText,
+    matchText,
+    matchTextareaRef,
+    updateMatchText,
+  } = useContext(TextAreaContext);
 
   const handleCodeClick = (e) => {
     e.preventDefault();
-    const selectedText = textareaRef.current.value.substring(
-      textareaRef.current.selectionStart,
-      textareaRef.current.selectionEnd
+    let postText = "";
+    let postRef = null;
+    let postUpdate = null;
+
+    switch (window.location.pathname) {
+      case "/notice/new":
+        postText = text;
+        postRef = textareaRef;
+        postUpdate = updateText;
+        break;
+      case "/match/new":
+        postText = matchText;
+        postRef = matchTextareaRef;
+        postUpdate = updateMatchText;
+        break;
+      default:
+        break;
+    }
+    const selectedText = postRef.current.value.substring(
+      postRef.current.selectionStart,
+      postRef.current.selectionEnd
     );
 
     // code 효과 (1. 드래그 선택된 값 앞 뒤에 ``` , 2. 드래그 선택된 값이 없으면 커서 위치에 ``` text ```입력)
     const newText =
-      text.substring(0, textareaRef.current.selectionStart) +
+      postText.substring(0, postRef.current.selectionStart) +
       `${
         selectedText ? "\n```\n" + selectedText + "\n```" : "\n```\ncode\n```"
       }` +
-      text.substring(textareaRef.current.selectionEnd);
+      postText.substring(postRef.current.selectionEnd);
 
-    updateText(newText);
+    postUpdate(newText);
 
     // 커서위치 이동(비동기)
-    const CodeStart = textareaRef.current.selectionStart + 5;
-    const CodeEnd = textareaRef.current.selectionEnd + (selectedText ? 5 : 10);
+    const CodeStart = postRef.current.selectionStart + 5;
+    const CodeEnd = postRef.current.selectionEnd + (selectedText ? 5 : 10);
 
-    textareaRef.current.focus();
+    postRef.current.focus();
     setTimeout(() => {
-      textareaRef.current.setSelectionRange(CodeStart, CodeEnd);
+      postRef.current.setSelectionRange(CodeStart, CodeEnd);
     }, 0);
   };
   return (

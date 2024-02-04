@@ -140,7 +140,7 @@ const AddImage = (props) => {
         style={{ display: "none" }}
         onChange={onChangeImages}
       />
-      <IconPhotoPlus size={30} color={"#CECDD5"} />
+      <IconPhotoPlus size={30} color={"#9C9AAB"} stroke={1} />
     </div>
   );
 };
