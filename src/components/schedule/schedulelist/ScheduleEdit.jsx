@@ -77,6 +77,7 @@ const StyledSVG = styled.svg`
 export default function ScheduleEdit({
   handleScheduleEditFinish,
   currentMonthIndex,
+  currentYearIndex,
   colorOptionList,
   dummyData,
   setDummyData,
@@ -87,6 +88,7 @@ export default function ScheduleEdit({
   const [isEndDateFilled, setIsEndDateFilled] = useState(true); // 종료 날짜가 입력된 상태인지
   const [ableBtn, setAbleBtn] = useState(false); // 저장버튼 able 여부
   const [isStartDateBigger, setIsStartDateBigger] = useState(true); //시작 날짜 큰 여부 설정
+  const [editAble, setEditAble] = useState(true); //Edit 하나만 할 수 있도록 설정
 
   //수정 버튼
   const handleEdit = (id) => {
@@ -95,6 +97,7 @@ export default function ScheduleEdit({
         infobox.id === id ? { ...infobox, editOn: true } : infobox
       )
     );
+    setEditAble(false);
   };
 
   //삭제 버튼
@@ -112,6 +115,7 @@ export default function ScheduleEdit({
       );
       return updatedProjectDummy;
     });
+    setEditAble(true);
   };
 
   // EditDot의 값을 정할 때 호출되는 함수
@@ -160,11 +164,11 @@ export default function ScheduleEdit({
 
       //해당 시작날짜가 종료날짜보다 뒤에 있는지 비교하기
       const hasStartDateBigger = updatedDummyData.some(
-        (data) => data.startday < data.endday ||
-        data.startmonth < data.endmonth ||
-        data.startyear < data.endyear
+        (data) =>
+          data.startday <= data.endday ||
+          data.startmonth < data.endmonth ||
+          data.startyear < data.endyear
       );
-
 
       setIsStartDateBigger(hasStartDateBigger); // 즉시 처리 하기
       setIsStartDateFilled(true); //해당 정규식에 맞춰서 채워질 경우 true로 처리
@@ -200,9 +204,10 @@ export default function ScheduleEdit({
 
       //비동기 처리가 아닌 즉시 처리를 하기 위해 updatedDummyData에 저장
       const hasStartDateBigger = updatedDummyData.some(
-        (data) => data.startday < data.endday ||
-        data.startmonth < data.endmonth ||
-        data.startyear < data.endyear
+        (data) =>
+          data.startday < data.endday ||
+          data.startmonth < data.endmonth ||
+          data.startyear < data.endyear
       );
 
       setIsStartDateBigger(hasStartDateBigger); //즉시 처리 하기
@@ -233,17 +238,21 @@ export default function ScheduleEdit({
   //해당 달력에 날짜가 있는지 처리
   const isDataInMonth = dummyData.some(
     (infobox) =>
-      infobox.startmonth == currentMonthIndex + 1 ||
-      infobox.endmonth == currentMonthIndex + 1 ||
-      (infobox.endmonth > currentMonthIndex + 1 &&
-        currentMonthIndex + 1 > infobox.startmonth)
+      (infobox.startyear == currentYearIndex ||
+        infobox.endyear == currentYearIndex) &&
+      (infobox.startmonth == currentMonthIndex + 1 ||
+        infobox.endmonth == currentMonthIndex + 1 ||
+        (infobox.endmonth > currentMonthIndex + 1 &&
+          currentMonthIndex + 1 > infobox.startmonth))
   );
   return (
     <div className="schedulecontainer">
       {isDataInMonth ? (
         dummyData.map((infobox, index) =>
           infobox.editOn
-            ? (infobox.startmonth == currentMonthIndex + 1 ||
+            ? (infobox.startyear == currentYearIndex ||
+                infobox.endyear == currentYearIndex) &&
+              (infobox.startmonth == currentMonthIndex + 1 ||
                 infobox.endmonth == currentMonthIndex + 1 ||
                 (infobox.endmonth > currentMonthIndex + 1 &&
                   currentMonthIndex + 1 > infobox.startmonth)) && (
@@ -307,6 +316,8 @@ export default function ScheduleEdit({
                 </div>
               )
             : //수정하기 전 상태
+              (infobox.startyear == currentYearIndex ||
+                infobox.endyear == currentYearIndex) &&
               (infobox.startmonth == currentMonthIndex + 1 ||
                 infobox.endmonth == currentMonthIndex + 1 ||
                 (infobox.endmonth > currentMonthIndex + 1 &&
@@ -321,11 +332,21 @@ export default function ScheduleEdit({
                     <div className="scheduleeditbox">
                       <span
                         className="scheduleedit"
+                        style={
+                          editAble
+                            ? {}
+                            : { pointerEvents: "none", opacity: 0.4 }
+                        }
                         onClick={() => handleEdit(infobox.id)}
                       >
                         수정
                       </span>
-                      <span> | </span>
+                      <span
+                        className="scheduleedit"
+                      >
+                        {" "}
+                        |{" "}
+                      </span>
                       <span
                         className="scheduleedit"
                         onClick={() => handleDelete(index)}

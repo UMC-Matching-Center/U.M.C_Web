@@ -75,7 +75,11 @@ export default function Schedule() {
   const [currentMonthIndex, setCurrentMonthIndex] = useState(
     new Date().getMonth()
   );
-
+  const [currentYearIndex, setCurrentYearIndex] = useState(new Date().getFullYear()
+  );
+  console.log(currentYearIndex);
+  console.log(currentMonthIndex);
+  
   //해당 날짜 변경하게끔 설정
   const [dummyData, setDummyData] = useState(projectDummy);
 
@@ -94,27 +98,32 @@ export default function Schedule() {
 
   const handleBeforeMonth = () => {
     setCurrentMonthIndex((currentMonthIndex - 1 + 12) % 12);
+    setCurrentYearIndex((currentMonthIndex === 0 ? currentYearIndex - 1 : currentYearIndex))
   };
 
   const handleAfterMonth = () => {
     setCurrentMonthIndex((currentMonthIndex + 1 + 12) % 12);
+    setCurrentYearIndex((currentMonthIndex === 11 ? currentYearIndex+1 : currentYearIndex))
   };
 
   return (
     <ScheduleBox>
       <ScheduleMonth
         currentMonthIndex={currentMonthIndex} //현재 달 index값 give
+        currentYearIndex={currentYearIndex} //현재 년도
         handleBeforeMonth={handleBeforeMonth} //저번 달 이동 handle 값 get
         handleAfterMonth={handleAfterMonth} //다음 달 이동 handle 값 get
       />
       <ScheduleContainer>
         <CustomCalendar
           currentMonthIndex={currentMonthIndex} //현재 달 index값 give
+          currentYearIndex={currentYearIndex} //현재 년도
           dummyData={dummyData} //해당 데이터 give
           formData={formData} //추가하는 데이터에 대한 반응하기 위해 give
         />
         <ScheduleList
           currentMonthIndex={currentMonthIndex} //현재 달 index값 give
+          currentYearIndex={currentYearIndex} //현재 년도 넘기기
           colorOptionList={colorOptionList} //해당 컬러 옵션 데이터 give
           dummyData={dummyData} //해당 데이터 give
           setDummyData={setDummyData}

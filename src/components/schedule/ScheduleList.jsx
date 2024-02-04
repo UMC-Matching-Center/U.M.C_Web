@@ -5,13 +5,15 @@ import ScheduleAdd from "./schedulelist/ScheduleAdd";
 
 export default function ScheduleList({
   currentMonthIndex,
+  currentYearIndex,
   colorOptionList,
   dummyData,
   setDummyData,
   formData,
   setFormData,
-  setAbleEdit
+  setAbleEdit,
 }) {
+  currentYearIndex=currentYearIndex-2000; //해당 24년도로 변환해서 처리하기 위해
   const [scheduleAdd, setScheduleAdd] = useState(false);
   const [scheduleEdit, setScheduleEdit] = useState(false);
 
@@ -34,11 +36,11 @@ export default function ScheduleList({
       id: dummyData.length + 1,
       title: formData.title,
       color: formData.color,
-      startyear : formData.startyear,
-      startmonth: formData.startmonth, 
-      startday: formData.startday, 
+      startyear: formData.startyear,
+      startmonth: formData.startmonth,
+      startday: formData.startday,
       endyear: formData.endyear,
-      endmonth: formData.endmonth, 
+      endmonth: formData.endmonth,
       endday: formData.endday,
       text: formData.memo,
     };
@@ -49,10 +51,10 @@ export default function ScheduleList({
     setFormData({
       title: "",
       color: "#DCDEEE",
-      startyear : "",
+      startyear: "",
       startmonth: "",
       startday: "",
-      endyear : "",
+      endyear: "",
       endmonth: "",
       endday: "",
       memo: "",
@@ -64,10 +66,10 @@ export default function ScheduleList({
     setFormData({
       title: "",
       color: "#DCDEEE",
-      startyear : "",
+      startyear: "",
       startmonth: "",
       startday: "",
-      endyear : "",
+      endyear: "",
       endmonth: "",
       endday: "",
       memo: "",
@@ -88,6 +90,7 @@ export default function ScheduleList({
         <ScheduleEdit
           handleScheduleEditFinish={handleScheduleEditFinish}
           currentMonthIndex={currentMonthIndex}
+          currentYearIndex={currentYearIndex}
           colorOptionList={colorOptionList}
           dummyData={dummyData}
           setDummyData={setDummyData}
@@ -98,6 +101,7 @@ export default function ScheduleList({
           handlemoveScheduleAdd={handlemoveScheduleAdd}
           handleScheduleEdit={handleScheduleEdit}
           currentMonthIndex={currentMonthIndex}
+          currentYearIndex={currentYearIndex}
           colorOptionList={colorOptionList}
           dummyData={dummyData}
         />

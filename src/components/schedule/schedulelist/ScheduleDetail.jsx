@@ -12,6 +12,7 @@ export default function ScheduleDetail({
   handlemoveScheduleAdd,
   handleScheduleEdit,
   currentMonthIndex,
+  currentYearIndex,
   colorOptionList,
   dummyData,
 }) {
@@ -24,24 +25,28 @@ export default function ScheduleDetail({
       </StyledSVG>
     ),
   }));
-  
+
   //해당 달력에 날짜가 있는지 처리
   const isDataInMonth = dummyData.some(
     (infobox) =>
-      infobox.startmonth == currentMonthIndex + 1 ||
+    (infobox.startyear == currentYearIndex ||
+      infobox.endyear == currentYearIndex) &&
+    (infobox.startmonth == currentMonthIndex + 1 ||
       infobox.endmonth == currentMonthIndex + 1 ||
       (infobox.endmonth > currentMonthIndex + 1 &&
-        currentMonthIndex + 1 > infobox.startmonth)
+        currentMonthIndex + 1 > infobox.startmonth))
   );
 
   return (
     <div className="schedulecontainer">
       {isDataInMonth ? (
         dummyData.map((infobox) =>
-          infobox.startmonth == currentMonthIndex + 1 ||
+        (infobox.startyear == currentYearIndex ||
+          infobox.endyear == currentYearIndex) &&
+        (infobox.startmonth == currentMonthIndex + 1 ||
           infobox.endmonth == currentMonthIndex + 1 ||
           (infobox.endmonth > currentMonthIndex + 1 &&
-            currentMonthIndex + 1 > infobox.startmonth) ? (
+            currentMonthIndex + 1 > infobox.startmonth)) ? (
             <div className="schedulebox" key={infobox.id}>
               <div className="schduletitlecontainer">
                 {

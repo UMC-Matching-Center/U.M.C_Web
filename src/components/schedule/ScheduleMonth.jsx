@@ -9,7 +9,6 @@ const MonthBox = styled.div`
   line-height: 150%;
   justify-content: center;
   align-items: center;
-  margin: 0rem 0 0 52.3rem; //나중에 수정해야함 margintop
 `;
 
 //현재 달
@@ -17,8 +16,19 @@ const CurrentMonthBox = styled.span`
   display: flex;
   font-size: 5rem;
   font-weight: 700;
-  width : 12.4rem;
-  justify-content: center;
+  width: 12.4rem;
+  align-items: center;
+  flex-direction: column;
+`;
+
+// //현재 년도
+const CurrentYearBox = styled.div`
+display : flex;
+position : absolute;
+margin-top : 4rem;
+  font-size: 1.6rem;
+  font-weight: 300;
+  line-height: 150%;
 `;
 
 //다른 달
@@ -32,19 +42,18 @@ const OtherMonthBox = styled.span`
 
 const StyledArrow = styled.svg`
   cursor: pointer;
-  transition: fill 0.3s; 
+  transition: fill 0.3s;
   &:hover {
-    fill: #fafafa; 
+    fill: #fafafa;
   }
 `;
 
 const Arrow = styled.div`
-  display: flex;  
+  display: flex;
   width: 3.6rem;
   height: 3.6rem;
   margin: 0 2.3rem 0 2.3rem;
   justify-content: center;
-
 `;
 // 왼쪽 화살표
 const BeforeMonthArrow = () => (
@@ -95,10 +104,27 @@ const AfterMonthArrow = () => (
     </defs>
   </StyledArrow>
 );
-const Months = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
+const Months = [
+  "1월",
+  "2월",
+  "3월",
+  "4월",
+  "5월",
+  "6월",
+  "7월",
+  "8월",
+  "9월",
+  "10월",
+  "11월",
+  "12월",
+];
 
-
-export default function ScheduleMonth({ currentMonthIndex, handleBeforeMonth, handleAfterMonth}) {
+export default function ScheduleMonth({
+  currentMonthIndex,
+  currentYearIndex,
+  handleBeforeMonth,
+  handleAfterMonth,
+}) {
   const currentMonth = Months[currentMonthIndex]; //현재 달
   const beforeMonth = Months[(currentMonthIndex - 1 + 12) % 12]; //저번 달
   const afterMonth = Months[(currentMonthIndex + 1) % 12]; //다음 달
@@ -108,7 +134,10 @@ export default function ScheduleMonth({ currentMonthIndex, handleBeforeMonth, ha
       <Arrow onClick={handleBeforeMonth}>
         <BeforeMonthArrow />
       </Arrow>
-      <CurrentMonthBox>{currentMonth}</CurrentMonthBox>
+      <CurrentMonthBox>
+        {currentMonth}
+        <CurrentYearBox>{currentYearIndex}년</CurrentYearBox>
+      </CurrentMonthBox>
       <Arrow onClick={handleAfterMonth}>
         <AfterMonthArrow />
       </Arrow>
