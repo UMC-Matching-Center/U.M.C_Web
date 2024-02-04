@@ -1,27 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import "../Modal.css";
+import "../Modal/Modal.css";
 
-//바탕화면 컬러 변경하기
-const Backdrop = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Adjust the opacity as needed */
-  z-index: 1;
-  display: ${(props) => (props.show ? "block" : "none")};
-`;
 
-//모달 위치 설정
-const ModalBoxContainer = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-`;
 
 //느낌표 표시
 const FailIcon = btoa(`
@@ -62,7 +43,6 @@ const CheckIconArea = styled.div`
 `;
 
 export default function AlertModal({
-  showModal,
   setShowModal,
   modalType,
   selectedAppName,
@@ -70,8 +50,6 @@ export default function AlertModal({
 }) {
   return (
     <>
-      <Backdrop show={showModal} />
-      <ModalBoxContainer>
         <div className="ModalBox">
           <div className="IconCircleBackground">
             <div
@@ -108,7 +86,6 @@ export default function AlertModal({
             </div>
           </div>
         </div>
-      </ModalBoxContainer>
     </>
   );
 }

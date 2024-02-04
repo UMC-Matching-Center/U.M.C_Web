@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import Modal from "react-modal";
 import AlertModal from "./AlertModal";
 
 //파트 컨테이너
@@ -190,6 +191,22 @@ const CheckBtn = styled.div`
   }
 `;
 
+//모달 스타일
+const ModalStyles = {
+  overlay: { width: "100vw", background: "rgba(2, 1, 11, 0.5)" },
+  content: {
+    width: "56.5rem",
+    height: "35rem",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    padding: "0",
+    background: "none",
+    border: "none",
+  },
+};
+
 //해당 데이터 예시
 const Apps = [
   {
@@ -201,7 +218,7 @@ const Apps = [
     portFolio: "https://www.naver.com/",
   },
   {
-    name: "루나",
+    name: "루크",
     nickname: "고라니",
     university: "INHA",
     memberPart: "IOS",
@@ -335,15 +352,18 @@ export default function ViewBody({ selectedOptionIndex }) {
             )
         );
       })}
-      {showModal && (
+      <Modal
+        isOpen={showModal}
+        onRequestClose={() => setShowModal(false)}
+        style={ModalStyles}
+      >
         <AlertModal
-          showModal={showModal}
           setShowModal={setShowModal}
           modalType={modalType}
           selectedAppName={selectedAppName}
           handlePassOrFail={handlePassOrFail}
         />
-      )}
+      </Modal>
     </>
   );
 }

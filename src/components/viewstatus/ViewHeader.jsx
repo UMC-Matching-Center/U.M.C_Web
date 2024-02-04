@@ -23,7 +23,6 @@ const TextBox = styled.div`
 //숫자 들어가는 헤더 텍스트 박스
 const HeaderTextBox = styled.div`
   display: flex;
-  flex-direciton: column;
   height: 5.1rem;
   line-height: 150%;
   justify-content: center;
@@ -42,7 +41,6 @@ const HeaderTextBig = styled.div`
 //숫자 들어가는 것중에 작은 숫자
 const HeaderTextSmall = styled.div`
   display: flex;
-  flex-direciton: row;
   padding: 1.2rem 0 0 0.4rem;
   font-size: 1.6rem;
   font-style: normal;
