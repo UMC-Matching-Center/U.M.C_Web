@@ -8,7 +8,7 @@ import ScheduleList from "../../components/schedule/ScheduleList";
 const ScheduleBox = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0 21rem;
+  align-items: center;
   font-family: KBO-Dia-Gothic;
   color: #fafafa;
 `;
@@ -17,7 +17,7 @@ const ScheduleBox = styled.div`
 const ScheduleContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top : 1.5rem;
+  margin-top : 3rem;
 `;
 const projectDummy = [
   {
