@@ -1,6 +1,6 @@
 import { privateAxios } from "../utils/customAxios.js";
 
-export const myPageDataAPI = async (accessToken, dispatch) => {
+export const myPageDataAPI = async (accessToken, dispatch, autoLogin) => {
   //서버로부터 받아 사용할 데이터
   const response = {
     isSuccess: false, //API 성공 여부
@@ -17,7 +17,7 @@ export const myPageDataAPI = async (accessToken, dispatch) => {
 
   //서버로 내 정보 조회 요청
   try {
-    const { data } = await privateAxios(accessToken, dispatch).get(
+    const { data } = await privateAxios(accessToken, dispatch, autoLogin).get(
       "/members/mypage"
     );
     if (data.code === "COMMON200") {
@@ -45,7 +45,11 @@ export const myPageDataAPI = async (accessToken, dispatch) => {
   return response;
 };
 
-export const challengerWithdrawalAPI = async (accessToken, dispatch) => {
+export const challengerWithdrawAPI = async (
+  accessToken,
+  dispatch,
+  autoLogin
+) => {
   //서버로부터 받아 사용할 데이터
   const response = {
     isSuccess: false, //API 성공 여부
@@ -54,7 +58,7 @@ export const challengerWithdrawalAPI = async (accessToken, dispatch) => {
 
   //서버로 내 정보 조회 요청
   try {
-    const { data } = await privateAxios(accessToken, dispatch).patch(
+    const { data } = await privateAxios(accessToken, dispatch, autoLogin).patch(
       "/members/depart"
     );
     if (data.code === "COMMON200") {
@@ -76,6 +80,7 @@ export const challengerWithdrawalAPI = async (accessToken, dispatch) => {
 export const challengerModifyAPI = async (
   accessToken,
   dispatch,
+  autoLogin,
   profileImage,
   portfolio,
   phoneNumber
@@ -107,7 +112,7 @@ export const challengerModifyAPI = async (
 
   //서버로 내 정보 수정 요청 (포트폴리오, 전화번호)
   try {
-    const { data } = await privateAxios(accessToken, dispatch).patch(
+    const { data } = await privateAxios(accessToken, dispatch, autoLogin).patch(
       "/members/mypage",
       formData
     );
@@ -137,6 +142,7 @@ export const challengerModifyAPI = async (
 export const adminModifyAPI = async (
   accessToken,
   dispatch,
+  autoLogin,
   profileImage,
   office,
   phoneNumber
@@ -168,7 +174,7 @@ export const adminModifyAPI = async (
 
   //서버로 내 정보 수정 요청 (포트폴리오, 전화번호)
   try {
-    const { data } = await privateAxios(accessToken, dispatch).patch(
+    const { data } = await privateAxios(accessToken, dispatch, autoLogin).patch(
       "/manage/info",
       formData
     );
