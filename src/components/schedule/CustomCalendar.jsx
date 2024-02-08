@@ -29,13 +29,12 @@ const CalendarTableHeaderText = styled.div`
   align-items: center;
 `;
 
+// 일별로 나뉠 때 사용되는 | 라인
 const CalendarTableHeaderLine = styled.div`
   width: 0.1rem;
   height: 1.6rem;
   background-color: #fafafa;
 `;
-
-// 일별로 나뉠 때 사용되는 | 라인
 
 //캘린더 바디부분
 const CalendarTable = styled.div`
@@ -208,24 +207,26 @@ export default function CustomCalendar({
       if (
         data.editOn && //scheduleEdit에서 추가한 editOn을 통해 해당 객체안에 editOn상태 여부 따짐으로 인해 색깔 여부 판단
         // 해당 년도에서 다른 년도로 넘어가는 부분 수정
-        (data.startyear == CompareCurrentYear ||
-          data.endyear == CompareCurrentYear) &&
+        ((data.startYear == CompareCurrentYear &&
+          data.startMonth == currentMonthIndex + 1) ||
+          (data.endYear == CompareCurrentYear &&
+            data.endMonth == currentMonthIndex + 1)) &&
         // 시작일 조건 수정
-        ((data.startmonth == currentMonthIndex + 1 &&
-          days[i] >= data.startday) ||
-          data.startmonth < currentMonthIndex + 1 ||
-          (data.endyear == CompareCurrentYear &&
-            data.endmonth < data.startmonth)) &&
+        ((data.startMonth == currentMonthIndex + 1 &&
+          days[i] >= data.startDay) ||
+          data.startMonth < currentMonthIndex + 1 ||
+          (data.endYear == CompareCurrentYear &&
+            data.endMonth < data.startMonth)) &&
         // 종료일 조건 수정
-        ((data.endyear > data.startyear &&
-          data.endmonth == currentMonthIndex + 1 &&
-          days[i] <= data.endday) ||
-          (data.endyear > data.startyear &&
-            data.startmonth == currentMonthIndex + 1) ||
-          (data.endyear == data.startyear &&
-            (data.endmonth > currentMonthIndex + 1 ||
-              (data.endmonth == currentMonthIndex + 1 &&
-                days[i] <= data.endday)))) &&
+        ((data.endYear > data.startYear &&
+          data.endMonth == currentMonthIndex + 1 &&
+          days[i] <= data.endDay) ||
+          (data.endYear > data.startYear &&
+            data.startMonth == currentMonthIndex + 1) ||
+          (data.endYear == data.startYear &&
+            (data.endMonth > currentMonthIndex + 1 ||
+              (data.endMonth == currentMonthIndex + 1 &&
+                days[i] <= data.endDay)))) &&
         // 범위에 해당하는 날짜만 출력
         !(i < firstDayOfMonth || i >= daysInMonth + firstDayOfMonth)
       ) {
@@ -241,8 +242,8 @@ export default function CustomCalendar({
     const isHighlightedEditFirstDayCheckValue = dummyData.map((data) => {
       if (
         data.editOn &&
-        data.startmonth == currentMonthIndex + 1 &&
-        data.startday == days[i] &&
+        data.startMonth == currentMonthIndex + 1 &&
+        data.startDay == days[i] &&
         !(i < firstDayOfMonth || i >= daysInMonth + firstDayOfMonth)
       ) {
         return true;
@@ -258,8 +259,8 @@ export default function CustomCalendar({
     const isHighlightedEditLastDayCheckValue = dummyData.map((data) => {
       if (
         data.editOn &&
-        data.endmonth == currentMonthIndex + 1 &&
-        data.endday == days[i] &&
+        data.endMonth == currentMonthIndex + 1 &&
+        data.endDay == days[i] &&
         !(i < firstDayOfMonth || i >= daysInMonth + firstDayOfMonth)
       ) {
         return true;
@@ -274,42 +275,44 @@ export default function CustomCalendar({
     //추가 시 하이라이트 여부 확인
     const isHighlightedAdd =
       // 해당 년도에서 다른 년도로 넘어가는 부분 수정
-      (formData.startyear == CompareCurrentYear ||
-        formData.endyear == CompareCurrentYear) &&
+      ((formData.startYear == CompareCurrentYear &&
+        formData.startMonth == currentMonthIndex + 1) ||
+        (formData.endYear == CompareCurrentYear &&
+          formData.endMonth == currentMonthIndex + 1)) &&
       // 시작일 조건 수정
-      ((formData.startmonth == currentMonthIndex + 1 &&
-        days[i] >= formData.startday) ||
-        formData.startmonth < currentMonthIndex + 1 ||
-        (formData.endyear == CompareCurrentYear &&
-          formData.endmonth < formData.startmonth)) &&
+      ((formData.startMonth == currentMonthIndex + 1 &&
+        days[i] >= formData.startDay) ||
+        formData.startMonth < currentMonthIndex + 1 ||
+        (formData.endYear == CompareCurrentYear &&
+          formData.endMonth < formData.startMonth)) &&
       // 종료일 조건 수정
-      ((formData.endyear > formData.startyear &&
-        formData.endmonth == currentMonthIndex + 1 &&
-        days[i] <= formData.endday) ||
-        (formData.endyear > formData.startyear &&
-          formData.startmonth == currentMonthIndex + 1) ||
-        (formData.endyear == formData.startyear &&
-          (formData.endmonth > currentMonthIndex + 1 ||
-            (formData.endmonth == currentMonthIndex + 1 &&
-              days[i] <= formData.endday)))) &&
+      ((formData.endYear > formData.startYear &&
+        formData.endMonth == currentMonthIndex + 1 &&
+        days[i] <= formData.endDay) ||
+        (formData.endYear > formData.startYear &&
+          formData.startMonth == currentMonthIndex + 1) ||
+        (formData.endYear == formData.startYear &&
+          (formData.endMonth > currentMonthIndex + 1 ||
+            (formData.endMonth == currentMonthIndex + 1 &&
+              days[i] <= formData.endDay)))) &&
       // 범위에 해당하는 날짜만 출력
-      !(i < firstDayOfMonth || i >= daysInMonth + firstDayOfMonth) ; //다음 달이나 저번달 거 표시하지 않도록 설정
+      !(i < firstDayOfMonth || i >= daysInMonth + firstDayOfMonth); //다음 달이나 저번달 거 표시하지 않도록 설정
 
     //Add시 첫 번째 날짜
     const isHighlightedAddFirstDayCheck =
-      currentMonthIndex + 1 == formData.startmonth &&
-      formData.startday == days[i] &&
+      currentMonthIndex + 1 == formData.startMonth &&
+      formData.startDay == days[i] &&
       !(i < firstDayOfMonth || i >= daysInMonth + firstDayOfMonth);
 
     //Add시 마지막 날짜
     const isHighlightedAddLastDayCheck =
-      currentMonthIndex + 1 == formData.endmonth &&
-      formData.endday == days[i] &&
+      currentMonthIndex + 1 == formData.endMonth &&
+      formData.endDay == days[i] &&
       !(i < firstDayOfMonth || i >= daysInMonth + firstDayOfMonth);
 
     cells.push(
       <CalendarTableBox
-        key={i} //key 값을 i 대신 줄 것이 떠오르지 않아서 i를 줬습니다..
+        key={`cell-${i}`} //key 값을 i 대신 줄 것이 떠오르지 않아서 i를 줬습니다..
         $isHighlighted={isHighlightedAdd || isHighlightedEdit} //중간 날짜 처리
         $isHighlightedFirstday={
           //시작 날짜 처리
@@ -328,6 +331,7 @@ export default function CustomCalendar({
         <CalendarTableBoxDate
           $todaydate={
             days[i] === DateToday &&
+            currentYearIndex === currentDate.getFullYear() &&
             currentMonthIndex === currentDate.getMonth() &&
             !(i < firstDayOfMonth || i >= daysInMonth + firstDayOfMonth)
           }
@@ -344,28 +348,30 @@ export default function CustomCalendar({
             data //dummyData에 있는 값을 출력 2023.12.23-2024.01.02
           ) =>
             // 해당 년도에서 다른 년도로 넘어가는 부분 수정
-            (data.startyear == CompareCurrentYear ||
-              data.endyear == CompareCurrentYear) &&
+            ((data.startYear == CompareCurrentYear &&
+              data.startMonth == currentMonthIndex + 1) ||
+              (data.endYear == CompareCurrentYear &&
+                data.endMonth == currentMonthIndex + 1)) &&
             // 시작일 조건 수정
-            ((data.startmonth == currentMonthIndex + 1 &&
-              days[i] >= data.startday) ||
-              data.startmonth < currentMonthIndex + 1 ||
-              (data.endyear == CompareCurrentYear &&
-                data.endmonth < data.startmonth)) &&
+            ((data.startMonth == currentMonthIndex + 1 &&
+              days[i] >= data.startDay) ||
+              data.startMonth < currentMonthIndex + 1 ||
+              (data.endYear == CompareCurrentYear &&
+                data.endMonth < data.startMonth)) &&
             // 종료일 조건 수정
-            ((data.endyear > data.startyear &&
-              data.endmonth == currentMonthIndex + 1 &&
-              days[i] <= data.endday) ||
-              (data.endyear > data.startyear &&
-                data.startmonth == currentMonthIndex + 1) ||
-              (data.endyear == data.startyear &&
-                (data.endmonth > currentMonthIndex + 1 ||
-                  (data.endmonth == currentMonthIndex + 1 &&
-                    days[i] <= data.endday)))) &&
+            ((data.endYear > data.startYear &&
+              data.endMonth == currentMonthIndex + 1 &&
+              days[i] <= data.endDay) ||
+              (data.endYear > data.startYear &&
+                data.startMonth == currentMonthIndex + 1) ||
+              (data.endYear == data.startYear &&
+                (data.endMonth > currentMonthIndex + 1 ||
+                  (data.endMonth == currentMonthIndex + 1 &&
+                    days[i] <= data.endDay)))) &&
             // 범위에 해당하는 날짜만 출력
             !(i < firstDayOfMonth || i >= daysInMonth + firstDayOfMonth) ? (
               //다음 달이나 저번달 거 표시하지 않도록 설정
-              <CalendarTableBoxDetailBox key={data.id}>
+              <CalendarTableBoxDetailBox key={data.scheduleId}>
                 <CalendarTableBoxDetailDot
                   $isHighlightedFirstday={
                     //해당 첫 번째 날짜일 경우 Dot 위치 조정
@@ -374,7 +380,7 @@ export default function CustomCalendar({
                   }
                 >
                   <StyledSVG>
-                    <circle cx="3" cy="3" r="3" fill={data.color} />
+                    <circle cx="3" cy="3" r="3" fill={data.scheduleColor} />
                   </StyledSVG>
                 </CalendarTableBoxDetailDot>
                 <CalendarTableBoxDetailValue>
@@ -392,7 +398,7 @@ export default function CustomCalendar({
               }
             >
               <StyledSVG>
-                <circle cx="3" cy="3" r="3" fill={formData.color} />
+                <circle cx="3" cy="3" r="3" fill={formData.scheduleColor} />
               </StyledSVG>
             </CalendarTableBoxDetailDot>
             <CalendarTableBoxDetailValue>
