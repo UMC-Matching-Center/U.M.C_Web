@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import "./ScheduleDetail.css";
 import styled from "styled-components";
 import DotEditOptions from "./dotoptions/DotEditOptions";
+import useGetAccessToken from "../../../utils/getAccessToken";
+import { useDispatch, useSelector } from "react-redux";
+import { scheduleDeleteAPI, scheduleEditAPI } from "../../../api";
 
 //편집 제목 박스
 const EditTitleBox = styled.div`
@@ -81,6 +84,8 @@ export default function ScheduleEdit({
   colorOptionList,
   dummyData,
   setDummyData,
+  editAble,
+  setEditAble,
 }) {
   const [selectedColor, setSelectedColor] = useState(colorOptionList);
   const [isTitleFilled, setIsTitleFilled] = useState(true); //타이틀이 입력된 상태인지
@@ -88,34 +93,69 @@ export default function ScheduleEdit({
   const [isEndDateFilled, setIsEndDateFilled] = useState(true); // 종료 날짜가 입력된 상태인지
   const [ableBtn, setAbleBtn] = useState(false); // 저장버튼 able 여부
   const [isStartDateBigger, setIsStartDateBigger] = useState(true); //시작 날짜 큰 여부 설정
-  const [editAble, setEditAble] = useState(true); //Edit 하나만 할 수 있도록 설정
+
+  const dispatch = useDispatch();
+  const accessToken = useGetAccessToken();
+  const { autoLogin } = useSelector((state) => state.userInfo);
 
   //수정 버튼
   const handleEdit = (id) => {
     setDummyData((prevInfoboxData) =>
       prevInfoboxData.map((infobox) =>
-        infobox.id === id ? { ...infobox, editOn: true } : infobox
+        infobox.scheduleId === id ? { ...infobox, editOn: true } : infobox
       )
     );
     setEditAble(false);
   };
 
   //삭제 버튼
-  const handleDelete = (index) => {
+  const handleDelete = (scheduleId) => {
+    scheduleDeleteAPI(accessToken, dispatch, autoLogin, scheduleId).then(
+      (response) => {
+        if (response.isSuccess) {
+          console.log("삭제 성공");
+        } else {
+          alert(response.message);
+        }
+      }
+    );
     setDummyData((prevInfoboxData) =>
-      prevInfoboxData.filter((_, i) => i !== index)
+      prevInfoboxData.filter((data) => data.scheduleId !== scheduleId)
     );
   };
 
   //저장 버튼
-  const handleSave = () => {
+  const handleSave = (id) => {
     setDummyData((prevInfoboxData) => {
       const updatedProjectDummy = prevInfoboxData.map((infobox) =>
         infobox.editOn ? { ...infobox, editOn: false } : infobox
       );
       return updatedProjectDummy;
     });
-    setEditAble(true);
+    setEditAble(true); //수정상태 끄기 및 다른 것들 킬 수 있게하기
+
+    // 넘겨줄 객체 생성
+    const giveData = dummyData
+      .filter((data) => data.scheduleId === id)
+      .reduce((acc, curr) => {
+        for (const key in curr) {
+          if (Object.prototype.hasOwnProperty.call(curr, key)) {
+            acc[key] = curr[key];
+          }
+        }
+        return acc;
+      }, {});
+    console.log(giveData);
+
+    scheduleEditAPI(accessToken, dispatch, autoLogin, id, giveData).then(
+      (response) => {
+        if (response.isSuccess) {
+          console.log("수정 성공");
+        } else {
+          alert(response.message);
+        }
+      }
+    );
   };
 
   // EditDot의 값을 정할 때 호출되는 함수
@@ -125,7 +165,7 @@ export default function ScheduleEdit({
     //infobox에 해당 컬러 값 추가
     setDummyData((prevInfoboxData) =>
       prevInfoboxData.map((infobox) =>
-        infobox.editOn ? { ...infobox, color: value } : infobox
+        infobox.editOn ? { ...infobox, scheduleColor: value } : infobox
       )
     );
   };
@@ -134,7 +174,7 @@ export default function ScheduleEdit({
   const handleTitleChange = (id, value) => {
     setDummyData((prevInfoboxData) =>
       prevInfoboxData.map((infobox) =>
-        infobox.id === id ? { ...infobox, title: value } : infobox
+        infobox.scheduleId === id ? { ...infobox, title: value } : infobox
       )
     );
     setIsTitleFilled(!!value); // 값이 비어 있지 않은 경우에만 isTitleFilled를 업데이트
@@ -146,18 +186,18 @@ export default function ScheduleEdit({
     const match = inputValue.match(/(\d{1,2})년\s*(\d{1,2})월\s*(\d{1,2})일/);
 
     if (match) {
-      const startyear = match[1];
-      const startmonth = match[2];
-      const startday = match[3];
+      const startyear = parseInt(match[1]);
+      const startmonth = parseInt(match[2]);
+      const startday = parseInt(match[3]);
 
       //비동기 처리가 아닌 즉시 처리를 하기 위해 updatedDummyData에 저장
       const updatedDummyData = dummyData.map((infobox) =>
-        infobox.id === id
+        infobox.scheduleId === id
           ? {
               ...infobox,
-              startyear: startyear,
-              startmonth: startmonth,
-              startday: startday,
+              startYear: startyear,
+              startMonth: startmonth,
+              startDay: startday,
             }
           : infobox
       );
@@ -165,9 +205,9 @@ export default function ScheduleEdit({
       //해당 시작날짜가 종료날짜보다 뒤에 있는지 비교하기
       const hasStartDateBigger = updatedDummyData.some(
         (data) =>
-          data.startday <= data.endday ||
-          data.startmonth < data.endmonth ||
-          data.startyear < data.endyear
+          data.startDay <= data.endDay ||
+          data.startMonth < data.endMonth ||
+          data.startYear < data.endYear
       );
 
       setIsStartDateBigger(hasStartDateBigger); // 즉시 처리 하기
@@ -186,18 +226,18 @@ export default function ScheduleEdit({
     // 입력된 날짜에서 연도, 월과 일 추출
     const match = inputValue.match(/(\d{1,2})년\s*(\d{1,2})월\s*(\d{1,2})일/);
     if (match) {
-      const endyear = match[1];
-      const endmonth = match[2];
-      const endday = match[3];
+      const endyear = parseInt(match[1]);
+      const endmonth = parseInt(match[2]);
+      const endday = parseInt(match[3]);
 
       //DummyData에 저장
       const updatedDummyData = dummyData.map((infobox) =>
-        infobox.id === id
+        infobox.scheduleId === id
           ? {
               ...infobox,
-              endyear: endyear,
-              endmonth: endmonth,
-              endday: endday,
+              endYear: endyear,
+              endMonth: endmonth,
+              endDay: endday,
             }
           : infobox
       );
@@ -205,9 +245,9 @@ export default function ScheduleEdit({
       //비동기 처리가 아닌 즉시 처리를 하기 위해 updatedDummyData에 저장
       const hasStartDateBigger = updatedDummyData.some(
         (data) =>
-          data.startday < data.endday ||
-          data.startmonth < data.endmonth ||
-          data.startyear < data.endyear
+          data.startDay < data.endDay ||
+          data.startMonth < data.endMonth ||
+          data.startYear < data.endYear
       );
 
       setIsStartDateBigger(hasStartDateBigger); //즉시 처리 하기
@@ -223,7 +263,7 @@ export default function ScheduleEdit({
   const handleTextChange = (id, value) => {
     setDummyData((prevInfoboxData) =>
       prevInfoboxData.map((infobox) =>
-        infobox.id === id ? { ...infobox, text: value } : infobox
+        infobox.scheduleId === id ? { ...infobox, description: value } : infobox
       )
     );
   };
@@ -238,28 +278,32 @@ export default function ScheduleEdit({
   //해당 달력에 날짜가 있는지 처리
   const isDataInMonth = dummyData.some(
     (infobox) =>
-      (infobox.startyear == currentYearIndex ||
-        infobox.endyear == currentYearIndex) &&
-      (infobox.startmonth == currentMonthIndex + 1 ||
-        infobox.endmonth == currentMonthIndex + 1 ||
-        (infobox.endmonth > currentMonthIndex + 1 &&
-          currentMonthIndex + 1 > infobox.startmonth))
+      ((infobox.startYear == currentYearIndex &&
+        infobox.startMonth == currentMonthIndex + 1) ||
+        (infobox.endYear == currentYearIndex &&
+          infobox.endMonth == currentMonthIndex + 1)) &&
+      (infobox.startMonth == currentMonthIndex + 1 ||
+        infobox.endMonth == currentMonthIndex + 1 ||
+        (infobox.endMonth > currentMonthIndex + 1 &&
+          currentMonthIndex + 1 > infobox.startMonth))
   );
   return (
     <div className="schedulecontainer">
       {isDataInMonth ? (
-        dummyData.map((infobox, index) =>
+        dummyData.map((infobox) =>
           infobox.editOn
-            ? (infobox.startyear == currentYearIndex ||
-                infobox.endyear == currentYearIndex) &&
-              (infobox.startmonth == currentMonthIndex + 1 ||
-                infobox.endmonth == currentMonthIndex + 1 ||
-                (infobox.endmonth > currentMonthIndex + 1 &&
-                  currentMonthIndex + 1 > infobox.startmonth)) && (
+            ? ((infobox.startYear == currentYearIndex &&
+                infobox.startMonth == currentMonthIndex + 1) ||
+                (infobox.endYear == currentYearIndex &&
+                  infobox.endMonth == currentMonthIndex + 1)) &&
+              (infobox.startMonth == currentMonthIndex + 1 ||
+                infobox.endMonth == currentMonthIndex + 1 ||
+                (infobox.endMonth > currentMonthIndex + 1 &&
+                  currentMonthIndex + 1 > infobox.startMonth)) && (
                 <div
-                  key={infobox.id}
+                  key={infobox.scheduleId}
                   className="schedulebox"
-                  style={{ height: "22rem" }}
+                  style={{ height: "19.5rem" }}
                 >
                   <EditTitleBox>
                     <DotEditOptions
@@ -272,17 +316,17 @@ export default function ScheduleEdit({
                     <EditTitle
                       value={infobox.title}
                       onChange={(e) =>
-                        handleTitleChange(infobox.id, e.target.value)
+                        handleTitleChange(infobox.scheduleId, e.target.value)
                       }
                     />
                     <span
                       className="scheduleedit"
-                      onClick={handleSave}
+                      onClick={() => handleSave(infobox.scheduleId)}
                       style={{
                         marginLeft: "7rem",
                         ...(ableBtn //해당 btn이 false이 off하기
                           ? {}
-                          : { pointerEvents: "none", opacity: 0.5 }),
+                          : { pointerEvents: "none", opacity: 0.4 }),
                       }}
                     >
                       저장
@@ -290,17 +334,23 @@ export default function ScheduleEdit({
                   </EditTitleBox>
                   <EditDateBox>
                     <EditDate
-                      defaultValue={`${infobox.startyear}년 ${infobox.startmonth}월 ${infobox.startday}일`}
+                      defaultValue={`${infobox.startYear}년 ${infobox.startMonth}월 ${infobox.startDay}일`}
                       onChange={(e) =>
-                        handleStartMonthDayChange(infobox.id, e.target.value)
+                        handleStartMonthDayChange(
+                          infobox.scheduleId,
+                          e.target.value
+                        )
                       }
                       style={{ marginRight: "0.8rem" }}
                     />
                     <span>~</span>
                     <EditDate
-                      defaultValue={`${infobox.endyear}년 ${infobox.endmonth}월 ${infobox.endday}일`}
+                      defaultValue={`${infobox.endYear}년 ${infobox.endMonth}월 ${infobox.endDay}일`}
                       onChange={(e) =>
-                        handleEndMonthDayChange(infobox.id, e.target.value)
+                        handleEndMonthDayChange(
+                          infobox.scheduleId,
+                          e.target.value
+                        )
                       }
                       style={{ marginLeft: "0.8rem" }}
                     />
@@ -308,24 +358,29 @@ export default function ScheduleEdit({
                   <EditText
                     placeholder="메모(선택)"
                     type="text"
-                    value={infobox.text}
+                    value={infobox.description}
                     onChange={(e) =>
-                      handleTextChange(infobox.id, e.target.value)
+                      handleTextChange(infobox.scheduleId, e.target.value)
                     }
                   />
                 </div>
               )
             : //수정하기 전 상태
-              (infobox.startyear == currentYearIndex ||
-                infobox.endyear == currentYearIndex) &&
-              (infobox.startmonth == currentMonthIndex + 1 ||
-                infobox.endmonth == currentMonthIndex + 1 ||
-                (infobox.endmonth > currentMonthIndex + 1 &&
-                  currentMonthIndex + 1 > infobox.startmonth)) && (
-                <div key={infobox.id} className="schedulebox">
+              (infobox.startYear == currentYearIndex ||
+                infobox.endYear == currentYearIndex) &&
+              (infobox.startMonth == currentMonthIndex + 1 ||
+                infobox.endMonth == currentMonthIndex + 1 ||
+                (infobox.endMonth > currentMonthIndex + 1 &&
+                  currentMonthIndex + 1 > infobox.startMonth)) && (
+                <div key={infobox.scheduleId} className="schedulebox">
                   <div className="schduletitlecontainer">
                     <StyledSVG>
-                      <circle cx="6" cy="6" r="6" fill={infobox.color} />
+                      <circle
+                        cx="6"
+                        cy="6"
+                        r="6"
+                        fill={infobox.scheduleColor}
+                      />
                     </StyledSVG>
 
                     <div className="scheduletitle">{infobox.title}</div>
@@ -337,30 +392,25 @@ export default function ScheduleEdit({
                             ? {}
                             : { pointerEvents: "none", opacity: 0.4 }
                         }
-                        onClick={() => handleEdit(infobox.id)}
+                        onClick={() => handleEdit(infobox.scheduleId)}
                       >
                         수정
                       </span>
+                      <span className="scheduleedit"> | </span>
                       <span
                         className="scheduleedit"
-                      >
-                        {" "}
-                        |{" "}
-                      </span>
-                      <span
-                        className="scheduleedit"
-                        onClick={() => handleDelete(index)}
+                        onClick={() => handleDelete(infobox.scheduleId)}
                       >
                         삭제
                       </span>
                     </div>
                   </div>
                   <div className="scheduledate">
-                    {infobox.startyear}년 {infobox.startmonth}월{" "}
-                    {infobox.startday}일 ~ {infobox.endyear}년{" "}
-                    {infobox.endmonth}월 {infobox.endday}일
+                    {infobox.startYear}년 {infobox.startMonth}월{" "}
+                    {infobox.startDay}일 ~ {infobox.endYear}년{" "}
+                    {infobox.endMonth}월 {infobox.endDay}일
                   </div>
-                  <div className="scheduletext">{infobox.text}</div>
+                  <div className="scheduletext">{infobox.description}</div>
                 </div>
               )
         )
@@ -374,7 +424,7 @@ export default function ScheduleEdit({
           style={{
             ...(ableBtn //해당 btn이 false이 off하기
               ? {}
-              : { pointerEvents: "none", opacity: 0.5 }),
+              : { pointerEvents: "none", opacity: 0.4 }),
           }}
         >
           편집 완료하기

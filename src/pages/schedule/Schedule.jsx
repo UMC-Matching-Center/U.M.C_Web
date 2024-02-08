@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import ScheduleMonth from "../../components/schedule/ScheduleMonth";
 import CustomCalendar from "../../components/schedule/CustomCalendar";
 import ScheduleList from "../../components/schedule/ScheduleList";
 
+import { scheduleDataAPI } from "../../api";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import useGetAccessToken from "../../utils/getAccessToken";
+
 const ScheduleBox = styled.div`
+  margin-top : -6.2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,47 +23,10 @@ const ScheduleBox = styled.div`
 const ScheduleContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top : 3rem;
+  margin-top: 3rem;
 `;
-const projectDummy = [
-  {
-    id: 1,
-    title: "기말고사",
-    startyear: "24",
-    startmonth: "1",
-    startday: "8",
-    endyear: "24",
-    endmonth: "1",
-    endday: "10",
-    text: "가천대학교 기말고사",
-    color: "#DCDEEE",
-  },
-  {
-    id: 2,
-    title: "개발자 매칭",
-    startyear: "24",
-    startmonth: "1",
-    startday: "8",
-    endyear: "24",
-    endmonth: "1",
-    endday: "11",
-    text: "",
-    color: "#FF7676",
-  },
-  {
-    id: 3,
-    title: "기말고사",
-    startyear: "24",
-    startmonth: "1",
-    startday: "8",
-    endyear: "24",
-    endmonth: "1",
-    endday: "23",
-    text: "",
-    color: "#DCDEEE",
-  },
-];
 
+//컬러 옵션 리스트
 const colorOptionList = [
   { id: 1, value: "#DCDEEE" },
   { id: 2, value: "#FF7676" },
@@ -71,40 +40,62 @@ const colorOptionList = [
 ];
 
 export default function Schedule() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const accessToken = useGetAccessToken();
+  const { autoLogin } = useSelector((state) => state.userInfo);
   //해당 달 구하기
   const [currentMonthIndex, setCurrentMonthIndex] = useState(
     new Date().getMonth()
   );
-  const [currentYearIndex, setCurrentYearIndex] = useState(new Date().getFullYear()
+  const [currentYearIndex, setCurrentYearIndex] = useState(
+    new Date().getFullYear()
   );
-  console.log(currentYearIndex);
-  console.log(currentMonthIndex);
-  
+
   //해당 날짜 변경하게끔 설정
-  const [dummyData, setDummyData] = useState(projectDummy);
+  const [dummyData, setDummyData] = useState([]);
 
   //데이터 추가 설정
   const [formData, setFormData] = useState({
     title: "",
-    color: "#DCDEEE",
-    startyear: "",
-    startmonth: "",
-    startday: "",
-    endyear: "",
-    endmonth: "",
-    endday: "",
-    memo: "",
+    description: "",
+    scheduleColor: "#DCDEEE",
+    startYear: "",
+    startMonth: "",
+    startDay: "",
+    endYear: "",
+    endMonth: "",
+    endDay: "",
   });
 
   const handleBeforeMonth = () => {
     setCurrentMonthIndex((currentMonthIndex - 1 + 12) % 12);
-    setCurrentYearIndex((currentMonthIndex === 0 ? currentYearIndex - 1 : currentYearIndex))
+    setCurrentYearIndex(
+      currentMonthIndex === 0 ? currentYearIndex - 1 : currentYearIndex
+    );
   };
 
   const handleAfterMonth = () => {
     setCurrentMonthIndex((currentMonthIndex + 1 + 12) % 12);
-    setCurrentYearIndex((currentMonthIndex === 11 ? currentYearIndex+1 : currentYearIndex))
+    setCurrentYearIndex(
+      currentMonthIndex === 11 ? currentYearIndex + 1 : currentYearIndex
+    );
   };
+
+  // 첫 실행시, formData가 사용될 때 마다 API 호출
+  useEffect(() => {
+    if (accessToken !== "") {
+      scheduleDataAPI(accessToken, dispatch, autoLogin).then((response) => {
+        if (response.isSuccess) {
+          setDummyData(response.scheduleList);
+        } else {
+          alert(response.message, "api 호출을 실패했습니다.");
+        }
+      });
+    } else {
+      navigate("/register", { replace: true }); // 메인 페이지로 이동
+    }
+  }, [formData]);
 
   return (
     <ScheduleBox>
