@@ -4,6 +4,7 @@ import styled from "styled-components";
 //모든 박스 틀
 const MonthBox = styled.div`
   display: flex;
+  margin-left : 3rem;
   width: 40rem;
   height: 12.4rem;
   line-height: 150%;
