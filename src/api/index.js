@@ -11,6 +11,14 @@ import {
   challengerModifyAPI,
   adminModifyAPI,
 } from "./mypageAPI.js";
+import {
+  matchListAPI,
+  matchDetailAPI,
+  matchQAListAPI,
+  matchQuestionUploadAPI,
+  matchQADeleteAPI,
+  matchAnswerUploadAPI,
+} from "./matchAPI.js";
 
 export {
   loginAPI, // 로그인
@@ -22,4 +30,10 @@ export {
   challengerWithdrawalAPI, // 챌린저 탈퇴 (자의)
   challengerModifyAPI, // 챌린저 정보 수정
   adminModifyAPI, // 관리자 정보 수정
+  matchListAPI, // 매칭 프로젝트 리스트 정보
+  matchDetailAPI, // 매칭 프로젝트 상세 정보
+  matchQAListAPI, // 매칭 프로젝트 Q&A 리스트
+  matchQuestionUploadAPI, // Q&A 새로운 질문 업로드
+  matchQADeleteAPI, // Q&A 삭제
+  matchAnswerUploadAPI, // Q&A 새로운 답변 등록
 };

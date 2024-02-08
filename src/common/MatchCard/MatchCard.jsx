@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import sample from "../../images/sample_project.png";
 
 const CardWrapper = styled.div`
   position: relative;
@@ -18,7 +17,15 @@ const CardWrapper = styled.div`
 `;
 
 const CardImageFrame = styled.div`
+  width: 100%;
   height: 16rem;
+  > * {
+    width: 100%;
+    height: 100%;
+  }
+  > img {
+    object-fit: cover;
+  }
 `;
 
 const CardContent = styled.div`
@@ -82,13 +89,21 @@ const MatchCard = (props) => {
   return (
     <CardWrapper onClick={handleCardClick}>
       <CardImageFrame>
-        <img src={sample} alt="projectImg" />
+        {props.project.image ? (
+          <img src={props.project.image} alt="projectImg" />
+        ) : (
+          <div
+            style={{
+              backgroundColor: "#014171",
+            }}
+          />
+        )}
       </CardImageFrame>
       <CardContent>
-        <div className="matchCard-title">{props.project.title}</div>
+        <div className="matchCard-title">{props.project.name}</div>
         <div className="matchCard-info">{props.project.introduction}</div>
         <div className="matchCard-recruit">
-          {props.project.recruit.map((recruit) => (
+          {props.project.recruitments.map((recruit) => (
             <CardRecruit
               key={recruit.id}
               $background={recruit.recruitmentFinished ? "#EEEFF7" : "#CCE6F9"}
@@ -106,9 +121,24 @@ const MatchCard = (props) => {
                       "웹 개발자 " +
                       (!recruit.recruitmentFinished ? "모집 중" : "모집 완료")
                     );
-                  case "SERVER":
+                  case "SPRINGBOOT":
                     return (
                       "서버 개발자(Spring boot) " +
+                      (!recruit.recruitmentFinished ? "모집 중" : "모집완료")
+                    );
+                  case "NODEJS":
+                    return (
+                      "서버 개발자(Node js) " +
+                      (!recruit.recruitmentFinished ? "모집 중" : "모집완료")
+                    );
+                  case "ANDROID":
+                    return (
+                      "앱 개발자(Android) " +
+                      (!recruit.recruitmentFinished ? "모집 중" : "모집완료")
+                    );
+                  case "IOS":
+                    return (
+                      "앱 개발자(iOS) " +
                       (!recruit.recruitmentFinished ? "모집 중" : "모집완료")
                     );
                   default:
