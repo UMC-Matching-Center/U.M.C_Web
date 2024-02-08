@@ -10,7 +10,7 @@ import {
   signupRejectAPI,
 } from "../../api/index";
 import Modal from "react-modal";
-import { SignupAccept, SignupReject } from "../../components/Modal";
+import { SignupAccept, SignupReject } from "../../components/modal";
 
 // 수락 및 거절
 const MatchingBtn = styled.div`

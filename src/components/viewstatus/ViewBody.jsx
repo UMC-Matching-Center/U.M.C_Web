@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Modal from "react-modal";
-import ViewStatusModal from "../Modal/ViewStatusModal";
+import { ViewStatusModal } from "../modal";
 
 //파트 컨테이너
 const PartContainer = styled.div`

@@ -5,6 +5,7 @@ import Withdraw from "./Withdraw";
 import SignupAccept from "./SignupAccept";
 import SignupReject from "./SignupReject";
 import ChallengerExpel from "./ChallengerExpel";
+import ViewStatusModal from "./ViewStatusModal";
 
 export {
   EmailRequestModal,
@@ -14,4 +15,5 @@ export {
   SignupAccept,
   SignupReject,
   ChallengerExpel,
+  ViewStatusModal,
 };

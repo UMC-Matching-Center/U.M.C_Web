@@ -17,7 +17,7 @@ import {
   challengerExpelAPI, // 챌린저 탈부
 } from "../../api/index";
 import Modal from "react-modal";
-import { ChallengerExpel } from "../../components/Modal";
+import { ChallengerExpel } from "../../components/modal";
 
 /*-------------------박스 두개 중 첫 번째 상단 박스------------------*/
 //현재 챌린저 상태 state

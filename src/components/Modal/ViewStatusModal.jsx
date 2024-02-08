@@ -40,7 +40,7 @@ const CheckIconArea = styled.div`
     no-repeat;
 `;
 
-export default function AlertModal({
+export default function ViewStatusModal({
   setShowModal,
   modalType,
   selectedAppName,
