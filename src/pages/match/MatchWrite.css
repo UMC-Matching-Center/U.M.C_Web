@@ -1,0 +1,170 @@
+.match-write-container {
+  display: flex;
+  justify-content: center;
+  width: 120rem;
+  margin: 0 auto 3.5rem auto;
+}
+
+.match-write-wrapper {
+  display: flex;
+  flex-direction: column;
+  background: #fafafa;
+  width: 120rem;
+  height: 75.1rem;
+  border-radius: 1rem;
+}
+
+/*----임시저장 및 게시하기 버튼 container----*/
+.match-upload {
+  display: flex;
+  margin-left: auto;
+  padding: 1.9rem 3.9rem 0 0;
+  gap: 0 2rem;
+}
+
+/*----인원 파트 추가----*/
+.match-part-add {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 3.1rem 9.5rem 0 9.5rem;
+  gap: 0 0.5rem;
+}
+
+.match-recruitbadge-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.4rem;
+}
+
+/*----매칭 프로젝트 내용 작성----*/
+.match-markdown {
+  width: 104.4rem;
+  margin: 4.3rem 8.5rem 0 7.1rem;
+}
+
+.match-write-title {
+  padding: 2.4rem;
+  border-bottom: 0.1rem solid #6b6880;
+
+  > input {
+    width: 99.6rem;
+  }
+}
+
+.match-markdown-content {
+  height: 45.2rem;
+  padding-top: 2.4rem;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.match-markdown-mainImg {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 104rem;
+  height: 25rem;
+  background-color: #fafafa;
+  border-radius: 0.8rem;
+  border: 0.1rem dashed #9c9aab;
+  cursor: pointer;
+
+  & .match-markdown-Img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.match-markdown-view {
+  padding: 2.4rem 0;
+  height: 100%;
+  > textarea {
+    width: 100rem;
+    height: 100%;
+    padding: 0 2.4rem;
+
+    font-size: 1.8rem;
+    font-weight: 300;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+/*-----button, textarea, input style 초기화 및 커스텀------*/
+button {
+  background: inherit;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  cursor: pointer;
+
+  &.match-upload-button {
+    background-color: #014171;
+    color: #fafafa;
+    width: 8.6rem;
+    height: 3.6rem;
+    border-radius: 0.5rem;
+  }
+
+  &.match-modify-button,
+  .match-temp-button {
+    background-color: #fafafa;
+    color: #014171;
+    width: 7.2rem;
+    height: 3.6rem;
+    border-radius: 0.5rem;
+    border: 0.1rem solid #014171;
+    margin: 1.9rem 3rem 0 auto;
+  }
+  &.match-partAdd-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #fafafa;
+    width: 2.4rem;
+    height: 2.2rem;
+    border: 0.1rem solid #6b6880;
+  }
+
+  font-family: KBO-Dia-Gothic;
+  font-size: 1.6rem;
+  font-weight: 300;
+}
+
+textarea {
+  resize: none;
+
+  border: 0;
+  outline: 0;
+  background-color: #fafafa;
+  font-family: KBO-Dia-Gothic;
+}
+
+input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 0;
+  outline: 0;
+  background: #fafafa;
+}
+
+.match-write-title > input {
+  font-family: "KBO-Dia-Gothic";
+  font-size: 2.6rem;
+  font-weight: 500;
+
+  &::placeholder {
+    color: #9c9aab;
+  }
+}

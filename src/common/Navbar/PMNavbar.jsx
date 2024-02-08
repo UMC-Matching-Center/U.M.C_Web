@@ -193,7 +193,7 @@ const PMNavbar = () => {
               <SubMenuWrapper>
                 <SubMenuItem>
                   <Link
-                    to="/myproject/review"
+                    to="/myproject/viewstatus"
                     onClick={() => {
                       handleNavIndex(3);
                     }}
@@ -203,7 +203,7 @@ const PMNavbar = () => {
                 </SubMenuItem>
                 <SubMenuItem>
                   <Link
-                    to="/"
+                    to="/myproject/review"
                     onClick={() => {
                       handleNavIndex(3);
                     }}

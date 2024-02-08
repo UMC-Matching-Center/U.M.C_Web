@@ -19,6 +19,12 @@ import {
   signupAcceptAPI,
   signupRejectAPI,
 } from "./challengerAPI.js";
+import {
+  scheduleEditAPI,
+  scheduleDeleteAPI,
+  scheduleAddAPI,
+  scheduleDataAPI
+} from "./scheduleAPI.js";
 
 export {
   loginAPI, // 로그인
@@ -36,4 +42,8 @@ export {
   signupListAPI, // 챌린저 신청 리스트 조회
   signupAcceptAPI, //챌린저 신청 승인
   signupRejectAPI, // 챌린저 신청 거절
+  scheduleEditAPI, //일정 수정 API
+  scheduleDeleteAPI,// 일정 삭제 API
+  scheduleAddAPI, ///일정 추가 API
+  scheduleDataAPI, //일정 조회 API
 };

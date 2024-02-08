@@ -133,13 +133,13 @@ export default function DotEditOptions({
   return (
     <SelectBox
       onClick={() =>
-        setIsShowOptions((prev) => !prev, setSelectedColor(infobox.color))
+        setIsShowOptions((prev) => !prev, setSelectedColor(infobox.scheduleColor))
       }
     >
       <Label>
         {
           <StyledSVG>
-            <circle cx="6" cy="6" r="6" fill={infobox.color} />
+            <circle cx="6" cy="6" r="6" fill={infobox.scheduleColor} />
           </StyledSVG>
         }
       </Label>
@@ -148,7 +148,7 @@ export default function DotEditOptions({
           <Option
             onClick={() => handleColorChange(option.value)}
             key={option.value}
-            style={option.value === infobox.color ? { backgroundColor: "#FAFAFA" } : {}}
+            style={option.value === infobox.scheduleColor ? { backgroundColor: "#FAFAFA" } : {}}
           >
             <OptionBox>
               <OptionContents>{option.content}</OptionContents>

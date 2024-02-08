@@ -6,18 +6,20 @@ import styled from "styled-components";
 const SelectBox = styled.div`
   z-index: 1;
   position: relative;
-  width: 4.5rem;
-  height: 2.7rem;
-  background-color: #02010b;
+  width: 10rem; //11.52-1.52
+  padding: 1.08rem 0 1.08rem 1.52rem;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  margin: -1.4rem 0 0 76.1rem;
   align-self: center;
   cursor: pointer;
   color: #010004;
-  border: 1px solid #fafafa;
+
   &::before {
-    color: #fafafa;
     content: "⌵";
     position: absolute;
-    right: 0.65rem;
+    top: 1rem;
+    right: 1rem;
     font-size: 1.5rem;
   }
 `;
@@ -35,57 +37,48 @@ const Label = styled.label`
 const SelectOptions = styled.ul`
   position: absolute;
   list-style: none;
+  left: -0.1rem;
   padding: 0rem;
   overflow: hidden;
-  left: -0.1rem;
-  top: 1.2rem;
-  max-height: 26.1rem;
-  max-height: ${(props) => (props.$show ? "none" : "0")};
+  max-height: ${(props) => (props.show ? "none" : "0")};
+  border-radius: 0.5rem;
+  border: ${(props) => (props.show ? "0.1rem solid #6b6880" : "none")};
   background-color: #fafafa;
   color: #010004;
+  font-size: 1rem;
 `;
 
 //개개인 옵션 세팅
 const Option = styled.li`
   transition: background-color 0.2s ease-in;
   font-size: 1.2rem;
-  background-color: #02010b;
-  border: 0.1rem solid #6b6880;
-  border-top: none;
-  &:first-child {
-    border: 0.1rem solid #6b6880;
-  }
-
+  font-weight: 300;
+  width: 8.48rem; //11.52-1.52*2
+  border-top: 1px solid #6b6880;
+  padding: 1rem 1.52rem;
   &:hover {
-    background-color: #6b6880;
+    background-color: #cecdd5;
   }
 `;
 
 //개개인 옵션 세팅 안에 컨텐츠
 const OptionContents = styled.div`
-  width: 2.6rem;
-  height: 2.7rem;
+  width: 6.784rem;
 `;
-//해당 옵션 박스
+
 const OptionBox = styled.div`
   display: flex;
 `;
 
-// 해당 닷 스타일링
 const StyledSVG = styled.svg`
-  margin: 0.5rem 0 0 0.4rem;
-  width: 1.5rem;
-  height: 1.5rem;
+  margin: 0rem -0.7rem 0 0.8rem;
+  width: 1.4rem;
+  height: 1.2rem;
 `;
 
-//틱 마크 스타일링
-const StyledFrameImg = styled.svg`
-  width: 1.4rem;
-  height: 1.4rem;
-  margin: 0.6rem 0.5rem 0 0;
-`;
+//체크 표시 이미지
 const FrameImg = () => (
-  <StyledFrameImg
+  <StyledSVG
     xmlns="http://www.w3.org/2000/svg"
     width="14"
     height="14"
@@ -105,47 +98,43 @@ const FrameImg = () => (
         <rect width="14" height="14" fill="white" />
       </clipPath>
     </defs>
-  </StyledFrameImg>
+  </StyledSVG>
 );
 
-export default function DotAddOptions({
-  colorOptionList,
-  handleColorChange,
-  formData,
-}) {
-  //색깔 정하기
-  const [isShowOptions, setIsShowOptions] = useState(false);
+export default function ViewSelect({ setSelectedOptionIndex }) {
+  const [isShowOptions, setIsShowOptions] = useState(false); //보여주는 옵션들
+  const [currentValue, setCurrentValue] = useState("전체보기"); //현재 옵션
+  const [isCompareOptions, setIsCompareOptions] = useState(false); //비교해서 처리하는 옵션
 
-  // DotOptions 배열 구성
-  const DotOptions = colorOptionList.map((option) => ({
-    value: option.value,
-    content: (
-      <StyledSVG>
-        <circle cx="7.5" cy="7.5" r="7.5" fill={option.value} />
-      </StyledSVG>
-    ),
-  }));
+  const optionList = [
+    { num: 1, content: "전체보기" },
+    { num: 2, content: "Design" },
+    { num: 3, content: "Android" },
+    { num: 4, content: "iOS" },
+    { num: 5, content: "Web" },
+    { num: 6, content: "Spring Boot" },
+    { num: 7, content: "Node.js" },
+  ];
+
+  //옵션 선택하면 그 값에 따라 변경되도록 설정
+  const handleOnChangeOption = (content, index) => {
+    setCurrentValue(content);
+    setSelectedOptionIndex(content);
+    setIsCompareOptions(index);
+  };
+
   return (
     <SelectBox onClick={() => setIsShowOptions((prev) => !prev)}>
-      <Label>
-        {
-          <StyledSVG>
-            <circle cx="7.5" cy="7.5" r="7.5" fill={formData.scheduleColor} />
-          </StyledSVG>
-        }
-      </Label>
-      <SelectOptions $show={isShowOptions}>
-        {DotOptions.map((option) => (
+      <Label>{currentValue}</Label>
+      <SelectOptions show={isShowOptions}>
+        {optionList.map((option, i) => (
           <Option
-            onClick={() => handleColorChange(option.value)}
-            key={option.value}
-            style={option.value === formData.scheduleColor ? { backgroundColor: "#FAFAFA" } : {}}
-            >
+            onClick={() => handleOnChangeOption(option.content, i)}
+            key={i}
+          >
             <OptionBox>
               <OptionContents>{option.content}</OptionContents>
-              {option.value == formData.scheduleColor && (
-                <StyledFrameImg>{FrameImg()}</StyledFrameImg>
-              )}
+              {isCompareOptions === i && <StyledSVG>{FrameImg()}</StyledSVG>}
             </OptionBox>
           </Option>
         ))}
