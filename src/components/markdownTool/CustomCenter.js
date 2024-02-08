@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { TextAreaContext } from "../../context/TextAreaProvider";
-import { IconLinkPlus } from "@tabler/icons-react";
+import { IconAlignCenter } from "@tabler/icons-react";
 
-const CustomLink = () => {
+const CustomCenter = () => {
   const {
     text,
     textareaRef,
@@ -12,7 +12,7 @@ const CustomLink = () => {
     updateMatchText,
   } = useContext(TextAreaContext);
 
-  const handleLinkClick = (e) => {
+  const handleCenterClick = (e) => {
     e.preventDefault();
     let postText = "";
     let postRef = null;
@@ -38,29 +38,32 @@ const CustomLink = () => {
       postRef.current.selectionEnd
     );
 
-    // link 효과 (1. 드래그 선택된 값은 url [](url), 2. 드래그 선택된 값이 없으면 커서 위치에 [](url) 입력)
+    // center 효과 (1. 드래그 선택된 값 양 옆에 <center>, 2. 드래그 선택된 값이 없으면 커서 위치에 <center>text</center> 입력)
     const newText =
       postText.substring(0, postRef.current.selectionStart) +
-      `${selectedText ? "[](" + selectedText + ")" : "[](URL)"}` +
+      `${
+        selectedText
+          ? "<center>" + selectedText + "</center>"
+          : "<center>text</center>"
+      }` +
       postText.substring(postRef.current.selectionEnd);
 
     postUpdate(newText);
 
     // 커서위치 이동(비동기)
-    const linkStart = postRef.current.selectionStart + 3;
-    const linkEnd = postRef.current.selectionEnd + (selectedText ? 3 : 6);
+    const centerStart = postRef.current.selectionStart + 8;
+    const centerEnd = postRef.current.selectionEnd + (selectedText ? 8 : 12);
 
     postRef.current.focus();
     setTimeout(() => {
-      postRef.current.setSelectionRange(linkStart, linkEnd);
+      postRef.current.setSelectionRange(centerStart, centerEnd);
     }, 0);
   };
-
   return (
-    <button onClick={handleLinkClick}>
-      <IconLinkPlus size={24} color="#393556" stroke={1} />
+    <button onClick={handleCenterClick}>
+      <IconAlignCenter size={24} color="#393556" stroke={1} />
     </button>
   );
 };
 
-export default CustomLink;
+export default CustomCenter;

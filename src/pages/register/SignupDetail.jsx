@@ -110,7 +110,7 @@ export default function UserSignup() {
 
   useEffect(() => {
     // 앞 단계 (id, pw)를 입력하지 않고 넘어온 경우 또는 새로고침된 경우 /register/signup 페이지로 이동
-    if (!access) navigate("../signup");
+    if (!access) navigate("../signup", { replace: true });
   }, []);
 
   /* ---- Email 관련 ----- */
@@ -306,7 +306,7 @@ export default function UserSignup() {
       console.log("response: ", response);
       if (response.isSuccess) {
         dispatch(SIGNUP_COMPLETE({ open: true }));
-        navigate("../../");
+        navigate("../../", { replace: true });
       } else {
         console.log("회원가입 실패");
         //

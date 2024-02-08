@@ -41,7 +41,9 @@ function Login() {
     loginAPI(id, pw, autoLogin, dispatch).then((response) => {
       if (response.isSuccess) {
         setLoginInfo("");
-        navigate("/");
+        response.userType === "ROLE_ADMIN"
+          ? navigate("/challenger/manage", { replace: true })
+          : navigate("/", { replace: true });
       } else {
         setLoginInfo(response.message);
       }
@@ -179,7 +181,7 @@ function Login() {
 
 function Register() {
   return (
-    <div style={{ position: "absolute" }}>
+    <div className="register_wrap">
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
