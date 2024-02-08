@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Routes, Route, useLocation } from "react-router-dom";
 import { IconPhotoPlus, IconPencil } from "@tabler/icons-react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   myPageDataAPI,
-  challengerWithdrawalAPI,
+  challengerWithdrawAPI,
   challengerModifyAPI,
 } from "../../api";
 import useGetAccessToken from "../../utils/getAccessToken";
@@ -59,6 +59,7 @@ const UserModify = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const accessToken = location.state?.accessToken;
+  const autoLogin = location.state?.autoLogin;
 
   const [profileImage, setProfileImage] = useState(null); // 이미지 데이터
   const [profileImageURL, setProfileImageURL] = useState(
@@ -105,6 +106,7 @@ const UserModify = () => {
     challengerModifyAPI(
       accessToken,
       dispatch,
+      autoLogin,
       profileImage,
       portfolio,
       phoneNumber
@@ -219,6 +221,7 @@ const UserInfo = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const accessToken = useGetAccessToken();
+  const { autoLogin } = useSelector((state) => state.userInfo);
 
   const [profileImageURL, setProfileImageURL] = useState(""); // 이미지 데이터 URL 저장
   const [nicknameName, setNicknameName] = useState(""); // 닉네임/이름
@@ -249,7 +252,7 @@ const UserInfo = () => {
   // 탈퇴
   const handleWithdraw = async () => {
     // 탈퇴 API 후 성공일 때 아래 코드 실행
-    challengerWithdrawalAPI(accessToken, dispatch).then((response) => {
+    challengerWithdrawAPI(accessToken, dispatch, autoLogin).then((response) => {
       if (response.isSuccess) {
         setWithdraw(false); // 모달 닫기
         // 탈퇴 API 후 성공일 때 아래 코드 실행
@@ -265,7 +268,7 @@ const UserInfo = () => {
   // 첫 실행시 API 호출
   useEffect(() => {
     if (accessToken !== "") {
-      myPageDataAPI(accessToken, dispatch).then((response) => {
+      myPageDataAPI(accessToken, dispatch, autoLogin).then((response) => {
         if (response.isSuccess) {
           setProfileImageURL(response.profileImage);
           setNicknameName(response.nicknameName);
@@ -346,6 +349,7 @@ const UserInfo = () => {
                       phoneNumber: phoneNumber,
                       portfolio: portfolio,
                       accessToken: accessToken,
+                      autoLogin: autoLogin,
                     },
                   });
                 }}

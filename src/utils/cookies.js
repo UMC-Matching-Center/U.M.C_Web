@@ -8,8 +8,7 @@ export const setRefreshToken = (refreshToken) => {
 
   return cookies.set("refreshToken", refreshToken, {
     path: "/",
-    secure: false,
-    httpOnly: true,
+    secure: true, // true: https에서만 쿠키가 전송
     expires: new Date(expireDate),
   });
 };

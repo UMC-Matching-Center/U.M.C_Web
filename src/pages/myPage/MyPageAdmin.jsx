@@ -7,7 +7,7 @@ import {
   Option,
 } from "../../common/Selectbox/RectangleSelectBox";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { myPageDataAPI, adminModifyAPI } from "../../api";
 import useGetAccessToken from "../../utils/getAccessToken";
 import Modal from "react-modal";
@@ -70,6 +70,7 @@ const AdminModify = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const accessToken = location.state?.accessToken;
+  const autoLogin = location.state?.autoLogin;
 
   const [profileImage, setProfileImage] = useState(null); // 이미지 데이터
   const [profileImageURL, setProfileImageURL] = useState(
@@ -117,6 +118,7 @@ const AdminModify = () => {
     adminModifyAPI(
       accessToken,
       dispatch,
+      autoLogin,
       profileImage,
       office[0],
       phoneNumber
@@ -254,6 +256,7 @@ const AdminInfo = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const accessToken = useGetAccessToken();
+  const { autoLogin } = useSelector((state) => state.userInfo);
 
   const [profileImageURL, setProfileImageURL] = useState(""); // 이미지 데이터 URL 저장
   const [nicknameName, setNicknameName] = useState(""); // 닉네임/이름
@@ -280,7 +283,7 @@ const AdminInfo = () => {
   // 첫 실행시 API 호출
   useEffect(() => {
     if (accessToken !== "") {
-      myPageDataAPI(accessToken, dispatch).then((response) => {
+      myPageDataAPI(accessToken, dispatch, autoLogin).then((response) => {
         if (response.isSuccess) {
           setProfileImageURL(response.profileImage);
           setNicknameName(response.nicknameName);
@@ -345,6 +348,7 @@ const AdminInfo = () => {
                       office: office,
                       phoneNumber: phoneNumber,
                       accessToken: accessToken,
+                      autoLogin: autoLogin,
                     },
                   });
                 }}
