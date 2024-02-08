@@ -5,6 +5,7 @@ export const myPageDataAPI = async (accessToken, dispatch, autoLogin) => {
   const response = {
     isSuccess: false, //API 성공 여부
     message: "", //API 메시지
+    profileImage: null,
     nicknameName: "",
     email: "",
     university: "",

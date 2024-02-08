@@ -318,7 +318,6 @@ function ChallengerList() {
               };
             });
             setUserData((prev) => [...prev, ...responseList]);
-            setUserData((prev) => [...prev]);
           } else {
             setIsEnd(true);
           }
