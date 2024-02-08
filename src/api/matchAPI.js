@@ -71,7 +71,12 @@ export const matchDetailAPI = async (accessToken, dispatch, autoLogin, id) => {
 // 생성, 수정만 하면 됨.
 
 /*----- Q&A 관련 -----*/
-export const matchQAListAPI = async (accessToken, dispatch, projectId) => {
+export const matchQAListAPI = async (
+  accessToken,
+  dispatch,
+  autoLogin,
+  projectId
+) => {
   const response = {
     isSuccess: false, //API 성공 여부
     message: "", //API 메시지
@@ -80,7 +85,7 @@ export const matchQAListAPI = async (accessToken, dispatch, projectId) => {
 
   //서버로 현재 매칭 프로젝트 조회 요청
   try {
-    const { data } = await privateAxios(accessToken, dispatch).get(
+    const { data } = await privateAxios(accessToken, dispatch, autoLogin).get(
       `/qna/${projectId}`
     );
     if (data.code === "COMMON200") {
@@ -108,6 +113,7 @@ export const matchQAListAPI = async (accessToken, dispatch, projectId) => {
 export const matchQuestionUploadAPI = async (
   accessToken,
   dispatch,
+  autoLogin,
   projectId,
   question
 ) => {
@@ -118,7 +124,7 @@ export const matchQuestionUploadAPI = async (
   };
 
   try {
-    const { data } = await privateAxios(accessToken, dispatch).post(
+    const { data } = await privateAxios(accessToken, dispatch, autoLogin).post(
       `/qna/${projectId}`,
       { question: question }
     );
@@ -144,7 +150,12 @@ export const matchQuestionUploadAPI = async (
   return response;
 };
 
-export const matchQADeleteAPI = async (accessToken, dispatch, questionId) => {
+export const matchQADeleteAPI = async (
+  accessToken,
+  dispatch,
+  autoLogin,
+  questionId
+) => {
   const response = {
     isSuccess: false, //API 성공 여부
     message: "", //API 메시지
@@ -153,9 +164,11 @@ export const matchQADeleteAPI = async (accessToken, dispatch, questionId) => {
 
   //서버로 현재 매칭 프로젝트 조회 요청
   try {
-    const { data } = await privateAxios(accessToken, dispatch).delete(
-      `/qna/${questionId}`
-    );
+    const { data } = await privateAxios(
+      accessToken,
+      dispatch,
+      autoLogin
+    ).delete(`/qna/${questionId}`);
     if (data.code === "COMMON200") {
       response.isSuccess = true;
       response.message = data.message;
@@ -180,6 +193,7 @@ export const matchQADeleteAPI = async (accessToken, dispatch, questionId) => {
 export const matchAnswerUploadAPI = async (
   accessToken,
   dispatch,
+  autoLogin,
   questionId,
   answer
 ) => {
@@ -189,7 +203,7 @@ export const matchAnswerUploadAPI = async (
   };
 
   try {
-    const { data } = await privateAxios(accessToken, dispatch).patch(
+    const { data } = await privateAxios(accessToken, dispatch, autoLogin).patch(
       `/qna/${questionId}`,
       { answer: answer }
     );

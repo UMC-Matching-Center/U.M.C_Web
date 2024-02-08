@@ -157,21 +157,23 @@ const MatchQA = () => {
 
   const dispatch = useDispatch();
   const accessToken = useGetAccessToken();
-  const { userType } = useSelector((state) => state.userInfo);
+  const { userType, autoLogin } = useSelector((state) => state.userInfo);
 
   // API : 리스트 조회
   const loadData = () => {
     if (accessToken !== "") {
-      matchQAListAPI(accessToken, dispatch, projectId).then((response) => {
-        if (response.isSuccess) {
-          setQAData(response.qnaList);
-          setToggles(response.qnaList.map(() => false));
-          setAContent(response.qnaList.map(() => ""));
-          setDisableAnswer(response.qnaList.map(() => true));
-        } else {
-          alert(response.message);
+      matchQAListAPI(accessToken, dispatch, autoLogin, projectId).then(
+        (response) => {
+          if (response.isSuccess) {
+            setQAData(response.qnaList);
+            setToggles(response.qnaList.map(() => false));
+            setAContent(response.qnaList.map(() => ""));
+            setDisableAnswer(response.qnaList.map(() => true));
+          } else {
+            alert(response.message);
+          }
         }
-      });
+      );
     } else {
       navigate("/login", { replace: true }); // 메인 페이지로 이동
     }
@@ -212,41 +214,11 @@ const MatchQA = () => {
   // 답변 삭제 이벤트
   const deleteQA = (index, questionId) => {
     if (accessToken !== "") {
-      matchQADeleteAPI(accessToken, dispatch, questionId).then((response) => {
-        if (response.isSuccess) {
-          // 삭제된 QA를 제외하고 QA 목록 업데이트
-          const updatedQAList = QAData.filter((qa, idx) => idx !== index);
-          setQAData(updatedQAList);
-
-          // 그 외 Toggles, AContent 및 DisableAnswer 상태 업데이트
-          setToggles(updatedQAList.map(() => false));
-          setAContent(updatedQAList.map(() => ""));
-          setDisableAnswer(updatedQAList.map(() => true));
-        } else {
-          alert(response.message);
-        }
-      });
-    } else {
-      navigate("/login", { replace: true }); // 메인 페이지로 이동
-    }
-  };
-
-  // 새로운 질문 등록
-  const uploadNewQ = () => {
-    if (accessToken !== "") {
-      matchQuestionUploadAPI(accessToken, dispatch, projectId, newQ).then(
+      matchQADeleteAPI(accessToken, dispatch, autoLogin, questionId).then(
         (response) => {
           if (response.isSuccess) {
             // 삭제된 QA를 제외하고 QA 목록 업데이트
-            const updatedQAList = [
-              ...QAData,
-              {
-                questionId: response.questionId,
-                question: newQ,
-                answer: null,
-                createAt: null,
-              },
-            ];
+            const updatedQAList = QAData.filter((qa, idx) => idx !== index);
             setQAData(updatedQAList);
 
             // 그 외 Toggles, AContent 및 DisableAnswer 상태 업데이트
@@ -261,6 +233,42 @@ const MatchQA = () => {
     } else {
       navigate("/login", { replace: true }); // 메인 페이지로 이동
     }
+  };
+
+  // 새로운 질문 등록
+  const uploadNewQ = () => {
+    if (accessToken !== "") {
+      matchQuestionUploadAPI(
+        accessToken,
+        dispatch,
+        autoLogin,
+        projectId,
+        newQ
+      ).then((response) => {
+        if (response.isSuccess) {
+          // 삭제된 QA를 제외하고 QA 목록 업데이트
+          const updatedQAList = [
+            ...QAData,
+            {
+              questionId: response.questionId,
+              question: newQ,
+              answer: null,
+              createAt: null,
+            },
+          ];
+          setQAData(updatedQAList);
+
+          // 그 외 Toggles, AContent 및 DisableAnswer 상태 업데이트
+          setToggles(updatedQAList.map(() => false));
+          setAContent(updatedQAList.map(() => ""));
+          setDisableAnswer(updatedQAList.map(() => true));
+        } else {
+          alert(response.message);
+        }
+      });
+    } else {
+      navigate("/login", { replace: true }); // 메인 페이지로 이동
+    }
 
     setNewQ("");
     setQMode(false);
@@ -269,26 +277,29 @@ const MatchQA = () => {
   // 새로운 답변 등록
   const uploadNewA = (questionId, answer) => {
     if (accessToken !== "") {
-      matchAnswerUploadAPI(accessToken, dispatch, questionId, answer).then(
-        (response) => {
-          if (response.isSuccess) {
-            // 답변 등록된 QA 목록 업데이트
-            const updatedQAList = QAData.map((item) => {
-              if (item.questionId === questionId) {
-                return { ...item, answer: answer };
-              }
-              return item;
-            });
-            setQAData(updatedQAList);
-          } else {
-            alert(response.message);
-          }
+      matchAnswerUploadAPI(
+        accessToken,
+        dispatch,
+        autoLogin,
+        questionId,
+        answer
+      ).then((response) => {
+        if (response.isSuccess) {
+          // 답변 등록된 QA 목록 업데이트
+          const updatedQAList = QAData.map((item) => {
+            if (item.questionId === questionId) {
+              return { ...item, answer: answer };
+            }
+            return item;
+          });
+          setQAData(updatedQAList);
+        } else {
+          alert(response.message);
         }
-      );
+      });
     } else {
       navigate("/login", { replace: true }); // 메인 페이지로 이동
     }
-    /*patch로 보내고(api) , state value값으로 QAData[index].answer? 변경해 변경*/
   };
 
   return (
@@ -321,7 +332,11 @@ const MatchQA = () => {
                       onChange={(e) => setNewQ(e.target.value)}
                     />
                   </div>
-                  <button className="matchQA_button" onClick={uploadNewQ}>
+                  <button
+                    className="matchQA_button"
+                    onClick={uploadNewQ}
+                    disabled={newQ === ""}
+                  >
                     등록
                   </button>
                 </div>
@@ -421,6 +436,7 @@ const MatchQA = () => {
                           onClick={() =>
                             uploadNewA(question.questionId, AContent[index])
                           }
+                          disabled={AContent[index] === ""}
                         >
                           등록
                         </button>
