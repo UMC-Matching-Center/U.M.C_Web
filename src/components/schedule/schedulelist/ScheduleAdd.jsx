@@ -124,7 +124,7 @@ export default function ScheduleEdit({
 
   //컬러 세팅
   const handleColorChange = (color) => {
-    setFormData({ ...formData, color: color });
+    setFormData({ ...formData, scheduleColor: color });
   };
 
   //시작 날짜 세팅
@@ -135,16 +135,16 @@ export default function ScheduleEdit({
     const match = inputValue.match(/(\d{1,2})년\s*(\d{1,2})월\s*(\d{1,2})일/);
 
     if (match) {
-      const startyear = match[1];
-      const startmonth = match[2];
-      const startday = match[3];
+      const startyear = parseInt(match[1]);
+      const startmonth = parseInt(match[2]);
+      const startday = parseInt(match[3]);
 
       // formData 업데이트
       setFormData({
         ...formData,
-        startyear: startyear,
-        startmonth: startmonth,
-        startday: startday,
+        startYear: startyear,
+        startMonth: startmonth,
+        startDay: startday,
       });
       setIsStartDateFilled(true);
     } else {
@@ -161,16 +161,16 @@ export default function ScheduleEdit({
     const match = inputValue.match(/(\d{1,2})년\s*(\d{1,2})월\s*(\d{1,2})일/);
 
     if (match) {
-      const endyear = match[1];
-      const endmonth = match[2];
-      const endday = match[3];
+      const endyear = parseInt(match[1]);
+      const endmonth = parseInt(match[2]);
+      const endday = parseInt(match[3]);
 
       // formData 업데이트
       setFormData({
         ...formData,
-        endyear: endyear,
-        endmonth: endmonth,
-        endday: endday,
+        endYear: endyear,
+        endMonth: endmonth,
+        endDay: endday,
       });
       setIsEndDateFilled(true);
     } else {
@@ -181,15 +181,15 @@ export default function ScheduleEdit({
 
   //메모 설정
   const handleMemoChange = (e) => {
-    setFormData({ ...formData, memo: e.target.value });
+    setFormData({ ...formData, description: e.target.value });
   };
 
   //해당 endday가 startday보다 클 경우 처리
   useEffect(() => {
     setIsStartDateBigger(
-      formData.startday <= formData.endday ||
-        formData.startmonth < formData.endmonth ||
-        formData.startyear < formData.endyear
+      formData.startDay <= formData.endDay ||
+        formData.startMonth < formData.endMonth ||
+        formData.startYear < formData.endYear
     );
   }, [formData]);
 
