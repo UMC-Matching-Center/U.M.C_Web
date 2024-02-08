@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Modal from "react-modal";
-import AlertModal from "./AlertModal";
+import ViewStatusModal from "../Modal/ViewStatusModal";
 
 //파트 컨테이너
 const PartContainer = styled.div`
@@ -345,7 +345,9 @@ export default function ViewBody({ selectedOptionIndex }) {
         ) : (
           filteredApps.length === 0 &&
             (selectedOptionIndex === option.display ||
-              (selectedOptionIndex === "전체보기" && AppList.length == 0 && i == 0)) && (
+              (selectedOptionIndex === "전체보기" &&
+                AppList.length == 0 &&
+                i == 0)) && (
               <NoPartContainer key={option.num}>
                 해당 파트에 지원한 사람이 없습니다.
               </NoPartContainer>
@@ -357,7 +359,7 @@ export default function ViewBody({ selectedOptionIndex }) {
         onRequestClose={() => setShowModal(false)}
         style={ModalStyles}
       >
-        <AlertModal
+        <ViewStatusModal
           setShowModal={setShowModal}
           modalType={modalType}
           selectedAppName={selectedAppName}

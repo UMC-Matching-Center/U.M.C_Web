@@ -11,7 +11,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { SIGNUP_COMPLETE } from "../../modules/signupState";
 import { emailRequestAPI, emailCodeCheckAPI, signupAPI } from "../../api";
-import EmailRequestModal from "../../components/ModalEmailRequest";
+import { EmailRequestModal } from "../../components/Modal";
 
 // input간 간격
 const InputGap = styled.div`

@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import "../Modal.css";
-
-
+import "./Modal.css";
 
 //느낌표 표시
 const FailIcon = btoa(`
@@ -50,42 +48,40 @@ export default function AlertModal({
 }) {
   return (
     <>
-        <div className="ModalBox">
-          <div className="IconCircleBackground">
-            <div
-              className="IconCircleGreen"
-              style={
-                modalType == "불합격" ? { backgroundColor: "#D62117" } : {}
-              }
-            >
-              <CheckIconArea modal={modalType == "합격"} />
-            </div>
+      <div className="ModalBox">
+        <div className="IconCircleBackground">
+          <div
+            className="IconCircleGreen"
+            style={modalType == "불합격" ? { backgroundColor: "#D62117" } : {}}
+          >
+            <CheckIconArea modal={modalType == "합격"} />
           </div>
-          <div className="ModalConentBox">
-            <div className="MoalContentCenter">
-              <div className="ModalInfo" style={{ margin: "11.5rem 0 0 0" }}>
-                첼린저 {selectedAppName}를 {modalType} 처리하시겠습니까?
+        </div>
+        <div className="ModalConentBox">
+          <div className="MoalContentCenter">
+            <div className="ModalInfo" style={{ margin: "11.5rem 0 0 0" }}>
+              첼린저 {selectedAppName}를 {modalType} 처리하시겠습니까?
+            </div>
+            <div className="ModalBtnArea" style={{ margin: "8.5rem 0 0 0" }}>
+              <div
+                className="ModalBtnWhite"
+                onClick={() => setShowModal(false)}
+              >
+                취소
               </div>
-              <div className="ModalBtnArea" style={{ margin: "8.5rem 0 0 0" }}>
-                <div
-                  className="ModalBtnWhite"
-                  onClick={() => setShowModal(false)}
-                >
-                  취소
-                </div>
-                <div
-                  className="ModalBtnGreen"
-                  style={
-                    modalType == "불합격" ? { backgroundColor: "#D62117" } : {}
-                  }
-                  onClick={() => handlePassOrFail(selectedAppName)}
-                >
-                  {modalType}
-                </div>
+              <div
+                className="ModalBtnGreen"
+                style={
+                  modalType == "불합격" ? { backgroundColor: "#D62117" } : {}
+                }
+                onClick={() => handlePassOrFail(selectedAppName)}
+              >
+                {modalType}
               </div>
             </div>
           </div>
         </div>
+      </div>
     </>
   );
 }
