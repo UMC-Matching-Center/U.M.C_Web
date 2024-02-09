@@ -3,30 +3,56 @@ import { TextAreaContext } from "../../context/TextAreaProvider";
 import { IconLinkPlus } from "@tabler/icons-react";
 
 const CustomLink = () => {
-  const { text, textareaRef, updateText } = useContext(TextAreaContext);
+  const {
+    text,
+    textareaRef,
+    updateText,
+    matchText,
+    matchTextareaRef,
+    updateMatchText,
+  } = useContext(TextAreaContext);
 
   const handleLinkClick = (e) => {
     e.preventDefault();
-    const selectedText = textareaRef.current.value.substring(
-      textareaRef.current.selectionStart,
-      textareaRef.current.selectionEnd
+    let postText = "";
+    let postRef = null;
+    let postUpdate = null;
+
+    switch (window.location.pathname) {
+      case "/notice/new":
+        postText = text;
+        postRef = textareaRef;
+        postUpdate = updateText;
+        break;
+      case "/match/new":
+        postText = matchText;
+        postRef = matchTextareaRef;
+        postUpdate = updateMatchText;
+        break;
+      default:
+        break;
+    }
+
+    const selectedText = postRef.current.value.substring(
+      postRef.current.selectionStart,
+      postRef.current.selectionEnd
     );
 
     // link 효과 (1. 드래그 선택된 값은 url [](url), 2. 드래그 선택된 값이 없으면 커서 위치에 [](url) 입력)
     const newText =
-      text.substring(0, textareaRef.current.selectionStart) +
+      postText.substring(0, postRef.current.selectionStart) +
       `${selectedText ? "[](" + selectedText + ")" : "[](URL)"}` +
-      text.substring(textareaRef.current.selectionEnd);
+      postText.substring(postRef.current.selectionEnd);
 
-    updateText(newText);
+    postUpdate(newText);
 
     // 커서위치 이동(비동기)
-    const linkStart = textareaRef.current.selectionStart + 3;
-    const linkEnd = textareaRef.current.selectionEnd + (selectedText ? 3 : 6);
+    const linkStart = postRef.current.selectionStart + 3;
+    const linkEnd = postRef.current.selectionEnd + (selectedText ? 3 : 6);
 
-    textareaRef.current.focus();
+    postRef.current.focus();
     setTimeout(() => {
-      textareaRef.current.setSelectionRange(linkStart, linkEnd);
+      postRef.current.setSelectionRange(linkStart, linkEnd);
     }, 0);
   };
 

@@ -38,6 +38,10 @@ const SelectOptions = styled.ul`
   padding: 0;
   margin: 0.4rem 0 0 0;
   overflow-y: auto; /* 스크롤이 필요한 경우만 보이도록 설정 */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   background-color: #fafafa;
   border-width: 0.5px 1px 1px 1px;
   border-style: solid;

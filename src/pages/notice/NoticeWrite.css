@@ -98,10 +98,10 @@
   align-items: center;
   min-width: 5rem;
   height: 5rem;
-  padding: 3rem;
+  padding: 4rem;
   background-color: #fafafa;
   border-radius: 0.8rem;
-  border: 0.3rem solid #cecdd5;
+  border: 0.1rem dotted #9c9aab;
   margin-top: 1.3rem;
   margin-left: 2rem;
   cursor: pointer;

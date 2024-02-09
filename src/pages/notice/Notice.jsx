@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import styled from "styled-components";
-import IconNewNotice from "../../images/ic_new_notice.png";
+import IconNewNotice from "../../images/ic_new_notice.svg";
 import { IconSearch } from "@tabler/icons-react";
 import { TextAreaProvider } from "../../context/TextAreaProvider";
 import NoticeWrite from "./NoticeWrite";
