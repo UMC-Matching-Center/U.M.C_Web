@@ -153,9 +153,9 @@ export default function UserSignup() {
     if (emailValid === 0) return "올바르지 않은 이메일 형식입니다.";
     else if (emailValid === 1 && emailRequest === -1)
       return "이메일 인증을 요청해주세요.";
-    else if (emailRequest === 0) return "이메일 인증에 실패했습니다.";
-    else if (emailRequest === 1) return "이메일 인증을 요청 중입니다.";
-    else if (emailRequest === 2) return "이메일 인증에 성공했습니다.";
+    else if (emailRequest === 0) return "인증 코드 발송을 실패했습니다.";
+    else if (emailRequest === 1) return "인증 코드를 발송 중입니다.";
+    else if (emailRequest === 2) return "인증 코드 발송이 완료되었습니다.";
     else return "";
   };
 
@@ -243,13 +243,13 @@ export default function UserSignup() {
 
   //파트들 정의
   const PartsDummy = [
-    { key: "ANDROID", name: "Android" },
-    { key: "IOS", name: "IOS" },
-    { key: "WEB", name: "Web(React)" },
-    { key: "NODEJS", name: "Server(Node)" },
-    { key: "SPRINGBOOT", name: "Server(Spring)" },
-    { key: "DESIGN", name: "Design" },
     { key: "PLAN", name: "Plan" },
+    { key: "DESIGN", name: "Design" },
+    { key: "ANDROID", name: "Android" },
+    { key: "IOS", name: "iOS" },
+    { key: "WEB", name: "Web" },
+    { key: "SPRINGBOOT", name: "Server(Spring Boot)" },
+    { key: "NODEJS", name: "Server(Node.js)" },
   ];
 
   //전화번호 정규식 및 '-' 자동 추가
@@ -315,7 +315,7 @@ export default function UserSignup() {
   };
 
   return (
-    <div>
+    <>
       <Modal
         isOpen={requestModal}
         onRequestClose={() => setRequestModal(false)}
@@ -551,7 +551,7 @@ export default function UserSignup() {
 
                 {/* 해당 페이지 기능 이외 기능 관련 */}
                 <div className="FormOtherArea">
-                  <span>계정이 있으신가요?</span>
+                  <span style={{ cursor: "default" }}>계정이 있으신가요?</span>
                   <span
                     onClick={() => {
                       navigate("..");
@@ -565,6 +565,6 @@ export default function UserSignup() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
