@@ -170,7 +170,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
+    <>
       <Modal
         isOpen={signupCompleteModalOpen}
         onRequestClose={() => setModalOpen(false)}
@@ -191,7 +191,7 @@ const Home = () => {
           })}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

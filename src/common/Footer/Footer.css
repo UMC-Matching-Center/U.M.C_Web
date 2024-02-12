@@ -1,11 +1,10 @@
 .app__footer {
-  height: 37rem;
+  padding: 8rem 0 6rem 0;
 }
 
 .footer_area {
   box-sizing: border-box;
   width: 120rem;
-  padding: 9.5rem 1.5rem 9.2rem;
   margin: 0 auto;
 }
 
@@ -13,7 +12,7 @@
   box-sizing: border-box;
   width: 100%;
   border-top: 1px solid #cecdd5;
-  padding: 2rem 0 0 0;
+  padding: 2rem 1.5rem 0 1.5rem;
 
   color: #e7e6ea;
   font-family: "KBO-Dia-Gothic";
@@ -30,7 +29,7 @@
 .footer_description {
   box-sizing: border-box;
   width: 100%;
-  padding: 3rem 0 0 0;
+  padding: 3rem 1.5rem 0 1.5rem;
 
   color: #cecdd5;
   font-family: "KBO-Dia-Gothic";
@@ -42,7 +41,7 @@
 .footer_email {
   box-sizing: border-box;
   width: 100%;
-  padding: 2rem 0 0 0;
+  padding: 2rem 1.5rem 0 1.5rem;
 
   color: #9c9aab;
   font-family: "KBO-Dia-Gothic";
@@ -54,7 +53,7 @@
   display: flex;
   box-sizing: border-box;
   width: 100%;
-  padding: 1rem 0 0 0;
+  padding: 1rem 1.5rem 0 1.5rem;
 
   color: #9c9aab;
   font-family: "KBO-Dia-Gothic";
