@@ -464,7 +464,10 @@ function ChallengerList() {
                               $currentTime={data.matchCount}
                               $applyIndex={matchingTeam.round}
                             >
-                              {matchingTeam.round}차 : {matchingTeam.teamName}
+                              {matchingTeam.round === 4
+                                ? "랜덤"
+                                : `${matchingTeam.round}차`}
+                              : {matchingTeam.teamName}
                             </MatchingProject>
                             {selectUser.get(data.memberId).length ===
                               teamIndex + 1 && (

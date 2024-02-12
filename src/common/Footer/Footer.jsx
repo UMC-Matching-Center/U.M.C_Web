@@ -1,8 +1,15 @@
 import React from "react";
 import "./Footer.css";
 import { IconCopyright } from "@tabler/icons-react";
+import { useLocation } from "react-router-dom";
 
 export default function Footer() {
+  const locationNow = useLocation();
+  const pageRoot = locationNow.pathname.split("/")[1];
+
+  // 회원가입 페이지에서는 footer를 보여주지 않음
+  if (pageRoot === "register" || pageRoot === "mypage") return null;
+
   return (
     <div className="app__footer">
       <div className="footer_area">
