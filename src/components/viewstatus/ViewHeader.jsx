@@ -69,7 +69,7 @@ const HeaderBar = styled.div`
   background-color: #9c9aab;
   margin-right: 4.2rem;
   &:nth-child(2) {
-    margin-right: 5.9rem;
+    margin-right: 5.7rem;
   }
 `;
 

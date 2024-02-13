@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Modal from "react-modal";
 import { ViewStatusModal } from "../modal";
-
 //파트 컨테이너
 const PartContainer = styled.div`
   display: flex;
@@ -31,15 +30,17 @@ const Part = styled.div`
 
 //해당 박스 리스트 우측으로 나열 시키기 위한 것
 const AppBoxList = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 2rem;
+  grid-gap: 3.4rem 1rem;
   flex-direction: row;
 `;
 
 //해당 박스 총 컨테이너
 const AppBoxContainer = styled.div`
-  width: 20rem;
+  width: 21.8rem;
   height: 24.3rem;
-  margin: 2rem 4rem 0 0;
 `;
 
 //프로필 하얀색 테두리 컨테이너
@@ -49,7 +50,7 @@ const AppProfileContainer = styled.div`
   background-color: #fafafa;
   border-radius: 42.5rem;
   position: absolute;
-  margin-left: 5.6rem;
+  margin-left: 6.6rem;
 `;
 
 //프로필 파란색 안쪽 박스
@@ -57,7 +58,6 @@ const AppProfileBox = styled.div`
   width: 7.65rem;
   height: 7.65rem;
   position: absolute;
-  background-color: #014171;
   border-radius: 42.5rem;
   position: absolute;
   margin: 0.4rem;
@@ -70,6 +70,8 @@ const ProfileImg = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 42.5rem;
+  background-color: #014171;
 `;
 
 //해당 기본 디펄트 이미지
@@ -103,8 +105,8 @@ const AppBox = styled.div`
   margin-top: 4.3rem;
   display: flex;
   flex-direction: column;
-  width: 20rem;
-  height: 20rem;
+  width: 21.8rem;
+  height: 21.8rem;
   background-color: #fafafa;
   border-radius: 10px;
   align-items: center;
@@ -123,7 +125,14 @@ const NameBox = styled.div`
 
 //학교 칸
 const SchoolBox = styled.div`
-  margin-top: 0.6rem;
+  margin-top: 0.3rem;
+`;
+
+//전화번호 칸
+const PhoneNumBox = styled.div`
+  margin-top: 0.4rem;
+  font-size: 1rem;
+  color: #9c9aab;
 `;
 
 //포트폴리오 칸
@@ -132,7 +141,7 @@ const PortBox = styled.div`
   display: flex;
   font-size: 1.2rem;
   flex-direction: column;
-  margin: 2.4rem 1rem 0 0;
+  margin: 1.8rem 1rem 0 0;
   a {
     text-decoration: none;
     color: inherit;
@@ -167,7 +176,7 @@ const PortArrow = () => (
 const BtnContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top: 1.4rem;
+  margin-top: 1.3rem;
   font-weight: 500;
 `;
 
@@ -179,7 +188,7 @@ const CheckBtn = styled.div`
   background-color: #d62117;
   width: 6.8rem;
   height: 3.2rem;
-  border-radius: 1rem;
+  border-radius: 0.4rem;
   color: #fafafa;
   cursor: pointer;
   &:first-child {
