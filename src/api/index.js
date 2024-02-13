@@ -25,7 +25,11 @@ import {
   scheduleAddAPI,
   scheduleDataAPI
 } from "./scheduleAPI.js";
-
+import {
+  viewAppAPI,
+  appPassAPI,
+  appFailAPI
+} from "./viewstatusAPI.js"
 export {
   loginAPI, // 로그인
   signupAPI, // 회원가입
@@ -46,4 +50,7 @@ export {
   scheduleDeleteAPI,// 일정 삭제 API
   scheduleAddAPI, ///일정 추가 API
   scheduleDataAPI, //일정 조회 API
+  viewAppAPI, //지원 현황보기 API
+  appPassAPI, //지원자 합격 API
+  appFailAPI, //지원자 불합격 API
 };

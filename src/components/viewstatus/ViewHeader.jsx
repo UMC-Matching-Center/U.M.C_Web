@@ -73,33 +73,6 @@ const HeaderBar = styled.div`
   }
 `;
 
-//매칭 예시 리스트
-const TotalMatchingNum = {
-  nowMatchingNum: 10,
-  totalMatchingNum: 20,
-};
-
-//파트 매칭 예시리스트
-const partMatching = [
-  {
-    part: "IOS",
-    matchingNum: 1,
-    totalNum: 2,
-  },
-  {
-    part: "SPRINGBOOT",
-    matchingNum: 5,
-    totalNum: 5,
-  },
-  {
-    part: "NODEJS",
-    matchingNum: 2,
-    totalNum: 2,
-  },
-];
-
-const competitiveRate = 0.56;
-
 //옵션 리스트
 const OptionList = [
   { num: 1, content: "DESIGN", display: "디자이너 매칭 인원" },
@@ -110,16 +83,20 @@ const OptionList = [
   { num: 6, content: "NODEJS", display: "Node.js 매칭 인원" },
 ];
 
-export default function ViewHeader() {
+export default function ViewHeader({
+  totalMatchingDTO,
+  partMatchingDTO,
+  competitionRate,
+}) {
   return (
     <HeaderContainer>
       <TextBox>
         <HeaderTextBox>
-          <HeaderTextBig>{TotalMatchingNum.nowMatchingNum}</HeaderTextBig>
+          <HeaderTextBig>{totalMatchingDTO.nowMatchingNum}</HeaderTextBig>
           <HeaderTextSmall>
             /
             <HeaderTextSmallText>
-              {TotalMatchingNum.totalMatchingNum}
+              {totalMatchingDTO.totalMatchingNum}
             </HeaderTextSmallText>
           </HeaderTextSmall>
         </HeaderTextBox>
@@ -127,12 +104,12 @@ export default function ViewHeader() {
       </TextBox>
       <HeaderBar />
       {OptionList.map((option) => {
-        const filteredPart = partMatching.filter(
+        const filteredPart = partMatchingDTO.filter(
           (parts) => parts.part === option.content
         );
         return (
           filteredPart.length > 0 && (
-            <>
+            <React.Fragment key={option.num}>
               <TextBox>
                 <HeaderTextBox>
                   <HeaderTextBig>{filteredPart[0].matchingNum}</HeaderTextBig>
@@ -145,14 +122,14 @@ export default function ViewHeader() {
                 </HeaderTextBox>
                 <BodyText>{option.display}</BodyText>
               </TextBox>
-            </>
+            </React.Fragment>
           )
         );
       })}
       <HeaderBar />
       <TextBox>
         <HeaderTextBox>
-          <HeaderTextBig>{competitiveRate}</HeaderTextBig>
+          <HeaderTextBig>{competitionRate}</HeaderTextBig>
           <HeaderTextSmall>: 1</HeaderTextSmall>
         </HeaderTextBox>
         <BodyText>지원 경쟁률 </BodyText>

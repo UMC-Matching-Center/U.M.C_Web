@@ -207,50 +207,6 @@ const ModalStyles = {
   },
 };
 
-//해당 데이터 예시
-const Apps = [
-  {
-    name: "루나",
-    nickname: "고라니",
-    university: "INHA",
-    memberPart: "ANDROID",
-    profileImage: null,
-    portFolio: "https://www.naver.com/",
-  },
-  {
-    name: "루크",
-    nickname: "고라니",
-    university: "INHA",
-    memberPart: "IOS",
-    profileImage: null,
-    portFolio: "https://www.naver.com/",
-  },
-  {
-    name: "신구",
-    nickname: "고라니",
-    university: "INHA",
-    memberPart: "SPRINGBOOT",
-    profileImage: null,
-    portFolio: "https://www.naver.com/",
-  },
-  {
-    name: "루카",
-    nickname: "고라니",
-    university: "GACHON",
-    memberPart: "WEB",
-    profileImage: null,
-    portFolio: "https://www.naver.com/",
-  },
-  {
-    name: "코비",
-    nickname: "고라니",
-    university: "GACHON",
-    memberPart: "WEB",
-    profileImage: null,
-    portFolio: "https://www.naver.com/",
-  },
-];
-
 //바디 부분을 위한 옵션 리스트
 const OptionList = [
   { num: 1, content: "DESIGN", display: "Design" },
@@ -261,68 +217,76 @@ const OptionList = [
   { num: 6, content: "NODEJS", display: "Node.js" },
 ];
 
-export default function ViewBody({ selectedOptionIndex }) {
-  const [showModal, setShowModal] = useState(false); //모달 띄우기
+export default function ViewBody({
+  selectedOptionIndex,
+  applicantInfoList,
+  handlePassOrFail,
+  showModal,
+  setShowModal,
+}) {
   const [modalType, setModalType] = useState(null); //합격,불합격 나누기 위한 것
   const [selectedAppName, setSelectedAppName] = useState(null); //AlertModal로 넘겨줄 name 생성
-  const [AppList, setAppList] = useState(Apps); //해당 데이터를 합격 누를 시 해당 값 없애기 위해 존재
+  const [selectedAppId, setSelectedAppId] = useState(null); //Alermodal로 넘겨줄 id 생성
 
   //합격 버튼 눌렀을 때,
-  const handlePass = (name) => {
+  const handlePass = (name, memberId) => {
     setShowModal(true);
     setModalType("합격");
     setSelectedAppName(name);
+    setSelectedAppId(memberId);
   };
 
   //불합격 버튼 눌렀을 때,
-  const handleFail = (name) => {
+  const handleFail = (name, memberId) => {
     setShowModal(true);
     setModalType("불합격");
     setSelectedAppName(name);
+    setSelectedAppId(memberId);
   };
-
-  //해당 모달이 출력되고나서 해당 합격/불합격 버튼을 클릭하고 난 후 처리
-  const handlePassOrFail = (selectedApp) => {
-    setAppList((prevAppList) =>
-      prevAppList.filter((app) => app.name !== selectedApp)
-    );
-    setShowModal(false);
-  };
-
+  const someApps = applicantInfoList.some(
+    (app) => app.memberMatchingStatus === "APPLY"
+  );
   return (
     <>
       {OptionList.map((option, i) => {
-        const filteredApps = AppList.filter(
-          (app) => app.memberPart === option.content
+        const filteredApps = applicantInfoList.filter(
+          (app) =>
+            app.memberPart === option.content &&
+            app.memberMatchingStatus === "APPLY"
         );
 
         const shouldRenderPartContainer =
           filteredApps.length > 0 &&
           (selectedOptionIndex === option.display ||
             selectedOptionIndex === "전체보기");
+        console.log(filteredApps);
 
         return shouldRenderPartContainer ? (
           <PartContainer key={option.num}>
             <Part>{option.display}</Part>
             <AppBoxList>
               {filteredApps.map((app) => (
-                <AppBoxContainer key={app.name}>
+                <AppBoxContainer key={app.memberId}>
                   <AppProfileContainer>
                     <AppProfileBox>
-                      <ProfileImg>
-                        {app.profileImage ? (
-                          app.profileImage
-                        ) : (
-                          <DefaultCardImg />
-                        )}
+                      <ProfileImg
+                        style={{
+                          backgroundImage: `url(${app.profileImage})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center center",
+                        }}
+                      >
+                        {app.profileImage ? null : <DefaultCardImg />}
                       </ProfileImg>
                     </AppProfileBox>
                   </AppProfileContainer>
                   <AppBox>
                     <NameBox>
-                      {app.name} / {app.nickname}
+                      {app.nameNickname.split("/")[0].trim()} /{" "}
+                      {app.nameNickname.split("/")[1].trim()}
                     </NameBox>
                     <SchoolBox>{app.university}</SchoolBox>
+                    <PhoneNumBox>{app.phoneNum}</PhoneNumBox>
                     <PortBox>
                       <a href={app.portFolio}>
                         포트폴리오 보러가기
@@ -330,10 +294,24 @@ export default function ViewBody({ selectedOptionIndex }) {
                       </a>
                     </PortBox>
                     <BtnContainer>
-                      <CheckBtn onClick={() => handlePass(app.name)}>
+                      <CheckBtn
+                        onClick={() =>
+                          handlePass(
+                            app.nameNickname.split("/")[0].trim(),
+                            app.memberId
+                          )
+                        }
+                      >
                         합격
                       </CheckBtn>
-                      <CheckBtn onClick={() => handleFail(app.name)}>
+                      <CheckBtn
+                        onClick={() =>
+                          handleFail(
+                            app.nameNickname.split("/")[0].trim(),
+                            app.memberId
+                          )
+                        }
+                      >
                         불합격
                       </CheckBtn>
                     </BtnContainer>
@@ -345,9 +323,7 @@ export default function ViewBody({ selectedOptionIndex }) {
         ) : (
           filteredApps.length === 0 &&
             (selectedOptionIndex === option.display ||
-              (selectedOptionIndex === "전체보기" &&
-                AppList.length == 0 &&
-                i == 0)) && (
+              (selectedOptionIndex === "전체보기" && !someApps && i == 0)) && (
               <NoPartContainer key={option.num}>
                 해당 파트에 지원한 사람이 없습니다.
               </NoPartContainer>
@@ -364,6 +340,7 @@ export default function ViewBody({ selectedOptionIndex }) {
           modalType={modalType}
           selectedAppName={selectedAppName}
           handlePassOrFail={handlePassOrFail}
+          selectedAppId={selectedAppId}
         />
       </Modal>
     </>
