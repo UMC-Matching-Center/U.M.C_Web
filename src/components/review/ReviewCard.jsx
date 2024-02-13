@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import ReviewStar from "./ReviewStar";
 import ReviewCardDetail from "./ReviewCardDetail";
+import { reviewSaveAPI } from "../../api";
+import { useDispatch, useSelector } from "react-redux";
+import useGetAccessToken from "../../utils/getAccessToken";
+
 //카드 전체 컨테이너
 const CardContainer = styled.div`
   display: flex;
@@ -127,22 +131,52 @@ const CardStarContainer = styled.div`
 `;
 
 export default function ReviewCard({ list, setDataList }) {
+  const dispatch = useDispatch();
+  const accessToken = useGetAccessToken();
+  const { autoLogin } = useSelector((state) => state.userInfo);
+
   const [isReviewMode, setisReviewMode] = useState(false);
 
+  //상호평가 들어가기
   const handleReview = () => {
     setisReviewMode(!isReviewMode);
   };
+
+  //상호 평가 저장
+  const handleSaveReview = (list) => {
+    setisReviewMode(!isReviewMode);
+    const updatedList = {
+      rate: list.rate,
+      content: list.content,
+    };
+    console.log(list.memberId);
+    console.log(updatedList);
+    reviewSaveAPI(
+      accessToken,
+      dispatch,
+      autoLogin,
+      list.memberId,
+      updatedList
+    ).then((response) => {
+      if (response.isSuccess) {
+        console.log("상호 평가 저장 성공");
+      } else {
+        alert(response.message);
+      }
+    });
+  };
+
   return (
     <>
       {isReviewMode ? (
         <ReviewCardDetail
           list={list}
-          handleReview={handleReview}
+          handleSaveReview={handleSaveReview}
           setDataList={setDataList}
           DefaultCardImg={DefaultCardImg}
         />
       ) : (
-        <CardContainer onClick={handleReview}>
+        <CardContainer onClick={() => handleReview()}>
           <CardProfileImgContainer>
             <CardProfileImg>
               {" "}
@@ -152,13 +186,14 @@ export default function ReviewCard({ list, setDataList }) {
           <CardRightContainer>
             <CardDetailContainer>
               <CardDetailName>
-                {list.nickname} / {list.name}
+                {list.nameNickname.split("/")[0].trim()} /
+                {list.nameNickname.split("/")[1].trim()}
               </CardDetailName>
-              <CardDetailPart>{list.part}</CardDetailPart>
-              <CardDetailSchool>{list.school}</CardDetailSchool>
+              <CardDetailPart>{list.memberPart}</CardDetailPart>
+              <CardDetailSchool>{list.university}</CardDetailSchool>
             </CardDetailContainer>
             <CardStarContainer>
-              <ReviewStar reviewstar={list.reviewstar} editOn={false} />
+              <ReviewStar list={list} editOn={false} />
             </CardStarContainer>
           </CardRightContainer>
         </CardContainer>

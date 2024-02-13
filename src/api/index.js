@@ -25,7 +25,10 @@ import {
   scheduleAddAPI,
   scheduleDataAPI
 } from "./scheduleAPI.js";
-
+import {
+  reviewAppAPI,
+  reviewSaveAPI,
+} from "./reviewAPI.js"
 export {
   loginAPI, // 로그인
   signupAPI, // 회원가입
@@ -46,4 +49,6 @@ export {
   scheduleDeleteAPI,// 일정 삭제 API
   scheduleAddAPI, ///일정 추가 API
   scheduleDataAPI, //일정 조회 API
+  reviewAppAPI, //팀원 상호평가 조회 API
+  reviewSaveAPI, //팀원 상호평가 저장 API
 };
