@@ -178,9 +178,14 @@ export default function ReviewCard({ list, setDataList }) {
       ) : (
         <CardContainer onClick={() => handleReview()}>
           <CardProfileImgContainer>
-            <CardProfileImg>
-              {" "}
-              <DefaultCardImg />
+            <CardProfileImg
+              style={{
+                backgroundImage: `url(${list.profileImage})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center center",
+              }}
+            >
+              {list.profileImage ? null : <DefaultCardImg />}
             </CardProfileImg>
           </CardProfileImgContainer>
           <CardRightContainer>

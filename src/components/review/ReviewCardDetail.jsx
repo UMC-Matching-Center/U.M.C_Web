@@ -141,8 +141,14 @@ export default function ReviewCardDetail({
       <DetailContainer>
         <HeadContainer>
           <ImgContainer>
-            <ProfileImg>
-              <DefaultCardImg />
+            <ProfileImg
+              style={{
+                backgroundImage: `url(${list.profileImage})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center center",
+              }}
+            >
+              {list.profileImage ? null : <DefaultCardImg />}
             </ProfileImg>
           </ImgContainer>
           <HeadTitle>{list.memberPart}</HeadTitle>
