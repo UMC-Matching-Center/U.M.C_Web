@@ -40,9 +40,9 @@ const SelectOptions = styled.ul`
   left: -0.1rem;
   padding: 0rem;
   overflow: hidden;
-  max-height: ${(props) => (props.show ? "none" : "0")};
+  max-height: ${(props) => (props.$show ? "none" : "0")};
   border-radius: 0.5rem;
-  border: ${(props) => (props.show ? "0.1rem solid #6b6880" : "none")};
+  border: ${(props) => (props.$show ? "0.1rem solid #6b6880" : "none")};
   background-color: #fafafa;
   color: #010004;
   font-size: 1rem;
@@ -126,7 +126,7 @@ export default function ViewSelect({ setSelectedOptionIndex }) {
   return (
     <SelectBox onClick={() => setIsShowOptions((prev) => !prev)}>
       <Label>{currentValue}</Label>
-      <SelectOptions show={isShowOptions}>
+      <SelectOptions $show={isShowOptions}>
         {optionList.map((option, i) => (
           <Option
             onClick={() => handleOnChangeOption(option.content, i)}
