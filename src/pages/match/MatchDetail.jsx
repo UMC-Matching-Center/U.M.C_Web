@@ -112,7 +112,6 @@ const MatchProjectDetail = () => {
     createAt: [],
   });
   const [apply, setApply] = useState(false);
-  const [applyConfirm, setApplyConfirm] = useState(false);
 
   useEffect(() => {
     if (accessToken !== "") {
@@ -130,8 +129,7 @@ const MatchProjectDetail = () => {
 
   const handleApply = () => {
     /**/
-    setApply(false);
-    setApplyConfirm(true);
+    setApply(true);
   };
 
   return (
@@ -141,7 +139,7 @@ const MatchProjectDetail = () => {
         onRequestClose={() => setApply(false)}
         style={ModalStyles}
       >
-        <Apply isClose={() => setApply(false)} isApply={() => handleApply()} />
+        <Apply isClose={() => setApply(false)} />
       </Modal>
       <ProjectDetail project={data} type={userType} />
       <MatchBar>
@@ -198,9 +196,7 @@ const MatchProjectDetail = () => {
             );
           })}
           {userType === "ROLE_CHALLENGER" && (
-            <button onClick={() => setApply(true)} disabled={applyConfirm}>
-              {applyConfirm ? "지원완료" : "지원하기"}
-            </button>
+            <button onClick={() => handleApply()}>지원하기</button>
           )}
         </div>
       </MatchBar>

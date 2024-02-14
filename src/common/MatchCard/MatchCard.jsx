@@ -111,6 +111,11 @@ const MatchCard = (props) => {
             >
               {(() => {
                 switch (recruit.part) {
+                  case "PLAN":
+                    return (
+                      "Plan " +
+                      (!recruit.recruitmentFinished ? "모집 중" : "모집 완료")
+                    );
                   case "DESIGN":
                     return (
                       "디자이너 " +

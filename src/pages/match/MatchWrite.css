@@ -45,15 +45,19 @@
 .match-write-title {
   padding: 2.4rem;
   border-bottom: 0.1rem solid #6b6880;
-
+  > input {
+    width: 99.6rem;
+  }
+}
+.match-write-subtitle {
+  padding: 2.4rem;
   > input {
     width: 99.6rem;
   }
 }
 
 .match-markdown-content {
-  height: 45.2rem;
-  padding-top: 2.4rem;
+  height: 40.4rem;
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;
@@ -161,9 +165,17 @@ input {
 
 .match-write-title > input {
   font-family: "KBO-Dia-Gothic";
-  font-size: 2.6rem;
   font-weight: 500;
+  font-size: 2.6rem;
+  &::placeholder {
+    color: #9c9aab;
+  }
+}
 
+.match-write-subtitle > input {
+  font-family: "KBO-Dia-Gothic";
+  font-weight: 300;
+  font-size: 1.8rem;
   &::placeholder {
     color: #9c9aab;
   }

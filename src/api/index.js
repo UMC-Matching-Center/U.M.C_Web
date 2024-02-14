@@ -14,6 +14,9 @@ import {
 import {
   matchListAPI,
   matchDetailAPI,
+  matchImageUploadAPI,
+  matchPostUploadAPI,
+  matchPostModifyAPI,
   matchQAListAPI,
   matchQuestionUploadAPI,
   matchQADeleteAPI,
@@ -32,6 +35,9 @@ export {
   adminModifyAPI, // 관리자 정보 수정
   matchListAPI, // 매칭 프로젝트 리스트 정보
   matchDetailAPI, // 매칭 프로젝트 상세 정보
+  matchImageUploadAPI, // 매칭 이미지 업로드
+  matchPostUploadAPI, // 매칭 프로젝트 업로드
+  matchPostModifyAPI, // 매칭 프로젝트 수정
   matchQAListAPI, // 매칭 프로젝트 Q&A 리스트
   matchQuestionUploadAPI, // Q&A 새로운 질문 업로드
   matchQADeleteAPI, // Q&A 삭제

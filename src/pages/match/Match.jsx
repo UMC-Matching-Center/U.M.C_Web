@@ -10,86 +10,6 @@ import MatchDetail from "./MatchDetail";
 import MatchWrite from "./MatchWrite";
 import { TextAreaProvider } from "../../context/TextAreaProvider";
 
-// const projectsDummy = [
-//   {
-//     projectId: 5,
-//     name: "프로젝트 이름",
-//     introduction: "설명",
-//     image: "../../images/sample_project.png",
-//     recruitments: [
-//       {
-//         id: 0,
-//         part: "DESIGN",
-//         recruitmentFinished: true,
-//       },
-//       {
-//         id: 1,
-//         part: "WEB",
-//         recruitmentFinished: false,
-//       },
-//     ],
-//   },
-//   {
-//     projectId: 6,
-//     name: "토스, 새로운 차원의 금융",
-//     introduction: "쉽고 편리한 금융을 넘어 모두의 평등한 금융 경험을 위해",
-//     image: "../../images/sample_project.png",
-//     recruitments: [
-//       {
-//         id: 0,
-//         part: "DESIGN",
-//         recruitmentFinished: true,
-//       },
-//       {
-//         id: 1,
-//         part: "WEB",
-//         recruitmentFinished: false,
-//       },
-//     ],
-//   },
-//   {
-//     projectId: 7,
-//     name: "네이버",
-//     introduction: `새로워진 네이버 앱 참, 쓸데 있는 즐거움.`,
-//     image: "../../images/sample_project.png",
-//     recruitments: [
-//       {
-//         id: 0,
-//         part: "DESIGN",
-//         recruitmentFinished: true,
-//       },
-//       {
-//         id: 1,
-//         part: "WEB",
-//         recruitmentFinished: false,
-//       },
-//       {
-//         id: 2,
-//         part: "SPRINGBOOT",
-//         recruitmentFinished: false,
-//       },
-//     ],
-//   },
-//   {
-//     projectId: 8,
-//     name: "프로젝트 이름",
-//     introduction: "설명",
-//     image: "../../images/sample_project.png",
-//     recruitments: [
-//       {
-//         id: 0,
-//         part: "DESIGN",
-//         recruitmentFinished: true,
-//       },
-//       {
-//         id: 1,
-//         part: "WEB",
-//         recruitmentFinished: false,
-//       },
-//     ],
-//   },
-// ];
-
 const MatchMain = styled.div`
   display: flex;
   flex-direction: column;
@@ -178,11 +98,17 @@ function MatchHome({ type }) {
     <MatchMain>
       {type === "ROLE_PM" && (
         <div className="button_wrap">
-          <button onClick={() => navigate("../new")}>Add</button>
+          <button
+            onClick={() =>
+              navigate("../new", { state: { project: null, mode: "new" } })
+            }
+          >
+            Add
+          </button>
         </div>
       )}
       <MatchList>
-        {data.map((project) => {
+        {data.reverse().map((project) => {
           return (
             <MatchCard
               project={project}
@@ -207,22 +133,14 @@ export default function Match() {
           path="/new"
           exact
           element={
-            userType === "ROLE_PM" ? (
-              <MatchWrite mode="new" />
-            ) : (
-              <Navigate to=".." />
-            )
+            userType === "ROLE_PM" ? <MatchWrite /> : <Navigate to=".." />
           }
         ></Route>
         <Route
           path="/modify"
           exact
           element={
-            userType === "ROLE_PM" ? (
-              <MatchWrite mode="modify" />
-            ) : (
-              <Navigate to=".." />
-            )
+            userType === "ROLE_PM" ? <MatchWrite /> : <Navigate to=".." />
           }
         ></Route>
       </Routes>

@@ -22,7 +22,7 @@ const BangIconArea = styled.div`
   background: url("data:image/svg+xml;base64, ${BangIcon}") no-repeat;
 `;
 
-export default function Apply({ isApply, isClose }) {
+export default function Apply({ isClose }) {
   return (
     <div className="ModalBox">
       <div className="IconCircleBackground">
@@ -37,10 +37,7 @@ export default function Apply({ isApply, isClose }) {
           </div>
           <div className="ModalBtnArea" style={{ margin: "8.5rem 0 0 0" }}>
             <div className="ModalBtnWhite" onClick={isClose}>
-              취소
-            </div>
-            <div className="ModalBtnGreen" onClick={isApply}>
-              지원하기
+              닫기
             </div>
           </div>
         </div>
