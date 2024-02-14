@@ -8,7 +8,7 @@ import ProjectDetail from "../../components/ProjectDetail";
 import MatchQA from "./MatchQA";
 import chat from "../../images/ic_chat.svg";
 import Modal from "react-modal";
-import { Apply } from "../../components/Modal";
+import { Apply } from "../../components/modal";
 import { IconLoader, IconCircleCheck } from "@tabler/icons-react";
 
 const ModalStyles = {
