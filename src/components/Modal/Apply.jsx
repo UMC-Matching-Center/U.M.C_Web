@@ -33,10 +33,14 @@ export default function Apply({ isClose }) {
       <div className="ModalConentBox">
         <div className="MoalContentCenter">
           <div className="ModalInfo" style={{ margin: "11.5rem 0 0 0" }}>
-            해당 프로젝트에 지원하시겠습니까?
+            지원이 완료되었습니다.
           </div>
           <div className="ModalBtnArea" style={{ margin: "8.5rem 0 0 0" }}>
-            <div className="ModalBtnWhite" onClick={isClose}>
+            <div
+              className="ModalBtnGreen"
+              onClick={isClose}
+              style={{ margin: "0 auto" }}
+            >
               닫기
             </div>
           </div>
