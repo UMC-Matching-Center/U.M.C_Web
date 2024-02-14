@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import Card from "../common/Card/Card";
-import { SignupComplete } from "../components/Modal";
+import { SignupComplete } from "../components/modal";
 import "./Home.css";
 import { useDispatch, useSelector } from "react-redux";
 import { SIGNUP_COMPLETE } from "../modules/signupState";

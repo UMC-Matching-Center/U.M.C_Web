@@ -10,7 +10,7 @@ import {
 } from "../../api";
 import useGetAccessToken from "../../utils/getAccessToken";
 import Modal from "react-modal";
-import { Logout, Withdraw } from "../../components/Modal";
+import { Logout, Withdraw } from "../../components/modal";
 import { removeCookieToken } from "../../utils/cookies";
 import { persistor } from "../../index";
 

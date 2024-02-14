@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 import { myPageDataAPI, adminModifyAPI } from "../../api";
 import useGetAccessToken from "../../utils/getAccessToken";
 import Modal from "react-modal";
-import { Logout } from "../../components/Modal";
+import { Logout } from "../../components/modal";
 import { removeCookieToken } from "../../utils/cookies";
 import { persistor } from "../../index";
 
