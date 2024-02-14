@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: calc(100% - 41.8rem);
+  min-height: calc(100% - 38rem);
 }
 
 .Container {
@@ -37,6 +37,7 @@
   padding: 9.1rem 0 0 8rem;
   width: 50%;
   height: 100%;
+  cursor: default;
 }
 
 /* --------- */

@@ -286,7 +286,7 @@ const AdminInfo = () => {
       myPageDataAPI(accessToken, dispatch, autoLogin).then((response) => {
         if (response.isSuccess) {
           setProfileImageURL(response.profileImage);
-          setNicknameName(response.nicknameName);
+          setNicknameName(`${response.nickname} / ${response.name}`);
           setEmail(response.email);
           setOffice(response.office);
           setPhoneNumber(

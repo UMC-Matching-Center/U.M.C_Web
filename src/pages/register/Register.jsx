@@ -35,8 +35,7 @@ function Login() {
   const dispatch = useDispatch();
 
   //로그인 정보 일치 확인 여부
-  const handleLogin = (e) => {
-    e.preventDefault();
+  const handleLogin = () => {
     //로그인 API 호출
     loginAPI(id, pw, autoLogin, dispatch).then((response) => {
       if (response.isSuccess) {
@@ -104,11 +103,20 @@ function Login() {
                   placeholder="비밀번호"
                   value={pw}
                   onChange={(e) => setPw(e.target.value)}
+                  onKeyDown={(e) => (e.key === "Enter" ? handleLogin() : null)}
                 />
                 {!pwVisible ? (
-                  <IconEyeOff className="PasswordEye" onClick={toggleVisible} />
+                  <IconEyeOff
+                    className="PasswordEye"
+                    onClick={toggleVisible}
+                    style={{ cursor: "pointer" }}
+                  />
                 ) : (
-                  <IconEye className="PasswordEye" onClick={toggleVisible} />
+                  <IconEye
+                    className="PasswordEye"
+                    onClick={toggleVisible}
+                    style={{ cursor: "pointer" }}
+                  />
                 )}
               </PwArea>
               <div
@@ -140,10 +148,13 @@ function Login() {
                     <IconSquare
                       htmlFor="autoLogin"
                       className="FormCheckCustom"
+                      style={{ cursor: "pointer" }}
                     />
                   )}
                 </label>
-                <span style={{ marginRight: "4.3rem" }}>자동 로그인</span>
+                <span style={{ marginRight: "4.3rem", cursor: "default" }}>
+                  자동 로그인
+                </span>
               </div>
 
               {/* 로그인 버튼 관련 */}

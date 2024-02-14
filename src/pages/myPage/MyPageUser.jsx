@@ -271,7 +271,7 @@ const UserInfo = () => {
       myPageDataAPI(accessToken, dispatch, autoLogin).then((response) => {
         if (response.isSuccess) {
           setProfileImageURL(response.profileImage);
-          setNicknameName(response.nicknameName);
+          setNicknameName(`${response.nickname} / ${response.name}`);
           setEmail(response.email);
           setUniversity(response.university);
           setgeneration(response.generation);
