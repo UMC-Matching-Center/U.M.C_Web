@@ -47,7 +47,8 @@ const AlarmDummy = [
 ];
 
 const UserNavMenuItem = styled.div`
-  height: 3.4rem;
+  height: 100%;
+  line-height: 2;
   display: flex;
   justify-content: center;
 
@@ -81,7 +82,7 @@ const UserNavMenuItem = styled.div`
 `;
 
 const SubMenuWrapper = styled.div`
-  padding-top: 1.8rem;
+  padding-top: 0.4rem;
   position: absolute;
   top: 9rem;
   display: none;

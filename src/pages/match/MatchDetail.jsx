@@ -1,34 +1,29 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route, useParams, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import useGetAccessToken from "../../utils/getAccessToken";
+import { matchDetailAPI } from "../../api";
 import styled from "styled-components";
 import ProjectDetail from "../../components/ProjectDetail";
 import MatchQA from "./MatchQA";
 import chat from "../../images/ic_chat.svg";
+import Modal from "react-modal";
+import { Apply } from "../../components/modal";
 import { IconLoader, IconCircleCheck } from "@tabler/icons-react";
 
-const DATA = {
-  idx: 0,
-  name: "프로젝트이름",
-  image: "string",
-  introduction: "string",
-  body: "string",
-  recruitments: [
-    {
-      id: 0,
-      part: "DESIGN",
-      recruitmentFinished: true,
-    },
-    {
-      id: 1,
-      part: "WEB",
-      recruitmentFinished: false,
-    },
-    {
-      id: 2,
-      part: "SPRINGBOOT",
-      recruitmentFinished: false,
-    },
-  ],
+const ModalStyles = {
+  overlay: { width: "100vw", background: "rgba(2, 1, 11, 0.5)", zIndex: "1" },
+  content: {
+    width: "56.5rem",
+    height: "35rem",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    padding: "0",
+    background: "none",
+    border: "none",
+  },
 };
 
 const MatchBar = styled.div`
@@ -101,37 +96,72 @@ const RecruitBadge = styled.div`
 
 const MatchProjectDetail = () => {
   const { id } = useParams();
-  const navigation = useNavigate();
-  const user = { type: "ROLE_PLAN" };
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const accessToken = useGetAccessToken();
+  const { userType, autoLogin } = useSelector((state) => state.userInfo);
+  const [data, setData] = useState({
+    projectId: null,
+    pmId: null,
+    name: "",
+    image: null,
+    introduction: "",
+    body: ``,
+    recruitments: [],
+    members: [],
+    createAt: [],
+  });
+  const [apply, setApply] = useState(false);
 
   useEffect(() => {
-    /*API: 프로젝트 id값 통해 해당 프로젝트 데이터(DATA) 받아오기*/
-    console.log(id);
+    if (accessToken !== "") {
+      matchDetailAPI(accessToken, dispatch, autoLogin, id).then((response) => {
+        if (response.isSuccess) {
+          setData(response.project);
+        } else {
+          alert(response.message);
+        }
+      });
+    } else {
+      navigate("/login", { replace: true }); // 메인 페이지로 이동
+    }
   }, []);
 
-  const ApplyProject = () => {
-    /*지원 하시겠습니까 모달 창 오픈?*/
+  const handleApply = () => {
+    /**/
+    setApply(true);
   };
 
   return (
     <>
-      <ProjectDetail project={DATA} type={user.type} />
+      <Modal
+        isOpen={apply}
+        onRequestClose={() => setApply(false)}
+        style={ModalStyles}
+      >
+        <Apply isClose={() => setApply(false)} />
+      </Modal>
+      <ProjectDetail project={data} type={userType} />
       <MatchBar>
         <div className="match-question">
           <div
             className="match-question-circle"
-            onClick={() => navigation(window.location.pathname + "/question")}
+            onClick={() =>
+              navigate(window.location.pathname + `/question`, {
+                state: { id: id },
+              })
+            }
           >
             <img src={chat} alt="chat-icon" />
             <span>Q&A</span>
           </div>
         </div>
         <div className="match-recruit-bar">
-          {DATA.recruitments.map((recruit) => {
+          {data?.recruitments.map((recruit) => {
             return (
               <>
                 <RecruitBadge
-                  key={recruit.idx}
+                  key={recruit.id}
                   $background={
                     !recruit.recruitmentFinished ? "#CCE6F9" : "#D9D9D9"
                   }
@@ -145,6 +175,12 @@ const MatchProjectDetail = () => {
                         return "디자이너 ";
                       case "SPRINGBOOT":
                         return "서버 개발자(Spring Boot) ";
+                      case "NODEJS":
+                        return "서버 개발자(Node js) ";
+                      case "ANDROID":
+                        return "앱 개발자(Android) ";
+                      case "IOS":
+                        return "앱 개발자(iOS) ";
                       default:
                         return "";
                     }
@@ -159,8 +195,8 @@ const MatchProjectDetail = () => {
               </>
             );
           })}
-          {user.type === "ROLE_CHALLENGER" && (
-            <button onClick={ApplyProject}>지원하기</button>
+          {userType === "ROLE_CHALLENGER" && (
+            <button onClick={() => handleApply()}>지원하기</button>
           )}
         </div>
       </MatchBar>

@@ -30,6 +30,18 @@ import {
   appPassAPI,
   appFailAPI
 } from "./viewstatusAPI.js"
+import {
+  matchListAPI,
+  matchDetailAPI,
+  matchImageUploadAPI,
+  matchPostUploadAPI,
+  matchPostModifyAPI,
+  matchQAListAPI,
+  matchQuestionUploadAPI,
+  matchQADeleteAPI,
+  matchAnswerUploadAPI,
+} from "./matchAPI.js";
+
 export {
   loginAPI, // 로그인
   signupAPI, // 회원가입
@@ -53,4 +65,13 @@ export {
   viewAppAPI, //지원 현황보기 API
   appPassAPI, //지원자 합격 API
   appFailAPI, //지원자 불합격 API
+  matchListAPI, // 매칭 프로젝트 리스트 정보
+  matchDetailAPI, // 매칭 프로젝트 상세 정보
+  matchImageUploadAPI, // 매칭 이미지 업로드
+  matchPostUploadAPI, // 매칭 프로젝트 업로드
+  matchPostModifyAPI, // 매칭 프로젝트 수정
+  matchQAListAPI, // 매칭 프로젝트 Q&A 리스트
+  matchQuestionUploadAPI, // Q&A 새로운 질문 업로드
+  matchQADeleteAPI, // Q&A 삭제
+  matchAnswerUploadAPI, // Q&A 새로운 답변 등록
 };
