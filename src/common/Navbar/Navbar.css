@@ -36,6 +36,11 @@
     font-family: KBO-Dia-Gothic;
     font-weight: 300;
     cursor: pointer;
+
+    &:hover {
+      background-color: #0261aa80;
+      border: none;
+    }
   }
 
   .icon-bg {

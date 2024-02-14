@@ -130,7 +130,7 @@ export default function DotAddOptions({
       <Label>
         {
           <StyledSVG>
-            <circle cx="7.5" cy="7.5" r="7.5" fill={formData.color} />
+            <circle cx="7.5" cy="7.5" r="7.5" fill={formData.scheduleColor} />
           </StyledSVG>
         }
       </Label>
@@ -139,11 +139,11 @@ export default function DotAddOptions({
           <Option
             onClick={() => handleColorChange(option.value)}
             key={option.value}
-            style={option.value === formData.color ? { backgroundColor: "#FAFAFA" } : {}}
+            style={option.value === formData.scheduleColor ? { backgroundColor: "#FAFAFA" } : {}}
             >
             <OptionBox>
               <OptionContents>{option.content}</OptionContents>
-              {option.value == formData.color && (
+              {option.value == formData.scheduleColor && (
                 <StyledFrameImg>{FrameImg()}</StyledFrameImg>
               )}
             </OptionBox>

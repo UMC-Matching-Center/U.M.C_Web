@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100% - 52rem);
+  min-height: calc(100% - 38rem);
 }
 
 .boxWrapper {

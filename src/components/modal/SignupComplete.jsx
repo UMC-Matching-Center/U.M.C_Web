@@ -34,8 +34,8 @@ const ModalCloseArea = styled.div`
   position: absolute;
   width: 2.4rem;
   height: 2.4rem;
-  top: 0.5rem;
-  right: 0.5rem;
+  top: 1.5rem;
+  right: 1.5rem;
   cursor: pointer;
   background: url("data:image/svg+xml;base64, ${ModalCloseIcon}") no-repeat;
 `;
