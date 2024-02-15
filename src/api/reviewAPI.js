@@ -6,7 +6,7 @@ export const reviewAppAPI = async (accessToken, dispatch, autoLogin) => {
   const response = {
     isSuccess: false, //API 성공 여부
     message: "", //API 메시지
-    reviewDataList : [], //데이터리스트
+    reviewDataList: [], //데이터리스트
   };
 
   //매칭 일정
@@ -21,11 +21,12 @@ export const reviewAppAPI = async (accessToken, dispatch, autoLogin) => {
     }
   } catch (err) {
     response.isSuccess = false;
-    if (err.response && err.response.data.code === "EVALUATION4003") {
-      response.message = err.response.data.message;
-    } else if (err.response && err.response.data.code === "EVALUATION4002") {
-      response.message = err.response.data.message;
-    } else if (err.response && err.response.data.code === "EVALUATION4001") {
+    if (
+      err.response &&
+      (err.response.data.code === "EVALUATION4003" ||
+        err.response.data.code === "EVALUATION4002" ||
+        err.response.data.code === "EVALUATION4001")
+    ) {
       response.message = err.response.data.message;
     } else {
       response.message = "알 수 없는 오류가 발생했습니다. 다시 시도해주세요.";
@@ -51,7 +52,8 @@ export const reviewSaveAPI = async (
 
   try {
     const { data } = await privateAxios(accessToken, dispatch, autoLogin).post(
-      `/evaluation/save/${memberId}`,memeberData
+      `/evaluation/save/${memberId}`,
+      memeberData
     );
     if (data.code === "COMMON200") {
       response.isSuccess = true;
@@ -59,11 +61,12 @@ export const reviewSaveAPI = async (
     }
   } catch (err) {
     response.isSuccess = false;
-    if (err.response && err.response.data.code === "EVALUATION4003") {
-      response.message = err.response.data.message;
-    } else if (err.response && err.response.data.code === "EVALUATION4002") {
-      response.message = err.response.data.message;
-    } else if (err.response && err.response.data.code === "EVALUATION4001") {
+    if (
+      err.response &&
+      (err.response.data.code === "EVALUATION4003" ||
+        err.response.data.code === "EVALUATION4002" ||
+        err.response.data.code === "EVALUATION4001")
+    ) {
       response.message = err.response.data.message;
     } else {
       response.message =
