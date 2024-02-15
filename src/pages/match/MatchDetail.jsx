@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Routes, Route, useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import useGetAccessToken from "../../utils/getAccessToken";
-import { matchDetailAPI } from "../../api";
+import { matchDetailAPI, matchApplyAPI } from "../../api";
 import styled from "styled-components";
 import ProjectDetail from "../../components/ProjectDetail";
 import MatchQA from "./MatchQA";
 import chat from "../../images/ic_chat.svg";
 import Modal from "react-modal";
-import { Apply } from "../../components/modal";
+import { Apply, ApplyError } from "../../components/modal";
 import { IconLoader, IconCircleCheck } from "@tabler/icons-react";
 
 const ModalStyles = {
@@ -94,6 +94,8 @@ const RecruitBadge = styled.div`
   font-family: KBO-Dia-Gothic;
 `;
 
+Modal.setAppElement("#root");
+
 const MatchProjectDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -112,6 +114,8 @@ const MatchProjectDetail = () => {
     createAt: [],
   });
   const [apply, setApply] = useState(false);
+  const [applyError, setApplyError] = useState(false);
+  const [errMessage, setErrMessage] = useState("");
 
   useEffect(() => {
     if (accessToken !== "") {
@@ -128,8 +132,18 @@ const MatchProjectDetail = () => {
   }, []);
 
   const handleApply = () => {
-    /**/
-    setApply(true);
+    if (accessToken !== "") {
+      matchApplyAPI(accessToken, dispatch, autoLogin, id).then((response) => {
+        if (response.isSuccess) {
+          setApply(true);
+        } else {
+          setErrMessage(response.message); // 에러 메시지 정의
+          setApplyError(true); // 에러 모달 띄우기
+        }
+      });
+    } else {
+      navigate("/login", { replace: true });
+    }
   };
 
   return (
@@ -140,6 +154,13 @@ const MatchProjectDetail = () => {
         style={ModalStyles}
       >
         <Apply isClose={() => setApply(false)} />
+      </Modal>
+      <Modal
+        isOpen={applyError}
+        onRequestClose={() => setApplyError(false)}
+        style={ModalStyles}
+      >
+        <ApplyError isClose={() => setApplyError(false)} message={errMessage} />
       </Modal>
       <ProjectDetail project={data} type={userType} />
       <MatchBar>
