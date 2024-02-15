@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Link, useNavigate, Outlet } from "react-router-dom";
+import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
 import { IconPin, IconBell, IconUser } from "@tabler/icons-react";
 
 import Logo from "../../images/logo_crop.svg";
@@ -111,6 +111,8 @@ const SubMenuItem = styled(UserNavMenuItem)`
 
 const AdminNavbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [activePath, setActivePath] = useState("");
 
   /*읽지 않은 알람이 존재하는 지 여부*/
   const [aliveAlarm, setAliveAlarm] = useState(true);
@@ -118,13 +120,6 @@ const AdminNavbar = () => {
   const [isViewModal, setIsViewModal] = useState(false);
   /*각 알림을 읽었는지를 나타내는 bluecircle 표시 = is_confirmed*/
   const [alarmContent, setAlarmContent] = useState(AlarmDummy);
-
-  /*선택된 메뉴 표시*/
-  const [selectIndex, setSelectIndex] = useState(0);
-  const handleNavIndex = (idx) => {
-    setIsViewModal(false);
-    setSelectIndex(idx);
-  };
 
   /*알림창 클릭 이벤트*/
   const handleIconBellClick = () => {
@@ -151,76 +146,48 @@ const AdminNavbar = () => {
     }
   };
 
+  useEffect(() => {
+    setActivePath(location.pathname.split("/")[1]);
+    setIsViewModal(false);
+  }, [location]);
+
   return (
     <>
       <div className="app__nav">
         <div className="nav_area">
           <div className="nav_logo">
             <Link to="/challenger/manage">
-              <img
-                src={Logo}
-                onClick={() => {
-                  handleNavIndex(0);
-                }}
-              />
+              <img src={Logo} />
             </Link>
           </div>
           <ul className="nav_center">
-            <UserNavMenuItem className={`${selectIndex === 0 && "active"}`}>
-              <Link
-                to="/challenger/manage"
-                onClick={() => {
-                  handleNavIndex(0);
-                }}
-                title="Challenger"
-              >
+            <UserNavMenuItem
+              className={`${activePath === "challenger" && "active"}`}
+            >
+              <Link to="/challenger/manage" title="Challenger">
                 Challenger
               </Link>
               <SubMenuWrapper>
                 <SubMenuItem>
-                  <Link
-                    to="/challenger/manage"
-                    onClick={() => {
-                      handleNavIndex(0);
-                    }}
-                  >
-                    챌린저 관리
-                  </Link>
+                  <Link to="/challenger/manage">챌린저 관리</Link>
                 </SubMenuItem>
                 <SubMenuItem>
-                  <Link
-                    to="/challenger/new"
-                    onClick={() => {
-                      handleNavIndex(0);
-                    }}
-                  >
-                    신규 챌린저
-                  </Link>
+                  <Link to="/challenger/new">신규 챌린저</Link>
                 </SubMenuItem>
               </SubMenuWrapper>
             </UserNavMenuItem>
             <UserNavMenuItem
-              className={`${selectIndex === 1 && "active"}`}
+              className={`${activePath === "schedule" && "active"}`}
               style={{ margin: "0 3.1rem" }}
             >
-              <Link
-                to="/schedule"
-                onClick={() => {
-                  handleNavIndex(1);
-                }}
-                title="Schedule"
-              >
+              <Link to="/schedule" title="Schedule">
                 Schedule
               </Link>
             </UserNavMenuItem>
-            <UserNavMenuItem className={`${selectIndex === 2 && "active"}`}>
-              <Link
-                to="/matching"
-                onClick={() => {
-                  handleNavIndex(2);
-                }}
-                title="Matching"
-              >
+            <UserNavMenuItem
+              className={`${activePath === "match" && "active"}`}
+            >
+              <Link to="/match" title="Matching">
                 Matching
               </Link>
             </UserNavMenuItem>
@@ -229,16 +196,15 @@ const AdminNavbar = () => {
             <div
               className="icon-bg"
               style={{
-                background: selectIndex === 3 && "#0261AA",
+                background: activePath === "notice" && "#0261AA",
               }}
             >
               <IconPin
-                strokeWidth={selectIndex === 3 ? 1.5 : 1}
+                strokeWidth={activePath === "notice" ? 1.5 : 1}
                 color={"#cecdd5"}
                 size={36}
                 onClick={() => {
                   navigate("/notice");
-                  handleNavIndex(3);
                 }}
               />
             </div>
@@ -262,22 +228,21 @@ const AdminNavbar = () => {
                 isViewModal={isViewModal}
                 deleteAlarm={deleteAlarm}
                 alarmContent={alarmContent}
-                handleNavIndex={handleNavIndex}
                 handleIconBellClick={handleIconBellClick}
               />
             </div>
             <div
               className="icon-bg"
               style={{
-                background: selectIndex === 5 && "#0261AA",
+                background: activePath === "mypage" && "#0261AA",
               }}
             >
               <IconUser
-                strokeWidth={selectIndex === 5 ? 1.5 : 1}
+                strokeWidth={activePath === "mypage" ? 1.5 : 1}
                 color={"#cecdd5"}
                 size={36}
                 onClick={() => {
-                  navigate("/mypage"), handleNavIndex(5);
+                  navigate("/mypage");
                 }}
               />
             </div>

@@ -23,17 +23,14 @@ import {
   scheduleEditAPI,
   scheduleDeleteAPI,
   scheduleAddAPI,
-  scheduleDataAPI
+  scheduleDataAPI,
 } from "./scheduleAPI.js";
-import {
-  viewAppAPI,
-  appPassAPI,
-  appFailAPI
-} from "./viewstatusAPI.js"
+import { viewAppAPI, appPassAPI, appFailAPI } from "./viewstatusAPI.js";
 import {
   matchListAPI,
   matchDetailAPI,
   matchImageUploadAPI,
+  matchApplyAPI,
   matchPostUploadAPI,
   matchPostModifyAPI,
   matchQAListAPI,
@@ -59,7 +56,7 @@ export {
   signupAcceptAPI, //챌린저 신청 승인
   signupRejectAPI, // 챌린저 신청 거절
   scheduleEditAPI, //일정 수정 API
-  scheduleDeleteAPI,// 일정 삭제 API
+  scheduleDeleteAPI, // 일정 삭제 API
   scheduleAddAPI, ///일정 추가 API
   scheduleDataAPI, //일정 조회 API
   viewAppAPI, //지원 현황보기 API
@@ -68,6 +65,7 @@ export {
   matchListAPI, // 매칭 프로젝트 리스트 정보
   matchDetailAPI, // 매칭 프로젝트 상세 정보
   matchImageUploadAPI, // 매칭 이미지 업로드
+  matchApplyAPI, // 매칭 프로젝트 지원하기
   matchPostUploadAPI, // 매칭 프로젝트 업로드
   matchPostModifyAPI, // 매칭 프로젝트 수정
   matchQAListAPI, // 매칭 프로젝트 Q&A 리스트

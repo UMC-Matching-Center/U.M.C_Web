@@ -21,9 +21,9 @@ export const matchListAPI = async (accessToken, dispatch, autoLogin, page) => {
     response.isSuccess = false;
     if (
       err.response &&
-      err.response.data.code === "AUTH006" &&
-      err.response.data.code === "AUTH004" &&
-      err.response.data.code === "AUTH003"
+      (err.response.data.code === "AUTH006" ||
+        err.response.data.code === "AUTH004" ||
+        err.response.data.code === "AUTH003")
     ) {
       response.message = err.response.data.message;
     } else {
@@ -55,9 +55,9 @@ export const matchDetailAPI = async (accessToken, dispatch, autoLogin, id) => {
     response.isSuccess = false;
     if (
       err.response &&
-      err.response.data.code === "AUTH006" &&
-      err.response.data.code === "AUTH004" &&
-      err.response.data.code === "AUTH003"
+      (err.response.data.code === "AUTH006" ||
+        err.response.data.code === "AUTH004" ||
+        err.response.data.code === "AUTH003")
     ) {
       response.message = err.response.data.message;
     } else {
@@ -106,6 +106,36 @@ export const matchImageUploadAPI = async (
   return response;
 };
 
+// 지원하기
+export const matchApplyAPI = async (accessToken, dispatch, autoLogin, id) => {
+  const response = {
+    isSuccess: false, //API 성공 여부
+    message: "", //API 메시지,
+  };
+
+  try {
+    const { data } = await privateAxios(accessToken, dispatch, autoLogin).post(
+      `/apply/${id}`
+    );
+    if (data.code === "COMMON200") {
+      response.isSuccess = true;
+      response.message = data.message;
+    }
+  } catch (err) {
+    response.isSuccess = false;
+    if (
+      err.response &&
+      (err.response.data.code === "APPLY4002" ||
+        err.response.data.code === "APPLY4001")
+    ) {
+      response.message = err.response.data.message;
+    } else {
+      response.message = "알 수 없는 오류가 발생했습니다. 다시 시도해주세요.";
+    }
+  }
+  return response;
+};
+
 // 생성
 export const matchPostUploadAPI = async (
   accessToken,
@@ -134,9 +164,9 @@ export const matchPostUploadAPI = async (
     response.isSuccess = false;
     if (
       err.response &&
-      err.response.data.code === "AUTH003" &&
-      err.response.data.code === "AUTH004" &&
-      err.response.data.code === "AUTH006"
+      (err.response.data.code === "AUTH003" ||
+        err.response.data.code === "AUTH004" ||
+        err.response.data.code === "AUTH006")
     ) {
       response.message = err.response.data.message;
     } else {
@@ -174,9 +204,9 @@ export const matchPostModifyAPI = async (
     response.isSuccess = false;
     if (
       err.response &&
-      err.response.data.code === "AUTH003" &&
-      err.response.data.code === "AUTH004" &&
-      err.response.data.code === "AUTH006"
+      (err.response.data.code === "AUTH003" ||
+        err.response.data.code === "AUTH004" ||
+        err.response.data.code === "AUTH006")
     ) {
       response.message = err.response.data.message;
     } else {
@@ -214,9 +244,9 @@ export const matchQAListAPI = async (
     response.isSuccess = false;
     if (
       err.response &&
-      err.response.data.code === "JWT4001" &&
-      err.response.data.code === "MEMBER4001" &&
-      err.response.data.code === "JWT4002"
+      (err.response.data.code === "JWT4001" ||
+        err.response.data.code === "MEMBER4001" ||
+        err.response.data.code === "JWT4002")
     ) {
       response.message = err.response.data.message;
     } else {
@@ -254,9 +284,9 @@ export const matchQuestionUploadAPI = async (
     response.isSuccess = false;
     if (
       err.response &&
-      err.response.data.code === "JWT4001" &&
-      err.response.data.code === "MEMBER4001" &&
-      err.response.data.code === "JWT4002"
+      (err.response.data.code === "JWT4001" ||
+        err.response.data.code === "MEMBER4001" ||
+        err.response.data.code === "JWT4002")
     ) {
       response.message = err.response.data.message;
     } else {
@@ -294,9 +324,9 @@ export const matchQADeleteAPI = async (
     response.isSuccess = false;
     if (
       err.response &&
-      err.response.data.code === "JWT4001" &&
-      err.response.data.code === "MEMBER4001" &&
-      err.response.data.code === "JWT4002"
+      (err.response.data.code === "JWT4001" ||
+        err.response.data.code === "MEMBER4001" ||
+        err.response.data.code === "JWT4002")
     ) {
       response.message = err.response.data.message;
     } else {
@@ -332,9 +362,9 @@ export const matchAnswerUploadAPI = async (
     response.isSuccess = false;
     if (
       err.response &&
-      err.response.data.code === "JWT4001" &&
-      err.response.data.code === "MEMBER4001" &&
-      err.response.data.code === "JWT4002"
+      (err.response.data.code === "JWT4001" ||
+        err.response.data.code === "MEMBER4001" ||
+        err.response.data.code === "JWT4002")
     ) {
       response.message = err.response.data.message;
     } else {
