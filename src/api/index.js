@@ -42,6 +42,7 @@ import {
   matchQADeleteAPI,
   matchAnswerUploadAPI,
 } from "./matchAPI.js";
+import { obProjectListAPI, obProjectDetailAPI } from "./obProjectAPI.js";
 
 export {
   loginAPI, // 로그인
@@ -78,4 +79,6 @@ export {
   matchQuestionUploadAPI, // Q&A 새로운 질문 업로드
   matchQADeleteAPI, // Q&A 삭제
   matchAnswerUploadAPI, // Q&A 새로운 답변 등록
+  obProjectListAPI, // OB 프로젝트 리스트 조회
+  obProjectDetailAPI, // OB 프로젝트 상세 조회
 };
