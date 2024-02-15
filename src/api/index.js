@@ -23,13 +23,9 @@ import {
   scheduleEditAPI,
   scheduleDeleteAPI,
   scheduleAddAPI,
-  scheduleDataAPI
+  scheduleDataAPI,
 } from "./scheduleAPI.js";
-import {
-  viewAppAPI,
-  appPassAPI,
-  appFailAPI
-} from "./viewstatusAPI.js"
+import { viewAppAPI, appPassAPI, appFailAPI } from "./viewstatusAPI.js";
 import {
   matchListAPI,
   matchDetailAPI,
@@ -41,6 +37,7 @@ import {
   matchQADeleteAPI,
   matchAnswerUploadAPI,
 } from "./matchAPI.js";
+import { obProjectListAPI, obProjectDetailAPI } from "./obProjectAPI.js";
 
 export {
   loginAPI, // 로그인
@@ -59,7 +56,7 @@ export {
   signupAcceptAPI, //챌린저 신청 승인
   signupRejectAPI, // 챌린저 신청 거절
   scheduleEditAPI, //일정 수정 API
-  scheduleDeleteAPI,// 일정 삭제 API
+  scheduleDeleteAPI, // 일정 삭제 API
   scheduleAddAPI, ///일정 추가 API
   scheduleDataAPI, //일정 조회 API
   viewAppAPI, //지원 현황보기 API
@@ -74,4 +71,6 @@ export {
   matchQuestionUploadAPI, // Q&A 새로운 질문 업로드
   matchQADeleteAPI, // Q&A 삭제
   matchAnswerUploadAPI, // Q&A 새로운 답변 등록
+  obProjectListAPI, // OB 프로젝트 리스트 조회
+  obProjectDetailAPI, // OB 프로젝트 상세 조회
 };
