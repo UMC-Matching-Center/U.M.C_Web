@@ -21,7 +21,6 @@ import "./MatchWrite.css";
 
 // 지부 option들 정의
 const partOptionsDummy = [
-  { value: "PLAN", name: "Plan" },
   { value: "DESIGN", name: "디자이너" },
   { value: "ANDROID", name: "Android" },
   { value: "IOS", name: "iOS" },
