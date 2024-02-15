@@ -77,7 +77,7 @@ const createPrivateAxios = (accessToken, dispatch, autoLogin) => {
       } else {
         console.log("OriginRequst Error:\n", error);
       }
-      return error;
+      throw error;
     }
   );
 

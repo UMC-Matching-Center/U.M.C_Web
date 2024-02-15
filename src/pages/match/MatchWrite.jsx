@@ -21,7 +21,6 @@ import "./MatchWrite.css";
 
 // 지부 option들 정의
 const partOptionsDummy = [
-  { value: "PLAN", name: "Plan" },
   { value: "DESIGN", name: "디자이너" },
   { value: "ANDROID", name: "Android" },
   { value: "IOS", name: "iOS" },
@@ -195,13 +194,10 @@ const MatchWrite = () => {
         imageIdList: images,
       };
 
-      console.log(postData);
       if (accessToken !== "") {
         matchPostUploadAPI(accessToken, dispatch, autoLogin, postData).then(
           (response) => {
             if (response.isSuccess) {
-              console.log(`${response.title}이 업로드 되었습니다.`);
-
               clearMatchImage();
               updateMatchText("");
             }
@@ -211,7 +207,6 @@ const MatchWrite = () => {
       }
     } else if (mode === "modify") {
       // modify the matching project
-      console.log(matchImage);
       // 파트
       const partCounts = {}; // part {}
       recruits.forEach((recruit) => {
@@ -253,8 +248,6 @@ const MatchWrite = () => {
         deleteImageIdList: deleteImageList,
       };
 
-      console.log(postData);
-
       // API 작성
       if (accessToken !== "") {
         matchPostModifyAPI(
@@ -265,7 +258,6 @@ const MatchWrite = () => {
           postData
         ).then((response) => {
           if (response.isSuccess) {
-            console.log(`수정완료:${response.message}`);
             clearMatchImage();
             updateMatchText("");
           }
@@ -277,7 +269,6 @@ const MatchWrite = () => {
 
   /* 수정 시, 저장된 값 가져오기 */
   useEffect(() => {
-    console.log(matchImage);
     if (project && mode === "modify") {
       const newRecruits = project.recruitments.map((recruit) => {
         // 파트 index
