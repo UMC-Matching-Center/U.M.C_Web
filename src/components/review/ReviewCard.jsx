@@ -107,14 +107,14 @@ const CardDetailContainer = styled.div`
 
 //카드 디테일(닉네임,이름)
 const CardDetailName = styled.div`
-  margin: 0 0.5rem 0 0;
+  margin: 0 0.4rem 0 0;
   font-size: 2rem;
   line-height: 150%;
 `;
 
 //카드 디테일(파트)
 const CardDetailPart = styled.div`
-  margin: 0.5rem 0.5rem 0 0;
+  margin: 0.5rem 0.4rem 0 0;
   font-size: 1.4rem;
 `;
 
@@ -130,6 +130,15 @@ const CardStarContainer = styled.div`
   margin: 1.25rem 0 0 11.2rem;
 `;
 
+//파트들 정의
+const PartsDummy = [
+  { num: 1, content: "DESIGN", display: "Design" },
+  { num: 2, content: "ANDROID", display: "Android" },
+  { num: 3, content: "IOS", display: "iOS" },
+  { num: 4, content: "WEB", display: "Web" },
+  { num: 5, content: "SPRINGBOOT", display: "Spring" },
+  { num: 6, content: "NODEJS", display: "Node.js" },
+];
 export default function ReviewCard({ list, setDataList }) {
   const dispatch = useDispatch();
   const accessToken = useGetAccessToken();
@@ -174,6 +183,7 @@ export default function ReviewCard({ list, setDataList }) {
           handleSaveReview={handleSaveReview}
           setDataList={setDataList}
           DefaultCardImg={DefaultCardImg}
+          PartsDummy={PartsDummy}
         />
       ) : (
         <CardContainer onClick={() => handleReview()}>
@@ -191,10 +201,17 @@ export default function ReviewCard({ list, setDataList }) {
           <CardRightContainer>
             <CardDetailContainer>
               <CardDetailName>
-                {list.nameNickname.split("/")[0].trim()} /
+                {list.nameNickname.split("/")[0].trim()} /{" "}
                 {list.nameNickname.split("/")[1].trim()}
               </CardDetailName>
-              <CardDetailPart>{list.memberPart}</CardDetailPart>
+              <CardDetailPart>
+                {PartsDummy.map((part) => {
+                  if (list.memberPart === part.content) {
+                    return part.display;
+                  }
+                  return null; // 조건을 만족하지 않는 경우 null 반환
+                })}
+              </CardDetailPart>
               <CardDetailSchool>{list.university}</CardDetailSchool>
             </CardDetailContainer>
             <CardStarContainer>

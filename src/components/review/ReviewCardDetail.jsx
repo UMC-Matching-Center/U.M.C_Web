@@ -55,7 +55,8 @@ const HeadTitle = styled.div`
 
 //별 컨테이너
 const ReviewContainer = styled.div`
-  margin: 0.7rem 0 0 1rem;
+  position: absolute;
+  margin: 0.7rem 0 0 21rem;
 `;
 
 //체크 표시 컨테이너
@@ -67,7 +68,7 @@ const CheckSVGContainer = styled.div`
 
   &:hover {
     & svg path {
-      stroke: black; // 원하는 색상으로 변경
+      stroke: green; // 원하는 색상으로 변경
     }
   }
 `;
@@ -123,6 +124,7 @@ export default function ReviewCardDetail({
   handleSaveReview,
   setDataList,
   DefaultCardImg,
+  PartsDummy,
 }) {
   const handleText = (e) => {
     setDataList((prevList) => {
@@ -151,9 +153,16 @@ export default function ReviewCardDetail({
               {list.profileImage ? null : <DefaultCardImg />}
             </ProfileImg>
           </ImgContainer>
-          <HeadTitle>{list.memberPart}</HeadTitle>
           <HeadTitle>
-            {list.nameNickname.split("/")[0].trim()} /
+            {PartsDummy.map((part) => {
+              if (list.memberPart === part.content) {
+                return part.display;
+              }
+              return null; // 조건을 만족하지 않는 경우 null 반환
+            })}
+          </HeadTitle>
+          <HeadTitle style={{marginTop : "0.3rem"}}>
+            {list.nameNickname.split("/")[0].trim()} /{" "}
             {list.nameNickname.split("/")[1].trim()}
           </HeadTitle>
           <ReviewContainer>
