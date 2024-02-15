@@ -6,6 +6,8 @@ import SignupAccept from "./SignupAccept";
 import SignupReject from "./SignupReject";
 import ChallengerExpel from "./ChallengerExpel";
 import ViewStatusModal from "./ViewStatusModal";
+import Apply from "./Apply";
+import ApplyError from "./ApplyError";
 
 export {
   EmailRequestModal,
@@ -16,4 +18,6 @@ export {
   SignupReject,
   ChallengerExpel,
   ViewStatusModal,
+  Apply,
+  ApplyError,
 };

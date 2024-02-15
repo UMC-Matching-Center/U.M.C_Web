@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { IconUsers, IconUserPlus } from "@tabler/icons-react";
 
 const AlarmContainer = ({
@@ -7,11 +8,9 @@ const AlarmContainer = ({
   isViewModal,
   deleteAlarm,
   alarmContent,
-  handleNavIndex,
   handleIconBellClick,
 }) => {
-  //const { userType } = useSelector((state) => state.userInfo);
-  const userType = "ROLE_ADMIN";
+  const { userType } = useSelector((state) => state.userInfo);
   const navigate = useNavigate();
 
   return (
@@ -37,32 +36,26 @@ const AlarmContainer = ({
                             : "/challenger/new"
                         );
                         handleIconBellClick();
-                        handleNavIndex(0);
                         break;
-                      case "ROLE_PLAN":
+                      case "ROLE_PM":
                         navigate(
                           alarm.type === "match"
-                            ? "/내프로젝트지원현황url"
+                            ? "/myproject/viewstatus" // 내 프로젝트 지원현황
                             : alarm.type === "notice"
                               ? "/notice"
-                              : "/Q&A 페이지"
+                              : "/match" // 내 프로젝트 Q&A 변경
                         );
                         handleIconBellClick();
-                        handleNavIndex(alarm.type === "match" ? 3 : 4);
                         break;
                       case "ROLE_CHALLENGER":
                         if (alarm.type !== "match_incomplete") {
                           if (alarm.type === "notice") {
                             navigate("/notice");
-                            handleNavIndex(4);
                           } else if (alarm.type === "match_complete") {
-                            navigate("팀원 상호 평가 화면 url");
-                            handleNavIndex(3);
+                            navigate("/mypage/review");
                           } else if (alarm.type === "match_apply") {
-                            navigate("해당 프로젝트 상세보기 화면 url");
-                            handleNavIndex(3);
+                            navigate("/match"); // 지원한 프로젝트 상세페이지 이동
                           }
-
                           handleIconBellClick();
                           break;
                         }
@@ -101,7 +94,7 @@ const AlarmContainer = ({
                           switch (userType) {
                             case "ROLE_ADMIN":
                               return alarm.type === "match" ? "매칭" : "가입";
-                            case "ROLE_PLAN":
+                            case "ROLE_PM":
                               return alarm.type === "match"
                                 ? "매칭"
                                 : alarm.type === "notice"

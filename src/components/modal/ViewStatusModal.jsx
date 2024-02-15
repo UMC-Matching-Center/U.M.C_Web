@@ -45,6 +45,7 @@ export default function ViewStatusModal({
   modalType,
   selectedAppName,
   handlePassOrFail,
+  selectedAppId,
 }) {
   return (
     <>
@@ -74,7 +75,7 @@ export default function ViewStatusModal({
                 style={
                   modalType == "불합격" ? { backgroundColor: "#D62117" } : {}
                 }
-                onClick={() => handlePassOrFail(selectedAppName)}
+                onClick={() => handlePassOrFail(modalType,selectedAppId)}
               >
                 {modalType}
               </div>

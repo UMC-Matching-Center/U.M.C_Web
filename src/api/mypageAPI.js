@@ -6,7 +6,8 @@ export const myPageDataAPI = async (accessToken, dispatch, autoLogin) => {
     isSuccess: false, //API 성공 여부
     message: "", //API 메시지
     profileImage: null,
-    nicknameName: "",
+    nickname: "",
+    name: "",
     email: "",
     university: "",
     generation: "",
@@ -25,7 +26,7 @@ export const myPageDataAPI = async (accessToken, dispatch, autoLogin) => {
       response.isSuccess = true;
       response.message = data.message;
       response.profileImage = data.result.profileImage || null;
-      response.nicknameName = data.result.name || "닉네임/이름";
+      [response.nickname, response.name] = data.result.name.split("/");
       response.email = data.result.email || "test@gmail.com";
       response.university = `${data.result.universityName}학교`;
       response.generation = `${data.result.generation || "-"}기`;
