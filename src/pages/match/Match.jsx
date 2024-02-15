@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +9,7 @@ import MatchCard from "../../common/MatchCard/MatchCard";
 import MatchDetail from "./MatchDetail";
 import MatchWrite from "./MatchWrite";
 import { TextAreaProvider } from "../../context/TextAreaProvider";
+import useIntersect from "../../utils/intersectionObserve";
 
 const MatchMain = styled.div`
   display: flex;
@@ -48,51 +49,39 @@ function MatchHome({ type }) {
   const { autoLogin } = useSelector((state) => state.userInfo);
 
   const [data, setData] = useState([]); // 전체 프로젝트 데이터
-  const [newData, setNewData] = useState([]);
-  const [page, setPage] = useState(1); // 데이터를 불러온 횟수(페이지)
+  const [page, setPage] = useState(0); // 데이터를 불러온 횟수(페이지)
+
+  const [loading, setLoading] = useState(false); // 로딩
+  const [isEnd, setIsEnd] = useState(false); // 끝
 
   /*---프로젝트 카드 클릭 이벤트(이동)---*/
   const handleCardClick = (project) => {
     navigate(`../detail/${project.projectId}`);
   };
 
-  const loadData = () => {
-    if (accessToken !== "") {
-      matchListAPI(accessToken, dispatch, autoLogin, page).then((response) => {
-        if (response.isSuccess) {
-          if (page === 1) {
-            setData(response.projectList);
+  const [, setRef] = useIntersect(async (entry, observer) => {
+    observer.unobserve(entry.target);
+    if (!isEnd) {
+      setLoading(true);
+      const Nextpage = page + 1;
+      await matchListAPI(accessToken, dispatch, autoLogin, Nextpage).then(
+        (response) => {
+          setPage(Nextpage);
+          if (response.isSuccess) {
+            if (response.projectList.length > 0) {
+              setData((prev) => [...prev, ...response.projectList]);
+            } else {
+              setIsEnd(true);
+            }
           } else {
-            setNewData(response.projectList);
-            setData((preData) => [...preData, ...newData]);
+            alert(response.message);
           }
-          setPage((prePage) => prePage + 1);
-        } else {
-          alert(response.message);
+          setLoading(false);
         }
-      });
-    } else {
-      navigate("/login", { replace: true }); // 메인 페이지로 이동
+      );
     }
-  };
-  /*---무한 스크롤---*/
-  const handleScroll = () => {
-    const scrollHeight = document.documentElement.scrollHeight;
-    const scrollTop = document.documentElement.scrollTop;
-    const clientHeight = document.documentElement.clientHeight;
-
-    if (scrollTop + clientHeight >= scrollHeight) {
-      loadData();
-    }
-  };
-
-  useEffect(() => {
-    loadData();
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+    observer.observe(entry.target);
+  }, {});
 
   return (
     <MatchMain>
@@ -117,6 +106,10 @@ function MatchHome({ type }) {
             />
           );
         })}
+        {loading && <div className="table_title">Loading</div>}
+        {!loading && (
+          <div ref={setRef} style={{ width: "100%", height: "1px" }} />
+        )}
       </MatchList>
     </MatchMain>
   );
