@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 import "./Modal.css";
 
@@ -23,8 +23,26 @@ const BangIconArea = styled.div`
 `;
 
 export default function SignupReject({ isClose, isReject, nickname }) {
+  const modalRef = useRef(null);
+
+  useEffect(() => {
+    // 모달이 마운트되면 모달 요소에 포커스를 줍니다.
+    modalRef.current.focus();
+  }, []);
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      isReject();
+    }
+  };
+
   return (
-    <div className="ModalBox">
+    <div
+      className="ModalBox"
+      ref={modalRef}
+      tabIndex={0} // 포커스를 받을 수 있도록 tabIndex 속성 추가
+      onKeyDown={handleKeyDown}
+    >
       <div className="IconCircleBackground">
         <div className="IconCircleRed">
           <BangIconArea />

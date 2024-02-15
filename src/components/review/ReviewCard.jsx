@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import ReviewStar from "./ReviewStar";
 import ReviewCardDetail from "./ReviewCardDetail";
+import { reviewSaveAPI } from "../../api";
+import { useDispatch, useSelector } from "react-redux";
+import useGetAccessToken from "../../utils/getAccessToken";
+
 //카드 전체 컨테이너
 const CardContainer = styled.div`
   display: flex;
@@ -103,14 +107,14 @@ const CardDetailContainer = styled.div`
 
 //카드 디테일(닉네임,이름)
 const CardDetailName = styled.div`
-  margin: 0 0.5rem 0 0;
+  margin: 0 0.4rem 0 0;
   font-size: 2rem;
   line-height: 150%;
 `;
 
 //카드 디테일(파트)
 const CardDetailPart = styled.div`
-  margin: 0.5rem 0.5rem 0 0;
+  margin: 0.5rem 0.4rem 0 0;
   font-size: 1.4rem;
 `;
 
@@ -126,39 +130,92 @@ const CardStarContainer = styled.div`
   margin: 1.25rem 0 0 11.2rem;
 `;
 
+//파트들 정의
+const PartsDummy = [
+  { num: 1, content: "DESIGN", display: "Design" },
+  { num: 2, content: "ANDROID", display: "Android" },
+  { num: 3, content: "IOS", display: "iOS" },
+  { num: 4, content: "WEB", display: "Web" },
+  { num: 5, content: "SPRINGBOOT", display: "Spring" },
+  { num: 6, content: "NODEJS", display: "Node.js" },
+];
 export default function ReviewCard({ list, setDataList }) {
+  const dispatch = useDispatch();
+  const accessToken = useGetAccessToken();
+  const { autoLogin } = useSelector((state) => state.userInfo);
+
   const [isReviewMode, setisReviewMode] = useState(false);
 
+  //상호평가 들어가기
   const handleReview = () => {
     setisReviewMode(!isReviewMode);
   };
+
+  //상호 평가 저장
+  const handleSaveReview = (list) => {
+    setisReviewMode(!isReviewMode);
+    const updatedList = {
+      rate: list.rate,
+      content: list.content,
+    };
+    console.log(list.memberId);
+    console.log(updatedList);
+    reviewSaveAPI(
+      accessToken,
+      dispatch,
+      autoLogin,
+      list.memberId,
+      updatedList
+    ).then((response) => {
+      if (response.isSuccess) {
+        console.log("상호 평가 저장 성공");
+      } else {
+        alert(response.message);
+      }
+    });
+  };
+
   return (
     <>
       {isReviewMode ? (
         <ReviewCardDetail
           list={list}
-          handleReview={handleReview}
+          handleSaveReview={handleSaveReview}
           setDataList={setDataList}
           DefaultCardImg={DefaultCardImg}
+          PartsDummy={PartsDummy}
         />
       ) : (
-        <CardContainer onClick={handleReview}>
+        <CardContainer onClick={() => handleReview()}>
           <CardProfileImgContainer>
-            <CardProfileImg>
-              {" "}
-              <DefaultCardImg />
+            <CardProfileImg
+              style={{
+                backgroundImage: `url(${list.profileImage})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center center",
+              }}
+            >
+              {list.profileImage ? null : <DefaultCardImg />}
             </CardProfileImg>
           </CardProfileImgContainer>
           <CardRightContainer>
             <CardDetailContainer>
               <CardDetailName>
-                {list.nickname} / {list.name}
+                {list.nameNickname.split("/")[0].trim()} /{" "}
+                {list.nameNickname.split("/")[1].trim()}
               </CardDetailName>
-              <CardDetailPart>{list.part}</CardDetailPart>
-              <CardDetailSchool>{list.school}</CardDetailSchool>
+              <CardDetailPart>
+                {PartsDummy.map((part) => {
+                  if (list.memberPart === part.content) {
+                    return part.display;
+                  }
+                  return null; // 조건을 만족하지 않는 경우 null 반환
+                })}
+              </CardDetailPart>
+              <CardDetailSchool>{list.university}</CardDetailSchool>
             </CardDetailContainer>
             <CardStarContainer>
-              <ReviewStar reviewstar={list.reviewstar} editOn={false} />
+              <ReviewStar list={list} editOn={false} />
             </CardStarContainer>
           </CardRightContainer>
         </CardContainer>

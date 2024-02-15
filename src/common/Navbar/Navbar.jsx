@@ -15,7 +15,7 @@ const Navbar = () => {
     <>
       {autoLogin === true ? (
         userType !== "ROLE_ADMIN" ? (
-          userType === "ROLE_PLAN" ? (
+          userType === "ROLE_PM" ? (
             <PMNavbar /> // 일반 챌린저 (PM)
           ) : (
             <UserNavbar /> // 일반 챌린저 (PM 이외)
@@ -26,7 +26,7 @@ const Navbar = () => {
       ) : sessionToken === "" ? (
         <InitNavbar /> // 회원가입
       ) : userType !== "ROLE_ADMIN" ? (
-        userType === "ROLE_PLAN" ? (
+        userType === "ROLE_PM" ? (
           <PMNavbar /> // 일반 챌린저 (PM)
         ) : (
           <UserNavbar /> // 일반 챌린저 (PM 이외)

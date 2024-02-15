@@ -53,6 +53,7 @@ const PwConditionArea = styled.div`
 const PwCondition = styled.div`
   display: flex;
   align-items: center;
+  style={{ cursor: "pointer" }}
 
   svg {
     width: 1rem;
@@ -235,9 +236,14 @@ export default function Signup() {
                   <IconEyeOff
                     className="PasswordEye"
                     onClick={pwVisibleToggle}
+                    style={{ cursor: "pointer" }}
                   />
                 ) : (
-                  <IconEye className="PasswordEye" onClick={pwVisibleToggle} />
+                  <IconEye
+                    className="PasswordEye"
+                    onClick={pwVisibleToggle}
+                    style={{ cursor: "pointer" }}
+                  />
                 )}
               </PwArea>
               <div
@@ -282,11 +288,13 @@ export default function Signup() {
                   <IconEyeOff
                     className="PasswordEye"
                     onClick={pwEqaulVisibleToggle}
+                    style={{ cursor: "pointer" }}
                   />
                 ) : (
                   <IconEye
                     className="PasswordEye"
                     onClick={pwEqaulVisibleToggle}
+                    style={{ cursor: "pointer" }}
                   />
                 )}
               </PwArea>
@@ -322,7 +330,9 @@ export default function Signup() {
 
               {/* 해당 페이지 기능 이외 기능 관련 */}
               <div className="FormOtherArea">
-                <span>이미 계정이 있으신가요?</span>
+                <span style={{ cursor: "default" }}>
+                  이미 계정이 있으신가요?
+                </span>
                 <span
                   onClick={() => {
                     navigate("..");

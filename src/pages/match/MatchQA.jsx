@@ -1,4 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  matchQAListAPI,
+  matchQuestionUploadAPI,
+  matchQADeleteAPI,
+  matchAnswerUploadAPI,
+} from "../../api";
+import useGetAccessToken from "../../utils/getAccessToken";
 import {
   IconLetterQ,
   IconChevronDown,
@@ -68,7 +77,33 @@ const QAModal = styled.div`
     font-family: KBO-Dia-Gothic;
     font-size: 1.8rem;
     font-weight: 300;
-    padding: 2.3rem 8.6rem 0 0.5rem;
+    padding: 2.3rem 0 0 0.5rem;
+  }
+
+  & input {
+    font-family: KBO-Dia-Gothic;
+    font-size: 1.8rem;
+    font-weight: 300;
+  }
+
+  & textarea {
+    border: 0;
+    outline: 0;
+    font-family: KBO-Dia-Gothic;
+    font-size: 1.8rem;
+    font-weight: 300;
+    width: 80rem;
+    height: 10rem;
+  }
+
+  & .matchQA_button {
+    margin-left: auto;
+    width: 4rem;
+    height: 2.4rem;
+    text-align: center;
+    color: #0261aa;
+    border: 0.1rem solid #0261aa;
+    border-radius: 0.5rem;
   }
 `;
 
@@ -108,41 +143,47 @@ const QARequest = styled.div`
   }
 `;
 
-const QAList = [
-  {
-    idx: 0,
-    Qcontent:
-      "질문질문질문질문질문아무말 대잔치 질문질문질문질문질문아무말 대잔치 질문질문질문질문질문아무말 대잔치 ",
-    Acontent: "",
-  },
-  {
-    idx: 1,
-    Qcontent: "질문질문",
-    Acontent: "답변답변",
-  },
-  {
-    idx: 2,
-    Qcontent: "질문질문",
-    Acontent: "답변답변",
-  },
-  {
-    idx: 3,
-    Qcontent: "질문질문히히힣하하",
-    Acontent: "답변답변",
-  },
-
-  {
-    idx: 4,
-    Qcontent: "질문질문히히힣하하",
-    Acontent: "답변답변",
-  },
-];
-
 /*---질문하기&수정하기, 삭제 이벤트 함수 추후 구현---*/
 const MatchQA = () => {
-  const [toggles, setToggles] = useState(QAList.map(() => false)); // 각 질문 toggle 변수
-  const user = { type: "ROLE_PLAN" };
+  const [QAData, setQAData] = useState([]);
+  const [toggles, setToggles] = useState([]); // 각 질문 toggle 변수
+  const [AContent, setAContent] = useState([]);
+  const [disableAnswer, setDisableAnswer] = useState([]);
+  const [QMode, setQMode] = useState(false);
+  const [newQ, setNewQ] = useState("");
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  const projectId = state.id;
 
+  const dispatch = useDispatch();
+  const accessToken = useGetAccessToken();
+  const { userType, autoLogin } = useSelector((state) => state.userInfo);
+
+  // API : 리스트 조회
+  const loadData = () => {
+    if (accessToken !== "") {
+      matchQAListAPI(accessToken, dispatch, autoLogin, projectId).then(
+        (response) => {
+          if (response.isSuccess) {
+            setQAData(response.qnaList);
+            setToggles(response.qnaList.map(() => false));
+            setAContent(response.qnaList.map(() => ""));
+            setDisableAnswer(response.qnaList.map(() => true));
+          } else {
+            alert(response.message);
+          }
+        }
+      );
+    } else {
+      navigate("/login", { replace: true }); // 메인 페이지로 이동
+    }
+  };
+
+  useEffect(() => {
+    loadData(); // 데이터 불러오기
+  }, []);
+
+  /*----- 각 Q&A 핸들러 -----*/
   // IconChevronDown 클릭 시, 답변 toggle
   const handleToggle = (index) => {
     setToggles((prevToggles) => {
@@ -150,6 +191,115 @@ const MatchQA = () => {
       newToggles[index] = !newToggles[index];
       return newToggles;
     });
+  };
+
+  // 답변 입력 핸들러
+  const handleAnswerChange = (index, value) => {
+    setAContent((prevList) => {
+      const newList = [...prevList];
+      newList[index] = value;
+      return newList;
+    });
+  };
+
+  // 답변 입력 상태 변경 핸들러
+  const handleDisableAnswerChange = (index) => {
+    setDisableAnswer((prevList) => {
+      const newList = [...prevList];
+      newList[index] = false;
+      return newList;
+    });
+  };
+
+  // 답변 삭제 이벤트
+  const deleteQA = (index, questionId) => {
+    if (accessToken !== "") {
+      matchQADeleteAPI(accessToken, dispatch, autoLogin, questionId).then(
+        (response) => {
+          if (response.isSuccess) {
+            // 삭제된 QA를 제외하고 QA 목록 업데이트
+            const updatedQAList = QAData.filter((qa, idx) => idx !== index);
+            setQAData(updatedQAList);
+
+            // 그 외 Toggles, AContent 및 DisableAnswer 상태 업데이트
+            setToggles(updatedQAList.map(() => false));
+            setAContent(updatedQAList.map(() => ""));
+            setDisableAnswer(updatedQAList.map(() => true));
+          } else {
+            alert(response.message);
+          }
+        }
+      );
+    } else {
+      navigate("/login", { replace: true }); // 메인 페이지로 이동
+    }
+  };
+
+  // 새로운 질문 등록
+  const uploadNewQ = () => {
+    if (accessToken !== "") {
+      matchQuestionUploadAPI(
+        accessToken,
+        dispatch,
+        autoLogin,
+        projectId,
+        newQ
+      ).then((response) => {
+        if (response.isSuccess) {
+          // 삭제된 QA를 제외하고 QA 목록 업데이트
+          const updatedQAList = [
+            ...QAData,
+            {
+              questionId: response.questionId,
+              question: newQ,
+              answer: null,
+              createAt: null,
+            },
+          ];
+          setQAData(updatedQAList);
+
+          // 그 외 Toggles, AContent 및 DisableAnswer 상태 업데이트
+          setToggles(updatedQAList.map(() => false));
+          setAContent(updatedQAList.map(() => ""));
+          setDisableAnswer(updatedQAList.map(() => true));
+        } else {
+          alert(response.message);
+        }
+      });
+    } else {
+      navigate("/login", { replace: true }); // 메인 페이지로 이동
+    }
+
+    setNewQ("");
+    setQMode(false);
+  };
+
+  // 새로운 답변 등록
+  const uploadNewA = (questionId, answer) => {
+    if (accessToken !== "") {
+      matchAnswerUploadAPI(
+        accessToken,
+        dispatch,
+        autoLogin,
+        questionId,
+        answer
+      ).then((response) => {
+        if (response.isSuccess) {
+          // 답변 등록된 QA 목록 업데이트
+          const updatedQAList = QAData.map((item) => {
+            if (item.questionId === questionId) {
+              return { ...item, answer: answer };
+            }
+            return item;
+          });
+          setQAData(updatedQAList);
+        } else {
+          alert(response.message);
+        }
+      });
+    } else {
+      navigate("/login", { replace: true }); // 메인 페이지로 이동
+    }
   };
 
   return (
@@ -161,9 +311,40 @@ const MatchQA = () => {
             <div style={{ color: "#0261aa" }}>Q&A</div>
           </QATitle>
           <QAContent>
-            {QAList.map((question, index) => {
+            {QMode && (
+              <QAModal>
+                <div className="question-toggle">
+                  <div
+                    style={{
+                      width: "2.4rem",
+                      height: "2.4rem",
+                      borderRadius: "3rem",
+                      backgroundColor: "#0261AA",
+                      padding: "0.3rem",
+                    }}
+                  >
+                    <IconLetterQ size={24} color="#FAFAFA" />
+                  </div>
+                  <div className="question-content">
+                    <textarea
+                      placeholder="질문을 입력해주세요"
+                      value={newQ}
+                      onChange={(e) => setNewQ(e.target.value)}
+                    />
+                  </div>
+                  <button
+                    className="matchQA_button"
+                    onClick={uploadNewQ}
+                    disabled={newQ === ""}
+                  >
+                    등록
+                  </button>
+                </div>
+              </QAModal>
+            )}
+            {QAData?.reverse().map((question, index) => {
               return (
-                <QAModal key={question.idx}>
+                <QAModal key={question.questionId}>
                   <div className="question-toggle">
                     <div
                       style={{
@@ -182,8 +363,14 @@ const MatchQA = () => {
                         color: `${toggles[index] ? "#014171" : "#131313"}`,
                       }}
                     >
-                      {question.Qcontent}{" "}
-                      {user.type === "ROLE_PLAN" && <DeleteQA>삭제</DeleteQA>}
+                      {question.question}{" "}
+                      {question.question && userType === "ROLE_PM" && (
+                        <DeleteQA
+                          onClick={() => deleteQA(index, question.questionId)}
+                        >
+                          삭제
+                        </DeleteQA>
+                      )}
                     </div>
                     {!toggles[index] ? (
                       <IconChevronDown
@@ -215,15 +402,45 @@ const MatchQA = () => {
                       stroke={1}
                       style={{
                         visibility: `${
-                          user.type === "ROLE_PLAN" ? "visible" : "hidden"
+                          userType === "ROLE_PM" ? "visible" : "hidden"
                         }`,
+                        cursor: "pointer",
                       }}
+                      onClick={() => handleDisableAnswerChange(index)}
                     />
                     <div style={{ marginLeft: "2.5rem" }}>
-                      {question.Acontent !== ""
-                        ? question.Acontent
-                        : "아직 답변이 등록되지 않았습니다."}
+                      {userType === "ROLE_PM" ? (
+                        question.answer === null ? (
+                          <input
+                            value={AContent[index]}
+                            onChange={(e) =>
+                              handleAnswerChange(index, e.target.value)
+                            }
+                            placeholder="답변을 입력해주세요"
+                            disabled={disableAnswer[index]}
+                          />
+                        ) : (
+                          question.answer
+                        )
+                      ) : question.answer === null ? (
+                        "아직 답변이 등록되지 않았습니다."
+                      ) : (
+                        question.answer
+                      )}
                     </div>
+                    {userType === "ROLE_PM" &&
+                      question.answer === null &&
+                      !disableAnswer[index] && (
+                        <button
+                          className="matchQA_button"
+                          onClick={() =>
+                            uploadNewA(question.questionId, AContent[index])
+                          }
+                          disabled={AContent[index] === ""}
+                        >
+                          등록
+                        </button>
+                      )}
                   </div>
                 </QAModal>
               );
@@ -231,9 +448,9 @@ const MatchQA = () => {
           </QAContent>
         </QAWrapper>
       </QAContainer>
-      {user.type === "ROLE_CHALLENGER" && (
+      {userType === "ROLE_CHALLENGER" && (
         <QARequest>
-          <button>질문하기</button>
+          <button onClick={() => setQMode(true)}>질문하기</button>
         </QARequest>
       )}
     </>

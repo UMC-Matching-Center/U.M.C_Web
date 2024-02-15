@@ -85,7 +85,7 @@ const ReviewStarHalfFilled = () => (
   </ReviewStarSVG>
 );
 
-export default function ReviewStar({ list, reviewstar, editOn, setDataList }) {
+export default function ReviewStar({ list, editOn, setDataList }) {
   // 해당 star를 클릭할 때 해당 star 값에 값을 넣어줌
   const handleStar = (index, event) => {
     if (event && event.clientX) {
@@ -98,11 +98,11 @@ export default function ReviewStar({ list, reviewstar, editOn, setDataList }) {
 
       setDataList((prevList) => {
         const updatedList = prevList.map((item) => {
-          if (item.id === list.id) {
+          if (item.nameNickname === list.nameNickname) {
             // 좌클릭일 때 0.5를 더하고, 우클릭일 때는 1을 더합니다.
-            const newReviewStar = isLeftClick ? index - 0.5 : index;
+            const newRate = isLeftClick ? index - 0.5 : index;
 
-            return { ...item, reviewstar: newReviewStar };
+            return { ...item, rate: newRate };
           }
           return item;
         });
@@ -111,8 +111,8 @@ export default function ReviewStar({ list, reviewstar, editOn, setDataList }) {
     }
   };
 
-  const reviewStarHead = Math.floor(reviewstar); //4.5점일 때, 4점을 뜻함.
-  const reviewStarTail = reviewstar % 1; //4.5점일 때, 0.5점을 뜻함
+  const reviewStarHead = Math.floor(list.rate); //4.5점일 때, 4점을 뜻함.
+  const reviewStarTail = list.rate % 1; //4.5점일 때, 0.5점을 뜻함
 
   //해당 Edit상태가 ON일때
   const editStars = Array.from({ length: 5 }, (_, index) => {

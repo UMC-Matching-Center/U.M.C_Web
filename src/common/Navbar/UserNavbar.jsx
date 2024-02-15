@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Link, useNavigate, Outlet } from "react-router-dom";
+import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
 import { IconPin, IconBell, IconUser } from "@tabler/icons-react";
 
 import Logo from "../../images/logo_crop.svg";
@@ -35,7 +35,8 @@ const AlarmDummy = [
 ];
 
 const UserNavMenuItem = styled.div`
-  height: 3.4rem;
+  height: 100%;
+  line-height: 2;
   display: flex;
   justify-content: center;
   margin: 0 1.8rem;
@@ -69,7 +70,7 @@ const UserNavMenuItem = styled.div`
 `;
 
 const SubMenuWrapper = styled.div`
-  padding-top: 1.8rem;
+  padding-top: 0.4rem;
   position: absolute;
   top: 9rem;
   display: none;
@@ -98,6 +99,8 @@ const SubMenuItem = styled(UserNavMenuItem)`
 
 const UserNavbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [activePath, setActivePath] = useState("");
 
   /*읽지 않은 알람이 존재하는 지 여부*/
   const [aliveAlarm, setAliveAlarm] = useState(true);
@@ -105,13 +108,6 @@ const UserNavbar = () => {
   const [isViewModal, setIsViewModal] = useState(false);
   /*각 알림을 읽었는지를 나타내는 bluecircle 표시 = is_confirmed*/
   const [alarmContent, setAlarmContent] = useState(AlarmDummy);
-
-  /*선택된 메뉴 표시*/
-  const [selectIndex, setSelectIndex] = useState(0);
-  const handleNavIndex = (idx) => {
-    setIsViewModal(false);
-    setSelectIndex(idx);
-  };
 
   /*알림창 클릭 이벤트*/
   const handleIconBellClick = () => {
@@ -138,84 +134,52 @@ const UserNavbar = () => {
     }
   };
 
+  useEffect(() => {
+    setActivePath(location.pathname.split("/")[1]);
+    setIsViewModal(false);
+  }, [location]);
+
   return (
     <>
       <div className="app__nav">
         <div className="nav_area">
           <div className="nav_logo">
             <Link to="/">
-              <img
-                src={Logo}
-                onClick={() => {
-                  handleNavIndex(0);
-                }}
-              />
+              <img src={Logo} />
             </Link>
           </div>
           <ul className="nav_center">
-            <UserNavMenuItem className={`${selectIndex === 0 && "active"}`}>
-              <Link
-                to="/"
-                onClick={() => {
-                  handleNavIndex(0);
-                }}
-                title="Home"
-              >
+            <UserNavMenuItem className={`${activePath === "" && "active"}`}>
+              <Link to="/" title="Home">
                 Home
               </Link>
             </UserNavMenuItem>
-            <UserNavMenuItem className={`${selectIndex === 1 && "active"}`}>
-              <Link
-                to="/schedule"
-                onClick={() => {
-                  handleNavIndex(1);
-                }}
-                title="Schedule"
-              >
+            <UserNavMenuItem
+              className={`${activePath === "schedule" && "active"}`}
+            >
+              <Link to="/schedule" title="Schedule">
                 Schedule
               </Link>
             </UserNavMenuItem>
-            <UserNavMenuItem className={`${selectIndex === 2 && "active"}`}>
-              <Link
-                to="/match"
-                onClick={() => {
-                  handleNavIndex(2);
-                }}
-                title="Matching"
-              >
+            <UserNavMenuItem
+              className={`${activePath === "match" && "active"}`}
+            >
+              <Link to="/match" title="Matching">
                 Matching
               </Link>
             </UserNavMenuItem>
-            <UserNavMenuItem className={`${selectIndex === 3 && "active"}`}>
-              <Link
-                to="/"
-                onClick={() => {
-                  handleNavIndex(3);
-                }}
-                title="My Project"
-              >
+            <UserNavMenuItem
+              className={`${activePath === "myproject" && "active"}`}
+            >
+              <Link to="/myproject/review" title="My Project">
                 My Project
               </Link>
               <SubMenuWrapper>
                 <SubMenuItem>
-                  <Link
-                    to="/myproject/review"
-                    onClick={() => {
-                      handleNavIndex(3);
-                    }}
-                  >
-                    팀원 상호 평가
-                  </Link>
+                  <Link to="/myproject/review">팀원 상호 평가</Link>
                 </SubMenuItem>
                 <SubMenuItem>
-                  <Link
-                    to="/"
-                    onClick={() => {
-                      handleNavIndex(3);
-                    }}
-                  >
-                    랜딩페이지 보기
-                  </Link>
+                  <Link to="/myproject/landing">랜딩페이지 보기</Link>
                 </SubMenuItem>
               </SubMenuWrapper>
             </UserNavMenuItem>
@@ -224,16 +188,15 @@ const UserNavbar = () => {
             <div
               className="icon-bg"
               style={{
-                background: selectIndex === 4 && "#0261AA",
+                background: activePath === "notice" && "#0261AA",
               }}
             >
               <IconPin
-                strokeWidth={selectIndex === 4 ? 1.5 : 1}
+                strokeWidth={activePath === "notice" ? 1.5 : 1}
                 color={"#cecdd5"}
                 size={36}
                 onClick={() => {
                   navigate("/notice");
-                  handleNavIndex(4);
                 }}
               />
             </div>
@@ -257,7 +220,6 @@ const UserNavbar = () => {
                 isViewModal={isViewModal}
                 deleteAlarm={deleteAlarm}
                 alarmContent={alarmContent}
-                handleNavIndex={handleNavIndex}
                 handleIconBellClick={handleIconBellClick}
               />
             </div>
@@ -265,15 +227,15 @@ const UserNavbar = () => {
             <div
               className="icon-bg"
               style={{
-                background: selectIndex === 5 && "#0261AA",
+                background: activePath === "mypage" && "#0261AA",
               }}
             >
               <IconUser
-                strokeWidth={selectIndex === 5 ? 1.5 : 1}
+                strokeWidth={activePath === "mypage" ? 1.5 : 1}
                 color={"#cecdd5"}
                 size={36}
                 onClick={() => {
-                  navigate("/mypage"), handleNavIndex(5);
+                  navigate("/mypage");
                 }}
               />
             </div>

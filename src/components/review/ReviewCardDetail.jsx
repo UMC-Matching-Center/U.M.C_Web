@@ -55,7 +55,8 @@ const HeadTitle = styled.div`
 
 //별 컨테이너
 const ReviewContainer = styled.div`
-  margin: 0.7rem 0 0 1rem;
+  position: absolute;
+  margin: 0.7rem 0 0 21rem;
 `;
 
 //체크 표시 컨테이너
@@ -67,7 +68,7 @@ const CheckSVGContainer = styled.div`
 
   &:hover {
     & svg path {
-      stroke: black; // 원하는 색상으로 변경
+      stroke: green; // 원하는 색상으로 변경
     }
   }
 `;
@@ -120,49 +121,60 @@ const TextBox = styled.textarea`
 
 export default function ReviewCardDetail({
   list,
-  handleReview,
+  handleSaveReview,
   setDataList,
   DefaultCardImg,
+  PartsDummy,
 }) {
   const handleText = (e) => {
     setDataList((prevList) => {
       const updatedList = prevList.map((item) => {
-        if (item.id === list.id) {
-          return { ...item, text: e.target.value };
+        if (item.memberId === list.memberId) {
+          return { ...item, content: e.target.value };
         }
         return item;
       });
       return updatedList;
     });
   };
+
   return (
     <Container>
       <DetailContainer>
         <HeadContainer>
           <ImgContainer>
-            <ProfileImg>
-              <DefaultCardImg />
+            <ProfileImg
+              style={{
+                backgroundImage: `url(${list.profileImage})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center center",
+              }}
+            >
+              {list.profileImage ? null : <DefaultCardImg />}
             </ProfileImg>
           </ImgContainer>
-          <HeadTitle>{list.part}</HeadTitle>
           <HeadTitle>
-            {list.nickname} / {list.name}
+            {PartsDummy.map((part) => {
+              if (list.memberPart === part.content) {
+                return part.display;
+              }
+              return null; // 조건을 만족하지 않는 경우 null 반환
+            })}
+          </HeadTitle>
+          <HeadTitle style={{marginTop : "0.3rem"}}>
+            {list.nameNickname.split("/")[0].trim()} /{" "}
+            {list.nameNickname.split("/")[1].trim()}
           </HeadTitle>
           <ReviewContainer>
-            <ReviewStar
-              list={list}
-              reviewstar={list.reviewstar}
-              editOn={true}
-              setDataList={setDataList}
-            />
+            <ReviewStar list={list} editOn={true} setDataList={setDataList} />
           </ReviewContainer>
-          <CheckSVGContainer onClick={handleReview}>
+          <CheckSVGContainer onClick={() => handleSaveReview(list)}>
             <CheckSVG />
           </CheckSVGContainer>
         </HeadContainer>
         <TextBox
           placeholder="평가를 작성해주세요"
-          value={list.text}
+          value={list.content}
           onChange={handleText}
         />
       </DetailContainer>
