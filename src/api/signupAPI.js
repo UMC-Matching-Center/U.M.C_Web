@@ -1,4 +1,5 @@
 import { publicAxios } from "../utils/customAxios.js";
+import errorCode from "./errorCode.js";
 
 // ID 중복 체크 API
 export const idCheckAPI = async (id) => {
@@ -19,11 +20,7 @@ export const idCheckAPI = async (id) => {
     }
   } catch (err) {
     response.isSuccess = false;
-    if (err.response.data.code == "MEMBER4004") {
-      response.message = err.response.data.message;
-    } else {
-      alert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
-    }
+    response.message = errorCode(err);
   }
 
   return response;
@@ -53,7 +50,7 @@ export const emailRequestAPI = async (email) => {
     }
   } catch (err) {
     response.isSuccess = false;
-    alert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
+    response.message = errorCode(err);
   }
 
   return response;
@@ -88,11 +85,7 @@ export const emailCodeCheckAPI = async (email, authCode) => {
     }
   } catch (err) {
     response.isSuccess = false;
-    if (err.response && err.response.data.code === "EMAIL4002") {
-      response.message = err.response.data.message;
-    } else {
-      alert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
-    }
+    response.message = errorCode(err);
   }
 
   return response;
@@ -138,7 +131,7 @@ export const signupAPI = async (
     }
   } catch (err) {
     response.isSuccess = false;
-    alert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
+    response.message = errorCode(err);
   }
 
   return response;

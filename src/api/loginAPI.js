@@ -3,6 +3,7 @@ import { USER_LOGIN } from "../modules/userInfo";
 import { SET_LOCAL_TOKEN } from "../modules/localToken.js";
 import { SET_SESSION_TOKEN } from "../modules/sessionToken.js";
 import { publicAxios } from "../utils/customAxios.js";
+import errorCode from "./errorCode.js";
 
 export const loginAPI = async (id, pw, auto, dispatch) => {
   //서버로 보낼 데이터
@@ -39,15 +40,7 @@ export const loginAPI = async (id, pw, auto, dispatch) => {
     }
   } catch (err) {
     response.isSuccess = false;
-    if (
-      err.response &&
-      (err.response.data.code === "MEMBER4001" ||
-        err.response.data.code === "MEMBER4002")
-    ) {
-      response.message = err.response.data.message;
-    } else {
-      alert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
-    }
+    response.message = errorCode(err);
   }
 
   return response;
