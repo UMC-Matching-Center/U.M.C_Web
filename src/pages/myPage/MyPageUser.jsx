@@ -13,6 +13,8 @@ import Modal from "react-modal";
 import { Logout, Withdraw } from "../../components/modal";
 import { removeCookieToken } from "../../utils/cookies";
 import { persistor } from "../../index";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const FormArea = styled.div`
   display: flex;
@@ -112,9 +114,18 @@ const UserModify = () => {
       phoneNumber
     ).then((response) => {
       if (response.isSuccess) {
-        navigate(-1, { replace: true });
+        navigate(-1, { replace: true, state: "마이페이지 수정 완료" });
       } else {
-        alert(response.message);
+        toast.error(response.message, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     });
   };
@@ -125,95 +136,106 @@ const UserModify = () => {
   }, [phoneNumber]);
 
   return (
-    <div className="container">
-      <div className="boxWrapper">
-        <div className="profileBox-wrapper">
-          <div className="profile_circle-bg">
-            <label htmlFor="profileImageInput">
-              <div
-                className="profile_circle"
-                style={{
-                  backgroundImage: `url(${profileImageURL})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center center",
-                  cursor: "pointer",
-                }}
-              >
-                {profileImageURL ? null : (
-                  <IconPhotoPlus size={36} strokeWidth={1} color={"#E7E6EA"} />
-                )}
+    <>
+      <ToastContainer />
+      <div className="container">
+        <div className="boxWrapper">
+          <div className="profileBox-wrapper">
+            <div className="profile_circle-bg">
+              <label htmlFor="profileImageInput">
+                <div
+                  className="profile_circle"
+                  style={{
+                    backgroundImage: `url(${profileImageURL})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center center",
+                    cursor: "pointer",
+                  }}
+                >
+                  {profileImageURL ? null : (
+                    <IconPhotoPlus
+                      size={36}
+                      strokeWidth={1}
+                      color={"#E7E6EA"}
+                    />
+                  )}
+                </div>
+              </label>
+            </div>
+            <input
+              id="profileImageInput"
+              type="file"
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={handleProfileImageChange}
+            />
+            <div className="profileBox">
+              <div className="profileBox-content">
+                <div className="profile-name">{nicknameName}</div>
+                <div className="profile-email">{email}</div>
               </div>
-            </label>
+            </div>
           </div>
-          <input
-            id="profileImageInput"
-            type="file"
-            accept="image/*"
-            style={{ display: "none" }}
-            onChange={handleProfileImageChange}
-          />
-          <div className="profileBox">
-            <div className="profileBox-content">
-              <div className="profile-name">{nicknameName}</div>
-              <div className="profile-email">{email}</div>
+          <div className="infoBox">
+            <div className="boxForm">
+              <FormArea>
+                <div className="form-label" style={{ marginRight: "4.1rem" }}>
+                  학교
+                </div>
+                <MyPageInput value={university} disabled={true} />
+              </FormArea>
+              <FormArea>
+                <div className="form-label" style={{ marginRight: "4.1rem" }}>
+                  기수
+                </div>
+                <MyPageInput
+                  value={generation}
+                  disabled={true}
+                  width="5.2rem"
+                />
+                <div
+                  className="form-label"
+                  style={{ marginLeft: "2.2rem", marginRight: "0.9rem" }}
+                >
+                  파트
+                </div>
+                <MyPageInput value={part} disabled={true} width="10rem" />
+              </FormArea>
+              <FormArea>
+                <div className="form-label" style={{ marginRight: "2rem" }}>
+                  전화번호
+                </div>
+                <MyPageInput
+                  value={phoneNumber}
+                  type="num"
+                  maxLength={13}
+                  onChange={handlePhoneNumber}
+                />
+              </FormArea>
+              <FormArea>
+                <div className="form-label" style={{ marginRight: "1rem" }}>
+                  포트폴리오
+                </div>
+                <MyPageInput
+                  value={portfolio}
+                  onChange={(e) => setPortfolio(e.target.value)}
+                />
+              </FormArea>
+              <button
+                className="mypage-button"
+                onClick={handleSubmit}
+                style={{
+                  backgroundColor: ableBtn ? "#014171" : "#01417180",
+                }}
+                disabled={!ableBtn}
+              >
+                저장
+              </button>
             </div>
           </div>
         </div>
-        <div className="infoBox">
-          <div className="boxForm">
-            <FormArea>
-              <div className="form-label" style={{ marginRight: "4.1rem" }}>
-                학교
-              </div>
-              <MyPageInput value={university} disabled={true} />
-            </FormArea>
-            <FormArea>
-              <div className="form-label" style={{ marginRight: "4.1rem" }}>
-                기수
-              </div>
-              <MyPageInput value={generation} disabled={true} width="5.2rem" />
-              <div
-                className="form-label"
-                style={{ marginLeft: "2.2rem", marginRight: "0.9rem" }}
-              >
-                파트
-              </div>
-              <MyPageInput value={part} disabled={true} width="10rem" />
-            </FormArea>
-            <FormArea>
-              <div className="form-label" style={{ marginRight: "2rem" }}>
-                전화번호
-              </div>
-              <MyPageInput
-                value={phoneNumber}
-                type="num"
-                maxLength={13}
-                onChange={handlePhoneNumber}
-              />
-            </FormArea>
-            <FormArea>
-              <div className="form-label" style={{ marginRight: "1rem" }}>
-                포트폴리오
-              </div>
-              <MyPageInput
-                value={portfolio}
-                onChange={(e) => setPortfolio(e.target.value)}
-              />
-            </FormArea>
-            <button
-              className="mypage-button"
-              onClick={handleSubmit}
-              style={{
-                backgroundColor: ableBtn ? "#014171" : "#01417180",
-              }}
-              disabled={!ableBtn}
-            >
-              저장
-            </button>
-          </div>
-        </div>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -256,44 +278,70 @@ const UserInfo = () => {
       if (response.isSuccess) {
         setWithdraw(false); // 모달 닫기
         // 탈퇴 API 후 성공일 때 아래 코드 실행
-        navigate("/", { replace: true }); // 메인 페이지로 이동
+        navigate("/", { replace: true, state: "탈퇴가 완료되었습니다." }); // 메인 페이지로 이동
         purge(); // 초기화 실행
-        alert("탈퇴가 완료되었습니다.");
       } else {
-        alert(response.message);
+        toast.error(response.message, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     });
   };
 
   // 첫 실행시 API 호출
   useEffect(() => {
-    if (accessToken !== "") {
-      myPageDataAPI(accessToken, dispatch, autoLogin).then((response) => {
-        if (response.isSuccess) {
-          setProfileImageURL(response.profileImage);
-          setNicknameName(`${response.nickname} / ${response.name}`);
-          setEmail(response.email);
-          setUniversity(response.university);
-          setgeneration(response.generation);
-          setPart(response.part);
-          setPhoneNumber(
-            response.phoneNumber.replace(
-              /^(\d{2,3})(\d{3,4})(\d{4})$/,
-              `$1-$2-$3`
-            )
-          );
-          setPortfolio(response.portfolio);
-        } else {
-          alert(response.message);
-        }
+    if (location.state) {
+      toast.success(location.state, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
       });
-    } else {
-      navigate("/register", { replace: true }); // 메인 페이지로 이동
     }
+    myPageDataAPI(accessToken, dispatch, autoLogin).then((response) => {
+      if (response.isSuccess) {
+        setProfileImageURL(response.profileImage);
+        setNicknameName(`${response.nickname} / ${response.name}`);
+        setEmail(response.email);
+        setUniversity(response.university);
+        setgeneration(response.generation);
+        setPart(response.part);
+        setPhoneNumber(
+          response.phoneNumber.replace(
+            /^(\d{2,3})(\d{3,4})(\d{4})$/,
+            `$1-$2-$3`
+          )
+        );
+        setPortfolio(response.portfolio);
+      } else {
+        toast.error(response.message, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    });
   }, []);
 
   return (
     <>
+      <ToastContainer />
       <Modal
         isOpen={logout}
         onRequestClose={() => setLogout(false)}

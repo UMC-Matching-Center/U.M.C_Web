@@ -1,8 +1,8 @@
 import { Route, Routes, BrowserRouter } from "react-router-dom";
+import { AdminRoute, ExcludeAdminRoute, PrivateRoutes } from "./routes";
 
 import Navbar from "./common/Navbar/Navbar";
 import Footer from "./common/Footer/Footer";
-import RegisterNavbar from "./common/Navbar/RegisterNavbar";
 import Home from "./pages/home/Home";
 import HomeDetail from "./pages/home/HomeDetail";
 import Register from "./pages/register/Register";
@@ -16,26 +16,25 @@ import MyProject from "./pages/myProject/MyProject";
 function App() {
   return (
     <BrowserRouter>
+      <Navbar />
       <Routes>
-        <Route path="/" element={<Navbar />}>
-          <Route index element={<Home />} />
+        <Route element={<ExcludeAdminRoute />}>
+          <Route path="/" element={<Home />} />
           <Route path="project/*" element={<HomeDetail />} />
+        </Route>
+        <Route element={<PrivateRoutes />}>
+          <Route element={<AdminRoute />}>
+            <Route path="challenger/*" element={<ChallengerManage />} />
+          </Route>
+          <Route element={<ExcludeAdminRoute />}>
+            <Route path="myproject/*" element={<MyProject />} />
+          </Route>
           <Route path="mypage/*" element={<MyPage />} />
-          <Route path="challenger/*" element={<ChallengerManage />} />
           <Route path="notice/*" element={<Notice />} />
           <Route path="schedule/*" element={<Schedule />} />
           <Route path="match/*" element={<Match />} />
-          <Route path="myproject/*" element={<MyProject />} />
         </Route>
-        <Route
-          path="/register/*"
-          element={
-            <>
-              <RegisterNavbar />
-              <Register />
-            </>
-          }
-        />
+        <Route path="register/*" element={<Register />} />
       </Routes>
       <Footer />
     </BrowserRouter>

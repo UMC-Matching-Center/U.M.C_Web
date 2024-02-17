@@ -40,7 +40,7 @@ const CheckIconArea = styled.div`
     no-repeat;
 `;
 
-export default function ViewStatusModal({
+export default function ApplyStatusModal({
   setShowModal,
   modalType,
   selectedAppName,
@@ -75,7 +75,7 @@ export default function ViewStatusModal({
                 style={
                   modalType == "불합격" ? { backgroundColor: "#D62117" } : {}
                 }
-                onClick={() => handlePassOrFail(modalType,selectedAppId)}
+                onClick={() => handlePassOrFail(modalType, selectedAppId)}
               >
                 {modalType}
               </div>

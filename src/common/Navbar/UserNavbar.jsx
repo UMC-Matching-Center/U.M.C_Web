@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
 import { IconPin, IconBell, IconUser } from "@tabler/icons-react";
@@ -108,6 +108,8 @@ const UserNavbar = () => {
   const [isViewModal, setIsViewModal] = useState(false);
   /*각 알림을 읽었는지를 나타내는 bluecircle 표시 = is_confirmed*/
   const [alarmContent, setAlarmContent] = useState(AlarmDummy);
+  /* 알림창 외 클릭 시 알림창 닫기 */
+  const alarmRef = useRef(null);
 
   /*알림창 클릭 이벤트*/
   const handleIconBellClick = () => {
@@ -138,6 +140,24 @@ const UserNavbar = () => {
     setActivePath(location.pathname.split("/")[1]);
     setIsViewModal(false);
   }, [location]);
+
+  useEffect(() => {
+    // 특정 영역 외 클릭 시 발생하는 이벤트
+    const handleOutsideClick = (event, ref, setVisibility) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setVisibility(false);
+      }
+    };
+
+    // 이벤트 리스너에 handleFocus 함수 등록
+    document.addEventListener("mousedown", (event) => {
+      handleOutsideClick(event, alarmRef, setIsViewModal);
+    });
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [alarmRef]);
 
   return (
     <>
@@ -171,12 +191,12 @@ const UserNavbar = () => {
             <UserNavMenuItem
               className={`${activePath === "myproject" && "active"}`}
             >
-              <Link to="/myproject/review" title="My Project">
+              <a style={{ cursor: "default" }} title="My Project">
                 My Project
-              </Link>
+              </a>
               <SubMenuWrapper>
                 <SubMenuItem>
-                  <Link to="/myproject/review">팀원 상호 평가</Link>
+                  <Link to="/myproject/evaluate">팀원 상호 평가</Link>
                 </SubMenuItem>
                 <SubMenuItem>
                   <Link to="/myproject/landing">랜딩페이지 보기</Link>
@@ -201,6 +221,7 @@ const UserNavbar = () => {
               />
             </div>
             <div
+              className="icon-bg"
               style={{
                 position: "relative",
                 margin: "0 2.4rem",
@@ -221,6 +242,7 @@ const UserNavbar = () => {
                 deleteAlarm={deleteAlarm}
                 alarmContent={alarmContent}
                 handleIconBellClick={handleIconBellClick}
+                alarmRef={alarmRef}
               />
             </div>
 

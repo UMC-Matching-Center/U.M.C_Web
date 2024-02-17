@@ -1,4 +1,5 @@
 import { privateAxios } from "../utils/customAxios.js";
+import errorCode from "./errorCode.js";
 
 export const myPageDataAPI = async (accessToken, dispatch, autoLogin) => {
   //서버로부터 받아 사용할 데이터
@@ -37,11 +38,7 @@ export const myPageDataAPI = async (accessToken, dispatch, autoLogin) => {
     }
   } catch (err) {
     response.isSuccess = false;
-    if (err.response && err.response.data.code === "MEMBER4001") {
-      response.message = err.response.data.message;
-    } else {
-      response.message = "알 수 없는 오류가 발생했습니다. 다시 시도해주세요.";
-    }
+    response.message = errorCode(err);
   }
 
   return response;
@@ -69,11 +66,7 @@ export const challengerWithdrawAPI = async (
     }
   } catch (err) {
     response.isSuccess = false;
-    if (err.response && err.response.data.code === "MEMBER4001") {
-      response.message = err.response.data.message;
-    } else {
-      response.message = "알 수 없는 오류가 발생했습니다. 다시 시도해주세요.";
-    }
+    response.message = errorCode(err);
   }
 
   return response;
@@ -124,17 +117,8 @@ export const challengerModifyAPI = async (
     }
   } catch (err) {
     response.isSuccess = false;
-    if (
-      err.response &&
-      (err.response.data.code === "MEMBER4001" ||
-        err.response.data.code === "MEMBER4005")
-    ) {
-      response.message = err.response.data.message;
-    } else if (err.response && err.response?.status === 415) {
-      response.message = "Unsupported Media Type";
-    } else {
-      response.message = "알 수 없는 오류가 발생했습니다. 다시 시도해주세요.";
-    }
+    response.message = errorCode(err);
+
     return response;
   }
 
@@ -186,17 +170,8 @@ export const adminModifyAPI = async (
     }
   } catch (err) {
     response.isSuccess = false;
-    if (
-      err.response &&
-      (err.response.data.code === "MEMBER4001" ||
-        err.response.data.code === "MEMBER4005")
-    ) {
-      response.message = err.response.data.message;
-    } else if (err.response && err.response?.status === 415) {
-      response.message = "Unsupported Media Type";
-    } else {
-      response.message = "알 수 없는 오류가 발생했습니다. 다시 시도해주세요.";
-    }
+    response.message = errorCode(err);
+
     return response;
   }
 

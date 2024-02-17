@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import Modal from "react-modal";
 import OBCard from "../../common/OBCard/OBCard";
 import { SignupComplete } from "../../components/modal";
@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { SIGNUP_COMPLETE } from "../../modules/signupState";
 import useIntersect from "../../utils/intersectionObserve";
 import { obProjectListAPI } from "../../api/index"; // OB 프로젝트 리스트 조회
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ModalStyles = {
   overlay: { width: "100vw", background: "rgba(2, 1, 11, 0.5)" },
@@ -27,6 +29,7 @@ const ModalStyles = {
 const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   Modal.setAppElement("#root");
 
   const { signupCompleteModalOpen } = useSelector((state) => state.signupState);
@@ -67,7 +70,16 @@ const Home = () => {
             setIsEnd(true);
           }
         } else {
-          alert(response.message);
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
         setLoading(false);
       });
@@ -75,8 +87,24 @@ const Home = () => {
     observer.observe(entry.target);
   }, {});
 
+  useEffect(() => {
+    if (location.state) {
+      toast.success(location.state, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  }, []);
+
   return (
     <>
+      <ToastContainer />
       <Modal
         isOpen={signupCompleteModalOpen}
         onRequestClose={() => setModalOpen(false)}
