@@ -97,15 +97,17 @@ function MatchHome({ type }) {
         </div>
       )}
       <MatchList>
-        {data.reverse().map((project) => {
-          return (
-            <MatchCard
-              project={project}
-              key={project.projectId}
-              onClick={handleCardClick}
-            />
-          );
-        })}
+        {data
+          .map((project) => {
+            return (
+              <MatchCard
+                project={project}
+                key={project.projectId}
+                onClick={handleCardClick}
+              />
+            );
+          })
+          .reverse()}
         {loading && <div className="table_title">Loading</div>}
         {!loading && (
           <div ref={setRef} style={{ width: "100%", height: "1px" }} />

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { TextAreaContext } from "../../context/TextAreaProvider";
 
-const NoticeView = ({ handleKeyDown }) => {
+const MatchView = ({ handleKeyDown }) => {
   const { matchText, matchTextareaRef, updateMatchText } =
     useContext(TextAreaContext);
 
@@ -22,4 +22,4 @@ const NoticeView = ({ handleKeyDown }) => {
   );
 };
 
-export default NoticeView;
+export default MatchView;

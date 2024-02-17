@@ -17,9 +17,7 @@ root.render(
   <CookiesProvider>
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>
+        <App />
       </PersistGate>
     </Provider>
   </CookiesProvider>
