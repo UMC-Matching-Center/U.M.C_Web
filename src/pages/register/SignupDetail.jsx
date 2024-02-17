@@ -37,7 +37,7 @@ const EmailAuth = styled.button`
   border: 1px solid #6b6880;
   background-color: #fafafa00;
   font-family: "KBO-Dia-Gothic";
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 300;
   color: #6b6880;
   box-sizing: border-box;
