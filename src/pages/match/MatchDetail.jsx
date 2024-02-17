@@ -169,7 +169,7 @@ const MatchProjectDetail = () => {
             className="match-question-circle"
             onClick={() =>
               navigate(window.location.pathname + `/question`, {
-                state: { id: id },
+                state: { id: id, name: data.name },
               })
             }
           >
