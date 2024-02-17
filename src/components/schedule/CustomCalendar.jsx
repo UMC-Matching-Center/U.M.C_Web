@@ -3,10 +3,11 @@ import styled from "styled-components";
 //캘린더 컨테이너
 const CalendarContainer = styled.div`
   display: flex;
+  box-sizing: border-box;
+  width: 68.5rem;
   flex-direction: column;
   font-size: 1.4rem;
   font-weight: 500;
-  margin-bottom: 3.1rem;
 `;
 
 //캘린더 컨테이너 상단 헤더 부분
@@ -22,6 +23,7 @@ const CalendarTableHeader = styled.div`
 //캘린더 컨테이너 상단 헤더 부분 텍스트
 const CalendarTableHeaderText = styled.div`
   display: flex;
+  box-sizing: border-box;
   width: 26rem;
   font-weight: 700;
   line-height: 150%;
@@ -39,7 +41,6 @@ const CalendarTableHeaderLine = styled.div`
 //캘린더 바디부분
 const CalendarTable = styled.div`
   display: flex;
-  width: 68.6rem;
   width: 100%;
   margin-top: 0.7rem;
   flex-direction: column;
@@ -49,6 +50,7 @@ const CalendarTable = styled.div`
 //캘린더 바디 부분 내 작은 상자(변경 시 조정하기)
 const CalendarTableBox = styled.div`
   display: flex;
+  box-sizing: border-box;
   width: 9.6rem;
   height: 12rem;
   flex-direction: column;
@@ -64,7 +66,7 @@ const CalendarTableBox = styled.div`
       ? "9.4rem"
       : props.$isHighlightedLastday || props.$isHighlightedFirstday
         ? "9.5rem"
-        : "9.6rem"};
+        : "9.8rem"};
 
   //하이라이트 여부에 따라 height 조절
   height: ${(props) => (props.$isHighlighted ? "11.8rem" : "12rem")};

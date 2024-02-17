@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import useGetAccessToken from "../../utils/getAccessToken";
@@ -10,6 +10,7 @@ import MatchDetail from "./MatchDetail";
 import MatchWrite from "./MatchWrite";
 import { TextAreaProvider } from "../../context/TextAreaProvider";
 import useIntersect from "../../utils/intersectionObserve";
+import { AdminRoute } from "../../routes";
 
 const MatchMain = styled.div`
   display: flex;
@@ -120,22 +121,12 @@ export default function Match() {
   return (
     <TextAreaProvider>
       <Routes>
-        <Route path="/" exact element={<MatchHome type={userType} />}></Route>
-        <Route path="/detail/*" element={<MatchDetail />}></Route>
-        <Route
-          path="/new"
-          exact
-          element={
-            userType === "ROLE_PM" ? <MatchWrite /> : <Navigate to=".." />
-          }
-        ></Route>
-        <Route
-          path="/modify"
-          exact
-          element={
-            userType === "ROLE_PM" ? <MatchWrite /> : <Navigate to=".." />
-          }
-        ></Route>
+        <Route path="/" exact element={<MatchHome type={userType} />} />
+        <Route path="/detail/*" element={<MatchDetail />} />
+        <Route element={<AdminRoute />}>
+          <Route path="/new" exact element={<MatchWrite />} />
+          <Route path="/modify" exact element={<MatchWrite />} />
+        </Route>
       </Routes>
     </TextAreaProvider>
   );

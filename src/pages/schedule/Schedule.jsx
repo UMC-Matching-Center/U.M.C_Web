@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import useGetAccessToken from "../../utils/getAccessToken";
 
 const ScheduleBox = styled.div`
-  margin-top : -6.2rem;
+  margin-top: -6.2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,6 +22,8 @@ const ScheduleBox = styled.div`
 //캘린더와 일정 추가 부분을 가로로 만들기 위해 생성
 const ScheduleContainer = styled.div`
   display: flex;
+  justify-content: space-between;
+  width: 120rem;
   flex-direction: row;
   margin-top: 3rem;
 `;

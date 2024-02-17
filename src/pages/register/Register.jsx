@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import "./Register.css";
 import {
@@ -12,6 +12,8 @@ import Signup from "./Signup";
 import SignupDetail from "./SignupDetail";
 import { useDispatch } from "react-redux";
 import { loginAPI } from "../../api";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // input간 간격
 const InputGap = styled.div`
@@ -33,6 +35,7 @@ function Login() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   //로그인 정보 일치 확인 여부
   const handleLogin = () => {
@@ -64,8 +67,24 @@ function Login() {
     setAbleBtn(id !== "" && pw !== "");
   }, [id, pw]);
 
+  useEffect(() => {
+    if (location.state) {
+      toast.error(location.state, {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  }, []);
+
   return (
     <div className="Container">
+      <ToastContainer />
       <div className="MainBox">
         {/* 좌측 로고 부분 */}
         <div className="CoverBox">

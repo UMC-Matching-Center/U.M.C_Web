@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import IconNewNotice from "../../images/ic_new_notice.svg";
 import { IconSearch } from "@tabler/icons-react";
@@ -7,6 +7,7 @@ import { TextAreaProvider } from "../../context/TextAreaProvider";
 import NoticeWrite from "./NoticeWrite";
 import NoticeDetail from "./NoticeDetail";
 import sample from "../../images/sample_project.png";
+import { AdminRoute } from "../../routes";
 
 const noticeDummy = [
   {
@@ -281,37 +282,12 @@ function Notice() {
   return (
     <TextAreaProvider>
       <Routes>
-        <Route
-          path="/"
-          exact
-          element={<NoticeBasic type={user.type} />}
-        ></Route>
-        <Route
-          path="/detail/*"
-          element={<NoticeDetail type={user.type} />}
-        ></Route>
-        <Route
-          path="/new"
-          exact
-          element={
-            user.type === "ROLE_ADMIN" ? (
-              <NoticeWrite mode="new" />
-            ) : (
-              <Navigate to=".." />
-            )
-          }
-        ></Route>
-        <Route
-          path="/modify"
-          exact
-          element={
-            user.type === "ROLE_ADMIN" ? (
-              <NoticeWrite mode="modify" />
-            ) : (
-              <Navigate to=".." />
-            )
-          }
-        ></Route>
+        <Route path="/" exact element={<NoticeBasic type={user.type} />} />
+        <Route path="/detail/*" element={<NoticeDetail type={user.type} />} />
+        <Route element={<AdminRoute />}>
+          <Route path="/new" exact element={<NoticeWrite mode="new" />} />
+          <Route path="/modify" exact element={<NoticeWrite mode="modify" />} />
+        </Route>
       </Routes>
     </TextAreaProvider>
   );
