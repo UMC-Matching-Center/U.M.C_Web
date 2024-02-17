@@ -1,36 +1,49 @@
 import React from "react";
 import "./MemberCard.css";
 
-const MemberCard = () => {
-  const member = {
-    image:
-      "https://blog.kakaocdn.net/dn/w4C2v/btrVqJWa4Pt/Ba0Dw0MU5gAlfQ7aKHZksk/img.jpg",
-    nickName: "오수빈/리처드",
-    year: "5th",
-    part: "Web",
-    school: "가천대학교",
-  };
+const MemberCard = ({ member }) => {
   return (
     <div className="member-card-box">
       <div className="member-card-image">
         <div className="member-card-image-circle">
-          {member.image && <img src={member.image} />}
+          {member.profileImage && <img src={member.profileImage} />}
         </div>
       </div>
       <div className="member-card-content">
-        <div className="member-card-name">{member.nickName}</div>
+        <div className="member-card-name">{member.nameNickName}</div>
         <div className="member-card-bar"></div>
         <div className="member-card-text">
           <span>기수</span>
-          <span>{member.year}</span>
+          <span>{member.generation}기</span>
         </div>
         <div className="member-card-text">
           <span>파트</span>
-          <span>{member.part}</span>
+          <span>
+            {(() => {
+              switch (member.memberPart) {
+                case "PLAN":
+                  return "Plan";
+                case "WEB":
+                  return "Web ";
+                case "DESIGN":
+                  return "Designer";
+                case "SPRINGBOOT":
+                  return "Server(Spring Boot) ";
+                case "NODEJS":
+                  return "Server(Node js) ";
+                case "ANDROID":
+                  return "App (Android) ";
+                case "IOS":
+                  return "App (iOS) ";
+                default:
+                  return "";
+              }
+            })()}
+          </span>
         </div>
         <div className="member-card-text">
           <span>학교</span>
-          <span>{member.school}</span>
+          <span>{member.university}</span>
         </div>
       </div>
     </div>

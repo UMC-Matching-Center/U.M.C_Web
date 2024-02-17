@@ -2,15 +2,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1.7rem 1.5rem; /* 변동 가능성 있음 */
+  padding: 1.7rem 1.2rem; /* 변동 가능성 있음 */
   border-radius: 0.8rem;
   border: 0.1rem solid #08032c;
-  gap: 0.8rem 0;
+  gap: 0.9rem 0;
 }
 
 .member-card-image-circle {
-  width: 7.2rem;
-  height: 7.2rem;
+  width: 5.4rem;
+  height: 5.4rem;
   border-radius: 5rem; /*변동*/
   background-color: #d9d9d9;
 
@@ -29,10 +29,11 @@
   gap: 0.2rem 0;
   > .member-card-name {
     margin: 0 auto;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.7rem;
   }
   > .member-card-bar {
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.5rem;
+    width: 10rem;
   }
 }
 
@@ -51,6 +52,7 @@
 
 .member-card-text {
   display: flex;
+  margin-left: 0.2rem;
   gap: 0 0.6rem;
   font-family: KBO-Dia-Gothic;
   font-size: 1rem;

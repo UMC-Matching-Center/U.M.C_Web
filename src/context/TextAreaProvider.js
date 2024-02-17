@@ -12,6 +12,11 @@ export const TextAreaProvider = ({ children }) => {
     matchText: "",
     matchTextareaRef: useRef(null),
     matchImage: [], // 초기 이미지
+
+    // 랜딩 페이지
+    landingText: "",
+    landingTextareaRef: useRef(null),
+    landingImage: [], // 초기 이미지
   });
 
   /*----- 공지사항 -----*/
@@ -41,7 +46,30 @@ export const TextAreaProvider = ({ children }) => {
     setState((prevState) => ({
       ...prevState,
       matchImage: [],
-      matchNewImage: [],
+    }));
+  };
+
+  /*----- 랜딩 페이지 -----*/
+  // 랜딩 페이지 markdown text
+  const updateLandingText = (newText) => {
+    setState((prevState) => ({ ...prevState, landingText: newText }));
+  };
+
+  // 매칭 프로젝트 image
+  // 1. 랜딩페이지 생성 시, 추가된 이미지 ID 관리 및 수정 시, 수정 이미지 ID 관리
+  const updateLandingImage = (id, url) => {
+    const newImage = { id, url };
+    setState((prevState) => ({
+      ...prevState,
+      landingImage: [...prevState.landingImage, newImage],
+    }));
+  };
+
+  // 2. 랜딩 페이지 업로드 이후, 보관했던 이미지 ID clear
+  const clearLandingImage = () => {
+    setState((prevState) => ({
+      ...prevState,
+      landingImage: [],
     }));
   };
 
@@ -50,9 +78,14 @@ export const TextAreaProvider = ({ children }) => {
       value={{
         ...state,
         updateText,
+
         updateMatchText,
         updateMatchImage,
         clearMatchImage,
+
+        updateLandingText,
+        updateLandingImage,
+        clearLandingImage,
       }}
     >
       {children}

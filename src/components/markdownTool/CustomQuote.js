@@ -10,6 +10,9 @@ const CustomQuote = () => {
     matchText,
     matchTextareaRef,
     updateMatchText,
+    landingText,
+    landingTextareaRef,
+    updateLandingText,
   } = useContext(TextAreaContext);
 
   const handleQutoeClick = (e) => {
@@ -28,6 +31,11 @@ const CustomQuote = () => {
         postText = matchText;
         postRef = matchTextareaRef;
         postUpdate = updateMatchText;
+        break;
+      case "/myproject/landing/new":
+        postText = landingText;
+        postRef = landingTextareaRef;
+        postUpdate = updateLandingText;
         break;
       default:
         break;
