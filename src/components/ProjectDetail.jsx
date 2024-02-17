@@ -94,13 +94,16 @@ const FormContent = styled.div`
     display: flex;
     justify-content: center;
     margin: 0 auto;
-    margin-bottom: 4.7rem;
     width: 35.5rem;
     height: 20rem;
     > img {
       overflow: hidden;
       object-fit: contain;
     }
+  }
+
+  > h1{
+    margin-bottom: 4.7rem;
   }
 
   > .project-description {
@@ -272,16 +275,22 @@ const ProjectDetail = ({ project, type }) => {
               })}
             </FormTitleMenu>
           </FormTitle>
-          {isMatchDetailPage &&
-          type === "ROLE_PM" &&
-          project.memberId === project.pmId ? (
+          {(isMatchDetailPage &&
+            type === "ROLE_PM" &&
+            project.memberId === project.pmId) ||
+          (isLandingDetailPage && type === "ROLE_PM") ? (
             /*수정 버튼 클릭 시, title, image, content 가져감*/
             <button
               className="modify-button"
               onClick={() =>
-                navigation("/match/modify", {
-                  state: { project: project, mode: "modify" },
-                })
+                navigation(
+                  isMatchDetailPage
+                    ? "/match/modify"
+                    : "/myproject/landing/modify",
+                  {
+                    state: { project: project, mode: "modify" },
+                  }
+                )
               }
             >
               수정
@@ -295,6 +304,7 @@ const ProjectDetail = ({ project, type }) => {
                 <img src={project.profileImageUrl} alt="프로젝트디테일" />
               )}
             </div>
+            <h1>{project.name}</h1>
             <div className="project-description">
               {contents.map((content, index) => (
                 <div
@@ -344,12 +354,14 @@ const ProjectDetail = ({ project, type }) => {
                           gap: "1.3rem",
                         }}
                       >
-                        <MemberCard />
-                        <MemberCard />
-                        <MemberCard />
-                        <MemberCard />
-                        <MemberCard />
-                        <MemberCard />
+                        {project.memberList?.map((member) => {
+                          return (
+                            <MemberCard
+                              key={member.nameNickName}
+                              member={member}
+                            />
+                          );
+                        })}
                       </div>
                     )}
                 </div>

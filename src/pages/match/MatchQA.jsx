@@ -35,6 +35,8 @@ const QAWrapper = styled.div`
 `;
 
 const QATitle = styled.div`
+  display: flex;
+  justify-content: center;
   margin: 5.8rem auto 6rem auto;
   width: 99.6rem;
   font-family: KBO-Dia-Gothic;
@@ -155,6 +157,7 @@ const MatchQA = () => {
   const [newQ, setNewQ] = useState("");
   const { state } = useLocation();
   const projectId = state.id;
+  const projectName = state.name;
 
   const dispatch = useDispatch();
   const accessToken = useGetAccessToken();
@@ -359,8 +362,8 @@ const MatchQA = () => {
       <QAContainer>
         <QAWrapper>
           <QATitle>
-            <div style={{ color: "#000000" }}>UMC Matching Center</div>
-            <div style={{ color: "#0261aa" }}>Q&A</div>
+            <div style={{ color: "#000000" }}>{projectName}</div>
+            <div style={{ color: "#0261aa" }}>&nbsp;Q&A</div>
           </QATitle>
           <QAContent>
             {QMode && (

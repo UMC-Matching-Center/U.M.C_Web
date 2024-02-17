@@ -40,6 +40,18 @@ import {
   matchAnswerUploadAPI,
 } from "./matchAPI.js";
 import { obProjectListAPI, obProjectDetailAPI } from "./obProjectAPI.js";
+import {
+  landingWriteAPI,
+  landingModifyAPI,
+  landingImageUploadAPI,
+  landingDetailAPI,
+} from "./landingAPI.js";
+import {
+  noticeListAPI,
+  noticeDetailAPI,
+  noticeUploadAPI,
+  noticeModifyAPI,
+} from "./noticeAPI.js";
 
 export {
   loginAPI, // 로그인
@@ -78,4 +90,12 @@ export {
   matchAnswerUploadAPI, // Q&A 새로운 답변 등록
   obProjectListAPI, // OB 프로젝트 리스트 조회
   obProjectDetailAPI, // OB 프로젝트 상세 조회
+  landingWriteAPI, // 랜딩 페이지 작성
+  landingModifyAPI, // 랜딩 페이지 수정
+  landingImageUploadAPI, // 랜딩 페이지 이미지 업로드
+  landingDetailAPI, // 랜딩 페이지 조회
+  noticeListAPI, // 공지사항 리스트 조회
+  noticeDetailAPI, // 공지사항 상세 조회
+  noticeUploadAPI, // 공지사항 업로드
+  noticeModifyAPI, // 공지사항 수정
 };
