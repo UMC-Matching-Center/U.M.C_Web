@@ -18,6 +18,8 @@ import {
 } from "../../api/index";
 import Modal from "react-modal";
 import { ChallengerExpel } from "../../components/modal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 /*-------------------박스 두개 중 첫 번째 상단 박스------------------*/
 //현재 챌린저 상태 state
@@ -225,7 +227,16 @@ function ChallengerList() {
             return new Map(nextState); // 새로운 맵 객체를 반환하여 상태 업데이트
           });
         } else {
-          alert(response.message);
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
       }
     );
@@ -250,8 +261,27 @@ function ChallengerList() {
           setUserData((prevUserData) =>
             prevUserData.filter((data) => data.memberId !== expelUser.memberId)
           );
+          toast.success("탈부 처리 완료", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         } else {
-          alert(response.message);
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
       });
     }
@@ -322,7 +352,16 @@ function ChallengerList() {
             setIsEnd(true);
           }
         } else {
-          alert(response.message);
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
         setLoading(false);
       });
@@ -339,6 +378,7 @@ function ChallengerList() {
 
   return (
     <>
+      <ToastContainer />
       <Modal
         isOpen={expel}
         onRequestClose={() => setExpel(false)}
@@ -496,7 +536,7 @@ function ChallengerList() {
 
             {loading && <div className="table_title">Loading</div>}
             {!loading && (
-              <div ref={setRef} style={{ width: "100%", height: "1px" }} />
+              <div ref={setRef} style={{ width: "100%", height: "2px" }} />
             )}
           </div>
         </div>

@@ -50,7 +50,7 @@ const SelectOptions = styled.ul`
 `;
 
 const Option = styled.li`
-  font-size: 1rem;
+  font-size: 1.2rem;
   padding: 0.5rem;
   box-sizing: border-box;
   border-bottom: 0.5px solid #6b6880;

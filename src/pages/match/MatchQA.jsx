@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   matchQAListAPI,
@@ -15,6 +15,8 @@ import {
   IconPencil,
 } from "@tabler/icons-react";
 import styled from "styled-components";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const QAContainer = styled.div`
   display: flex;
@@ -153,7 +155,6 @@ const MatchQA = () => {
   const [disableAnswer, setDisableAnswer] = useState([]);
   const [QMode, setQMode] = useState(false);
   const [newQ, setNewQ] = useState("");
-  const navigate = useNavigate();
   const { state } = useLocation();
   const projectId = state.id;
   const projectName = state.name;
@@ -164,22 +165,27 @@ const MatchQA = () => {
 
   // API : 리스트 조회
   const loadData = () => {
-    if (accessToken !== "") {
-      matchQAListAPI(accessToken, dispatch, autoLogin, projectId).then(
-        (response) => {
-          if (response.isSuccess) {
-            setQAData(response.qnaList);
-            setToggles(response.qnaList.map(() => false));
-            setAContent(response.qnaList.map(() => ""));
-            setDisableAnswer(response.qnaList.map(() => true));
-          } else {
-            alert(response.message);
-          }
+    matchQAListAPI(accessToken, dispatch, autoLogin, projectId).then(
+      (response) => {
+        if (response.isSuccess) {
+          setQAData(response.qnaList);
+          setToggles(response.qnaList.map(() => false));
+          setAContent(response.qnaList.map(() => ""));
+          setDisableAnswer(response.qnaList.map(() => true));
+        } else {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
-      );
-    } else {
-      navigate("/login", { replace: true }); // 메인 페이지로 이동
-    }
+      }
+    );
   };
 
   useEffect(() => {
@@ -216,49 +222,21 @@ const MatchQA = () => {
 
   // 답변 삭제 이벤트
   const deleteQA = (index, questionId) => {
-    if (accessToken !== "") {
-      matchQADeleteAPI(accessToken, dispatch, autoLogin, questionId).then(
-        (response) => {
-          if (response.isSuccess) {
-            // 삭제된 QA를 제외하고 QA 목록 업데이트
-            const updatedQAList = QAData.filter((qa, idx) => idx !== index);
-            setQAData(updatedQAList);
-
-            // 그 외 Toggles, AContent 및 DisableAnswer 상태 업데이트
-            setToggles(updatedQAList.map(() => false));
-            setAContent(updatedQAList.map(() => ""));
-            setDisableAnswer(updatedQAList.map(() => true));
-          } else {
-            alert(response.message);
-          }
-        }
-      );
-    } else {
-      navigate("/login", { replace: true }); // 메인 페이지로 이동
-    }
-  };
-
-  // 새로운 질문 등록
-  const uploadNewQ = () => {
-    if (accessToken !== "") {
-      matchQuestionUploadAPI(
-        accessToken,
-        dispatch,
-        autoLogin,
-        projectId,
-        newQ
-      ).then((response) => {
+    matchQADeleteAPI(accessToken, dispatch, autoLogin, questionId).then(
+      (response) => {
         if (response.isSuccess) {
+          toast.success(`답변 삭제 완료`, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
           // 삭제된 QA를 제외하고 QA 목록 업데이트
-          const updatedQAList = [
-            ...QAData,
-            {
-              questionId: response.questionId,
-              question: newQ,
-              answer: null,
-              createAt: null,
-            },
-          ];
+          const updatedQAList = QAData.filter((qa, idx) => idx !== index);
           setQAData(updatedQAList);
 
           // 그 외 Toggles, AContent 및 DisableAnswer 상태 업데이트
@@ -266,12 +244,70 @@ const MatchQA = () => {
           setAContent(updatedQAList.map(() => ""));
           setDisableAnswer(updatedQAList.map(() => true));
         } else {
-          alert(response.message);
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
-      });
-    } else {
-      navigate("/login", { replace: true }); // 메인 페이지로 이동
-    }
+      }
+    );
+  };
+
+  // 새로운 질문 등록
+  const uploadNewQ = () => {
+    matchQuestionUploadAPI(
+      accessToken,
+      dispatch,
+      autoLogin,
+      projectId,
+      newQ
+    ).then((response) => {
+      if (response.isSuccess) {
+        toast.success(`질문 등록 완료`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        // 삭제된 QA를 제외하고 QA 목록 업데이트
+        const updatedQAList = [
+          ...QAData,
+          {
+            questionId: response.questionId,
+            question: newQ,
+            answer: null,
+            createAt: null,
+          },
+        ];
+        setQAData(updatedQAList);
+
+        // 그 외 Toggles, AContent 및 DisableAnswer 상태 업데이트
+        setToggles(updatedQAList.map(() => false));
+        setAContent(updatedQAList.map(() => ""));
+        setDisableAnswer(updatedQAList.map(() => true));
+      } else {
+        toast.error(response.message, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    });
 
     setNewQ("");
     setQMode(false);
@@ -279,34 +315,50 @@ const MatchQA = () => {
 
   // 새로운 답변 등록
   const uploadNewA = (questionId, answer) => {
-    if (accessToken !== "") {
-      matchAnswerUploadAPI(
-        accessToken,
-        dispatch,
-        autoLogin,
-        questionId,
-        answer
-      ).then((response) => {
-        if (response.isSuccess) {
-          // 답변 등록된 QA 목록 업데이트
-          const updatedQAList = QAData.map((item) => {
-            if (item.questionId === questionId) {
-              return { ...item, answer: answer };
-            }
-            return item;
-          });
-          setQAData(updatedQAList);
-        } else {
-          alert(response.message);
-        }
-      });
-    } else {
-      navigate("/login", { replace: true }); // 메인 페이지로 이동
-    }
+    matchAnswerUploadAPI(
+      accessToken,
+      dispatch,
+      autoLogin,
+      questionId,
+      answer
+    ).then((response) => {
+      if (response.isSuccess) {
+        toast.success(`답변 등록 완료`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        // 답변 등록된 QA 목록 업데이트
+        const updatedQAList = QAData.map((item) => {
+          if (item.questionId === questionId) {
+            return { ...item, answer: answer };
+          }
+          return item;
+        });
+        setQAData(updatedQAList);
+      } else {
+        toast.error(response.message, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    });
   };
 
   return (
     <>
+      <ToastContainer />
       <QAContainer>
         <QAWrapper>
           <QATitle>

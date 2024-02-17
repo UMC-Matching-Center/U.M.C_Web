@@ -72,7 +72,6 @@ const createPrivateAxios = (accessToken, dispatch, autoLogin) => {
         }
       } else if (error.response.data.code === "JWT4001") {
         // 권한이 존재하지 않을 때
-        alert("권한이 존재하지 않습니다.");
         Navigate(-1);
       } else {
         console.log("OriginRequst Error:\n", error);

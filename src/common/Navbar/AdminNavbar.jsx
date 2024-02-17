@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
 import { IconPin, IconBell, IconUser } from "@tabler/icons-react";
@@ -120,6 +120,8 @@ const AdminNavbar = () => {
   const [isViewModal, setIsViewModal] = useState(false);
   /*각 알림을 읽었는지를 나타내는 bluecircle 표시 = is_confirmed*/
   const [alarmContent, setAlarmContent] = useState(AlarmDummy);
+  /* 알림창 외 클릭 시 알림창 닫기 */
+  const alarmRef = useRef(null);
 
   /*알림창 클릭 이벤트*/
   const handleIconBellClick = () => {
@@ -151,6 +153,24 @@ const AdminNavbar = () => {
     setIsViewModal(false);
   }, [location]);
 
+  useEffect(() => {
+    // 특정 영역 외 클릭 시 발생하는 이벤트
+    const handleOutsideClick = (event, ref, setVisibility) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setVisibility(false);
+      }
+    };
+
+    // 이벤트 리스너에 handleFocus 함수 등록
+    document.addEventListener("mousedown", (event) => {
+      handleOutsideClick(event, alarmRef, setIsViewModal);
+    });
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [alarmRef]);
+
   return (
     <>
       <div className="app__nav">
@@ -164,9 +184,9 @@ const AdminNavbar = () => {
             <UserNavMenuItem
               className={`${activePath === "challenger" && "active"}`}
             >
-              <Link to="/challenger/manage" title="Challenger">
+              <a style={{ cursor: "default" }} title="Challenger">
                 Challenger
-              </Link>
+              </a>
               <SubMenuWrapper>
                 <SubMenuItem>
                   <Link to="/challenger/manage">챌린저 관리</Link>
@@ -209,7 +229,9 @@ const AdminNavbar = () => {
               />
             </div>
             <div
+              className="icon-bg"
               style={{
+                background: activePath === "notice" && "#0261AA",
                 position: "relative",
                 margin: "0 2.4rem",
               }}
@@ -229,6 +251,7 @@ const AdminNavbar = () => {
                 deleteAlarm={deleteAlarm}
                 alarmContent={alarmContent}
                 handleIconBellClick={handleIconBellClick}
+                alarmRef={alarmRef}
               />
             </div>
             <div

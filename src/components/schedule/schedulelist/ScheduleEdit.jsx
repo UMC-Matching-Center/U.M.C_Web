@@ -5,6 +5,8 @@ import DotEditOptions from "./dotoptions/DotEditOptions";
 import useGetAccessToken from "../../../utils/getAccessToken";
 import { useDispatch, useSelector } from "react-redux";
 import { scheduleDeleteAPI, scheduleEditAPI } from "../../../api";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 //편집 제목 박스
 const EditTitleBox = styled.div`
@@ -113,9 +115,27 @@ export default function ScheduleEdit({
     scheduleDeleteAPI(accessToken, dispatch, autoLogin, scheduleId).then(
       (response) => {
         if (response.isSuccess) {
-          console.log("삭제 성공");
+          toast.success("삭제 성공", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         } else {
-          alert(response.message);
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
       }
     );
@@ -145,14 +165,31 @@ export default function ScheduleEdit({
         }
         return acc;
       }, {});
-    console.log(giveData);
 
     scheduleEditAPI(accessToken, dispatch, autoLogin, id, giveData).then(
       (response) => {
         if (response.isSuccess) {
-          console.log("수정 성공");
+          toast.success("수정 성공", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         } else {
-          alert(response.message);
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
       }
     );
@@ -288,148 +325,151 @@ export default function ScheduleEdit({
           currentMonthIndex + 1 > infobox.startMonth))
   );
   return (
-    <div className="schedulecontainer">
-      {isDataInMonth ? (
-        dummyData.map((infobox) =>
-          infobox.editOn
-            ? ((infobox.startYear == currentYearIndex &&
-                infobox.startMonth == currentMonthIndex + 1) ||
-                (infobox.endYear == currentYearIndex &&
-                  infobox.endMonth == currentMonthIndex + 1)) &&
-              (infobox.startMonth == currentMonthIndex + 1 ||
-                infobox.endMonth == currentMonthIndex + 1 ||
-                (infobox.endMonth > currentMonthIndex + 1 &&
-                  currentMonthIndex + 1 > infobox.startMonth)) && (
-                <div
-                  key={infobox.scheduleId}
-                  className="schedulebox"
-                  style={{ height: "19.5rem" }}
-                >
-                  <EditTitleBox>
-                    <DotEditOptions
-                      infobox={infobox}
-                      handleColorChange={handleColorChange}
-                      colorOptionList={colorOptionList}
-                      selectedColor={selectedColor}
-                      setSelectedColor={setSelectedColor}
-                    />
-                    <EditTitle
-                      value={infobox.title}
-                      onChange={(e) =>
-                        handleTitleChange(infobox.scheduleId, e.target.value)
-                      }
-                    />
-                    <span
-                      className="scheduleedit"
-                      onClick={() => handleSave(infobox.scheduleId)}
-                      style={{
-                        marginLeft: "7rem",
-                        ...(ableBtn //해당 btn이 false이 off하기
-                          ? {}
-                          : { pointerEvents: "none", opacity: 0.4 }),
-                      }}
-                    >
-                      저장
-                    </span>
-                  </EditTitleBox>
-                  <EditDateBox>
-                    <EditDate
-                      defaultValue={`${infobox.startYear}년 ${infobox.startMonth}월 ${infobox.startDay}일`}
-                      onChange={(e) =>
-                        handleStartMonthDayChange(
-                          infobox.scheduleId,
-                          e.target.value
-                        )
-                      }
-                      style={{ marginRight: "0.8rem" }}
-                    />
-                    <span>~</span>
-                    <EditDate
-                      defaultValue={`${infobox.endYear}년 ${infobox.endMonth}월 ${infobox.endDay}일`}
-                      onChange={(e) =>
-                        handleEndMonthDayChange(
-                          infobox.scheduleId,
-                          e.target.value
-                        )
-                      }
-                      style={{ marginLeft: "0.8rem" }}
-                    />
-                  </EditDateBox>
-                  <EditText
-                    placeholder="메모(선택)"
-                    type="text"
-                    value={infobox.description}
-                    onChange={(e) =>
-                      handleTextChange(infobox.scheduleId, e.target.value)
-                    }
-                  />
-                </div>
-              )
-            : //수정하기 전 상태
-              (infobox.startYear == currentYearIndex ||
-                infobox.endYear == currentYearIndex) &&
-              (infobox.startMonth == currentMonthIndex + 1 ||
-                infobox.endMonth == currentMonthIndex + 1 ||
-                (infobox.endMonth > currentMonthIndex + 1 &&
-                  currentMonthIndex + 1 > infobox.startMonth)) && (
-                <div key={infobox.scheduleId} className="schedulebox">
-                  <div className="schduletitlecontainer">
-                    <StyledSVG>
-                      <circle
-                        cx="6"
-                        cy="6"
-                        r="6"
-                        fill={infobox.scheduleColor}
+    <>
+      <ToastContainer />
+      <div className="schedulecontainer">
+        {isDataInMonth ? (
+          dummyData.map((infobox) =>
+            infobox.editOn
+              ? ((infobox.startYear == currentYearIndex &&
+                  infobox.startMonth == currentMonthIndex + 1) ||
+                  (infobox.endYear == currentYearIndex &&
+                    infobox.endMonth == currentMonthIndex + 1)) &&
+                (infobox.startMonth == currentMonthIndex + 1 ||
+                  infobox.endMonth == currentMonthIndex + 1 ||
+                  (infobox.endMonth > currentMonthIndex + 1 &&
+                    currentMonthIndex + 1 > infobox.startMonth)) && (
+                  <div
+                    key={infobox.scheduleId}
+                    className="schedulebox"
+                    style={{ height: "19.5rem" }}
+                  >
+                    <EditTitleBox>
+                      <DotEditOptions
+                        infobox={infobox}
+                        handleColorChange={handleColorChange}
+                        colorOptionList={colorOptionList}
+                        selectedColor={selectedColor}
+                        setSelectedColor={setSelectedColor}
                       />
-                    </StyledSVG>
-
-                    <div className="scheduletitle">{infobox.title}</div>
-                    <div className="scheduleeditbox">
-                      <span
-                        className="scheduleedit"
-                        style={
-                          editAble
-                            ? {}
-                            : { pointerEvents: "none", opacity: 0.4 }
+                      <EditTitle
+                        value={infobox.title}
+                        onChange={(e) =>
+                          handleTitleChange(infobox.scheduleId, e.target.value)
                         }
-                        onClick={() => handleEdit(infobox.scheduleId)}
-                      >
-                        수정
-                      </span>
-                      <span className="scheduleedit"> | </span>
+                      />
                       <span
                         className="scheduleedit"
-                        onClick={() => handleDelete(infobox.scheduleId)}
+                        onClick={() => handleSave(infobox.scheduleId)}
+                        style={{
+                          marginLeft: "7rem",
+                          ...(ableBtn //해당 btn이 false이 off하기
+                            ? {}
+                            : { pointerEvents: "none", opacity: 0.4 }),
+                        }}
                       >
-                        삭제
+                        저장
                       </span>
+                    </EditTitleBox>
+                    <EditDateBox>
+                      <EditDate
+                        defaultValue={`${infobox.startYear}년 ${infobox.startMonth}월 ${infobox.startDay}일`}
+                        onChange={(e) =>
+                          handleStartMonthDayChange(
+                            infobox.scheduleId,
+                            e.target.value
+                          )
+                        }
+                        style={{ marginRight: "0.8rem" }}
+                      />
+                      <span>~</span>
+                      <EditDate
+                        defaultValue={`${infobox.endYear}년 ${infobox.endMonth}월 ${infobox.endDay}일`}
+                        onChange={(e) =>
+                          handleEndMonthDayChange(
+                            infobox.scheduleId,
+                            e.target.value
+                          )
+                        }
+                        style={{ marginLeft: "0.8rem" }}
+                      />
+                    </EditDateBox>
+                    <EditText
+                      placeholder="메모(선택)"
+                      type="text"
+                      value={infobox.description}
+                      onChange={(e) =>
+                        handleTextChange(infobox.scheduleId, e.target.value)
+                      }
+                    />
+                  </div>
+                )
+              : //수정하기 전 상태
+                (infobox.startYear == currentYearIndex ||
+                  infobox.endYear == currentYearIndex) &&
+                (infobox.startMonth == currentMonthIndex + 1 ||
+                  infobox.endMonth == currentMonthIndex + 1 ||
+                  (infobox.endMonth > currentMonthIndex + 1 &&
+                    currentMonthIndex + 1 > infobox.startMonth)) && (
+                  <div key={infobox.scheduleId} className="schedulebox">
+                    <div className="schduletitlecontainer">
+                      <StyledSVG>
+                        <circle
+                          cx="6"
+                          cy="6"
+                          r="6"
+                          fill={infobox.scheduleColor}
+                        />
+                      </StyledSVG>
+
+                      <div className="scheduletitle">{infobox.title}</div>
+                      <div className="scheduleeditbox">
+                        <span
+                          className="scheduleedit"
+                          style={
+                            editAble
+                              ? {}
+                              : { pointerEvents: "none", opacity: 0.4 }
+                          }
+                          onClick={() => handleEdit(infobox.scheduleId)}
+                        >
+                          수정
+                        </span>
+                        <span className="scheduleedit"> | </span>
+                        <span
+                          className="scheduleedit"
+                          onClick={() => handleDelete(infobox.scheduleId)}
+                        >
+                          삭제
+                        </span>
+                      </div>
                     </div>
+                    <div className="scheduledate">
+                      {infobox.startYear}년 {infobox.startMonth}월{" "}
+                      {infobox.startDay}일 ~ {infobox.endYear}년{" "}
+                      {infobox.endMonth}월 {infobox.endDay}일
+                    </div>
+                    <div className="scheduletext">{infobox.description}</div>
                   </div>
-                  <div className="scheduledate">
-                    {infobox.startYear}년 {infobox.startMonth}월{" "}
-                    {infobox.startDay}일 ~ {infobox.endYear}년{" "}
-                    {infobox.endMonth}월 {infobox.endDay}일
-                  </div>
-                  <div className="scheduletext">{infobox.description}</div>
-                </div>
-              )
-        )
-      ) : (
-        <div className="noschedulebox">등록된 일정이 없습니다.</div>
-      )}
-      <div className="schedulebuttoncontainer">
-        <div
-          className="schedulebuttonfinish"
-          onClick={handleScheduleEditFinish}
-          style={{
-            ...(ableBtn //해당 btn이 false이 off하기
-              ? {}
-              : { pointerEvents: "none", opacity: 0.4 }),
-          }}
-        >
-          편집 완료하기
+                )
+          )
+        ) : (
+          <div className="noschedulebox">등록된 일정이 없습니다.</div>
+        )}
+        <div className="schedulebuttoncontainer">
+          <div
+            className="schedulebuttonfinish"
+            onClick={handleScheduleEditFinish}
+            style={{
+              ...(ableBtn //해당 btn이 false이 off하기
+                ? {}
+                : { pointerEvents: "none", opacity: 0.4 }),
+            }}
+          >
+            편집 완료하기
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

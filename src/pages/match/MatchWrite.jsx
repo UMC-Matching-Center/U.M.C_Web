@@ -194,17 +194,15 @@ const MatchWrite = () => {
         imageIdList: images,
       };
 
-      if (accessToken !== "") {
-        matchPostUploadAPI(accessToken, dispatch, autoLogin, postData).then(
-          (response) => {
-            if (response.isSuccess) {
-              clearMatchImage();
-              updateMatchText("");
-            }
-            navigate(-1, { replace: true });
+      matchPostUploadAPI(accessToken, dispatch, autoLogin, postData).then(
+        (response) => {
+          if (response.isSuccess) {
+            clearMatchImage();
+            updateMatchText("");
           }
-        );
-      }
+          navigate(-1, { replace: true });
+        }
+      );
     } else if (mode === "modify") {
       // modify the matching project
       // 파트
@@ -249,21 +247,19 @@ const MatchWrite = () => {
       };
 
       // API 작성
-      if (accessToken !== "") {
-        matchPostModifyAPI(
-          accessToken,
-          dispatch,
-          autoLogin,
-          project.projectId,
-          postData
-        ).then((response) => {
-          if (response.isSuccess) {
-            clearMatchImage();
-            updateMatchText("");
-          }
-          navigate(-1, { replace: true });
-        });
-      }
+      matchPostModifyAPI(
+        accessToken,
+        dispatch,
+        autoLogin,
+        project.projectId,
+        postData
+      ).then((response) => {
+        if (response.isSuccess) {
+          clearMatchImage();
+          updateMatchText("");
+        }
+        navigate(-1, { replace: true });
+      });
     }
   };
 

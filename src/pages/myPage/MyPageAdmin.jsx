@@ -14,6 +14,8 @@ import Modal from "react-modal";
 import { Logout } from "../../components/modal";
 import { removeCookieToken } from "../../utils/cookies";
 import { persistor } from "../../index";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const FormArea = styled.div`
   display: flex;
@@ -124,9 +126,18 @@ const AdminModify = () => {
       phoneNumber
     ).then((response) => {
       if (response.isSuccess) {
-        navigate(-1, { replace: true });
+        navigate(-1, { replace: true, state: "마이페이지 수정 완료" });
       } else {
-        alert(response.message);
+        toast.error(response.message, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     });
   };
@@ -156,99 +167,106 @@ const AdminModify = () => {
   }, [officeSelectRef]);
 
   return (
-    <div className="container">
-      <div className="boxWrapper">
-        <div className="profileBox-wrapper">
-          <div className="profile_circle-bg">
-            <label htmlFor="profileImageInput">
-              <div
-                className="profile_circle"
-                style={{
-                  backgroundImage: `url(${profileImageURL})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center center",
-                  cursor: "pointer",
-                }}
-              >
-                {profileImageURL ? null : (
-                  <IconPhotoPlus size={36} strokeWidth={1} color={"#E7E6EA"} />
-                )}
+    <>
+      <ToastContainer />
+      <div className="container">
+        <div className="boxWrapper">
+          <div className="profileBox-wrapper">
+            <div className="profile_circle-bg">
+              <label htmlFor="profileImageInput">
+                <div
+                  className="profile_circle"
+                  style={{
+                    backgroundImage: `url(${profileImageURL})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center center",
+                    cursor: "pointer",
+                  }}
+                >
+                  {profileImageURL ? null : (
+                    <IconPhotoPlus
+                      size={36}
+                      strokeWidth={1}
+                      color={"#E7E6EA"}
+                    />
+                  )}
+                </div>
+              </label>
+            </div>
+            <input
+              id="profileImageInput"
+              type="file"
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={handleProfileImageChange}
+            />
+            <div className="profileBox">
+              <div className="profileBox-content">
+                <div className="profile-name">{nicknameName}</div>
+                <div className="profile-email">{email}</div>
               </div>
-            </label>
+            </div>
           </div>
-          <input
-            id="profileImageInput"
-            type="file"
-            accept="image/*"
-            style={{ display: "none" }}
-            onChange={handleProfileImageChange}
-          />
-          <div className="profileBox">
-            <div className="profileBox-content">
-              <div className="profile-name">{nicknameName}</div>
-              <div className="profile-email">{email}</div>
+          <div className="infoBox">
+            <div className="boxForm">
+              <FormArea style={{ marginBottom: "3.2rem" }}>
+                <div className="form-label" style={{ flexGrow: 1 }}>
+                  대표 번호
+                </div>
+                <div style={{ width: "20rem" }}>
+                  <MyPageInput
+                    type="tel"
+                    placeholder="숫자만 입력해주세요"
+                    value={phoneNumber}
+                    onChange={(e) => handlePhoneNumber(e)}
+                    maxLength={13}
+                  />
+                  <FormInputUnderline />
+                </div>
+              </FormArea>
+
+              {/* 지부 부분 */}
+              <FormArea style={{ marginBottom: "9.2rem" }}>
+                <div className="form-label" style={{ flexGrow: 1 }}>
+                  지부 선택
+                </div>
+                <div style={{ width: "20rem", position: "relative" }}>
+                  <SelectBox
+                    onClick={() => setOfficeOptionVisible(!officeOptionVisible)}
+                    ref={officeSelectRef}
+                  >
+                    <label style={{ cursor: "pointer" }}>{office[1]}</label>
+                    <SelectOptions $visible={officeOptionVisible}>
+                      {OfficeOptionsDummy.map((option) => (
+                        <Option
+                          onClick={() => setOffice([option.key, option.name])}
+                          key={option.key}
+                          className={option.key === office[0] ? "selected" : ""}
+                        >
+                          {option.name}
+                        </Option>
+                      ))}
+                    </SelectOptions>
+                  </SelectBox>
+                  <FormInputUnderline />
+                </div>
+              </FormArea>
+
+              <button
+                className="mypage-button"
+                onClick={handleSubmit}
+                style={{
+                  backgroundColor: ableBtn ? "#014171" : "#01417180",
+                }}
+                disabled={!ableBtn}
+              >
+                저장
+              </button>
             </div>
           </div>
         </div>
-        <div className="infoBox">
-          <div className="boxForm">
-            <FormArea style={{ marginBottom: "3.2rem" }}>
-              <div className="form-label" style={{ flexGrow: 1 }}>
-                대표 번호
-              </div>
-              <div style={{ width: "20rem" }}>
-                <MyPageInput
-                  type="tel"
-                  placeholder="숫자만 입력해주세요"
-                  value={phoneNumber}
-                  onChange={(e) => handlePhoneNumber(e)}
-                  maxLength={13}
-                />
-                <FormInputUnderline />
-              </div>
-            </FormArea>
-
-            {/* 지부 부분 */}
-            <FormArea style={{ marginBottom: "9.2rem" }}>
-              <div className="form-label" style={{ flexGrow: 1 }}>
-                지부 선택
-              </div>
-              <div style={{ width: "20rem", position: "relative" }}>
-                <SelectBox
-                  onClick={() => setOfficeOptionVisible(!officeOptionVisible)}
-                  ref={officeSelectRef}
-                >
-                  <label style={{ cursor: "pointer" }}>{office[1]}</label>
-                  <SelectOptions $visible={officeOptionVisible}>
-                    {OfficeOptionsDummy.map((option) => (
-                      <Option
-                        onClick={() => setOffice([option.key, option.name])}
-                        key={option.key}
-                        className={option.key === office[0] ? "selected" : ""}
-                      >
-                        {option.name}
-                      </Option>
-                    ))}
-                  </SelectOptions>
-                </SelectBox>
-                <FormInputUnderline />
-              </div>
-            </FormArea>
-
-            <button
-              className="mypage-button"
-              onClick={handleSubmit}
-              style={{
-                backgroundColor: ableBtn ? "#014171" : "#01417180",
-              }}
-              disabled={!ableBtn}
-            >
-              저장
-            </button>
-          </div>
-        </div>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -282,30 +300,48 @@ const AdminInfo = () => {
 
   // 첫 실행시 API 호출
   useEffect(() => {
-    if (accessToken !== "") {
-      myPageDataAPI(accessToken, dispatch, autoLogin).then((response) => {
-        if (response.isSuccess) {
-          setProfileImageURL(response.profileImage);
-          setNicknameName(`${response.nickname} / ${response.name}`);
-          setEmail(response.email);
-          setOffice(response.office);
-          setPhoneNumber(
-            response.phoneNumber.replace(
-              /^(\d{2,3})(\d{3,4})(\d{4})$/,
-              `$1-$2-$3`
-            )
-          );
-        } else {
-          alert(response.message);
-        }
+    myPageDataAPI(accessToken, dispatch, autoLogin).then((response) => {
+      if (response.isSuccess) {
+        setProfileImageURL(response.profileImage);
+        setNicknameName(`${response.nickname} / ${response.name}`);
+        setEmail(response.email);
+        setOffice(response.office);
+        setPhoneNumber(
+          response.phoneNumber.replace(
+            /^(\d{2,3})(\d{3,4})(\d{4})$/,
+            `$1-$2-$3`
+          )
+        );
+      } else {
+        toast.error(response.message, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    });
+    if (location.state) {
+      toast.success(location.state, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
       });
-    } else {
-      navigate("/register", { replace: true }); // 메인 페이지로 이동
     }
   }, []);
 
   return (
     <>
+      <ToastContainer />
       <Modal
         isOpen={logout}
         onRequestClose={() => setLogout(false)}

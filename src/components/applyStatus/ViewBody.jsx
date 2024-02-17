@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Modal from "react-modal";
-import { ViewStatusModal } from "../modal";
+import { ApplyStatusModal } from "../modal";
 //파트 컨테이너
 const PartContainer = styled.div`
   display: flex;
@@ -268,7 +268,6 @@ export default function ViewBody({
           filteredApps.length > 0 &&
           (selectedOptionIndex === option.display ||
             selectedOptionIndex === "전체보기");
-        console.log(filteredApps);
 
         return shouldRenderPartContainer ? (
           <PartContainer key={option.num}>
@@ -344,7 +343,7 @@ export default function ViewBody({
         onRequestClose={() => setShowModal(false)}
         style={ModalStyles}
       >
-        <ViewStatusModal
+        <ApplyStatusModal
           setShowModal={setShowModal}
           modalType={modalType}
           selectedAppName={selectedAppName}

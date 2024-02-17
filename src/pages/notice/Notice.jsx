@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import useGetAccessToken from "../../utils/getAccessToken";
 import { noticeListAPI } from "../../api";
+import { AdminRoute } from "../../routes/";
+
 import styled from "styled-components";
 import IconNewNotice from "../../images/ic_new_notice.svg";
 import { IconSearch } from "@tabler/icons-react";
@@ -278,33 +280,12 @@ function Notice() {
   return (
     <TextAreaProvider>
       <Routes>
-        <Route path="/" exact element={<NoticeBasic type={userType} />}></Route>
-        <Route
-          path="/detail/:id"
-          element={<NoticeDetail type={userType} />}
-        ></Route>
-        <Route
-          path="/new"
-          exact
-          element={
-            userType === "ROLE_ADMIN" ? (
-              <NoticeWrite mode="new" />
-            ) : (
-              <Navigate to=".." />
-            )
-          }
-        ></Route>
-        <Route
-          path="/modify"
-          exact
-          element={
-            userType === "ROLE_ADMIN" ? (
-              <NoticeWrite mode="modify" />
-            ) : (
-              <Navigate to=".." />
-            )
-          }
-        ></Route>
+        <Route path="/" exact element={<NoticeBasic type={userType} />} />
+        <Route path="/detail/:id" element={<NoticeDetail type={userType} />} />
+        <Route element={<AdminRoute />}>
+          <Route path="/new" exact element={<NoticeWrite mode="new" />} />
+          <Route path="/modify" exact element={<NoticeWrite mode="modify" />} />
+        </Route>
       </Routes>
     </TextAreaProvider>
   );

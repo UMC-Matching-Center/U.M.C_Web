@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { SIGNUP_COMPLETE } from "../../modules/signupState";
 import { emailRequestAPI, emailCodeCheckAPI, signupAPI } from "../../api";
 import { EmailRequestModal } from "../../components/modal";
+import { ToastContainer, toast } from "react-toastify";
 
 // input간 간격
 const InputGap = styled.div`
@@ -36,7 +37,7 @@ const EmailAuth = styled.button`
   border: 1px solid #6b6880;
   background-color: #fafafa00;
   font-family: "KBO-Dia-Gothic";
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 300;
   color: #6b6880;
   box-sizing: border-box;
@@ -303,19 +304,27 @@ export default function UserSignup() {
       phoneNumber,
       portfolio
     ).then((response) => {
-      console.log("response: ", response);
       if (response.isSuccess) {
         dispatch(SIGNUP_COMPLETE({ open: true }));
         navigate("../../", { replace: true });
       } else {
-        console.log("회원가입 실패");
-        //
+        toast.error(response.message, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     });
   };
 
   return (
     <>
+      <ToastContainer />
       <Modal
         isOpen={requestModal}
         onRequestClose={() => setRequestModal(false)}
