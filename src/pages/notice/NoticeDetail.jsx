@@ -1,5 +1,8 @@
-import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import useGetAccessToken from "../../utils/getAccessToken";
+import { noticeDetailAPI } from "../../api";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import gfm from "remark-gfm";
@@ -16,7 +19,7 @@ const NoticeDetailHeader = styled.div`
 
   display: flex;
   padding: 0 1.3rem 1.2rem 0.6rem;
-  font-family: "KBO-Dia-Gothic";
+  font-family: KBO-Dia-Gothic;
 
   .notice-detail-title {
     color: #131313;
@@ -46,12 +49,17 @@ const NoticeDetailContent = styled.div`
   margin: 0 auto;
 
   padding: 3.4rem 0.9rem 0.7rem 0.7rem;
+  font-family: KBO-Dia-Gothic;
   font-weight: 300;
   font-size: 2rem;
 
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;
+  }
+
+  & p > img {
+    width: 100%;
   }
 
   .notice-detail-images-box {
@@ -113,14 +121,40 @@ const CustomModalStyle = {
   },
 };
 
-/*API를 통해 마크다운 형식을 받아올 예정, 현재는 TextAreaContext에서 가져온 text or markdowndummy 객체를 보여줌*/
 const NoticeDetail = ({ type }) => {
   const navigate = useNavigate();
-  //const { text } = useContext(TextAreaContext);
-  const { notice } = useLocation().state.data;
+  const dispatch = useDispatch();
+  const accessToken = useGetAccessToken();
+  const { autoLogin } = useSelector((state) => state.userInfo);
+
+  const { id } = useParams();
+  const [notice, setNotice] = useState({});
+  const [images, setImages] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
+  const isModified =
+    JSON.stringify(notice.createdAt) !== JSON.stringify(notice.updatedAt); // 수정 상태 확인
+
+  useEffect(() => {
+    if (accessToken !== "") {
+      noticeDetailAPI(accessToken, dispatch, autoLogin, id).then((response) => {
+        if (response.isSuccess) {
+          setNotice(response.notice);
+
+          const imageKeys = Object.keys(response.notice.images);
+          imageKeys.forEach((key) => {
+            const imageUrl = response.notice.images[key];
+            setImages((pre) => [...pre, imageUrl]);
+          });
+        } else {
+          alert(response.message);
+        }
+      });
+    } else {
+      navigate("/login", { replace: true });
+    }
+  }, []);
   return (
     <>
       <div className="notice-detail-container">
@@ -133,6 +167,7 @@ const NoticeDetail = ({ type }) => {
                 navigate("../modify", {
                   state: {
                     data: { notice },
+                    mode: "modify",
                   },
                 });
               }}
@@ -143,9 +178,18 @@ const NoticeDetail = ({ type }) => {
           <NoticeDetailHeader>
             <div className="notice-detail-title">{notice.title}</div>
             <div className="notice-detail-modify">
-              {notice.is_modify && "(수정됨)"}
+              {isModified && "(수정됨)"}
             </div>
-            <div className="notice-detail-date">{notice.date}</div>
+            <div className="notice-detail-date">
+              {notice.updatedAt && (
+                <>
+                  {notice.updatedAt[0]}년&nbsp;{notice.updatedAt[1]}
+                  월&nbsp;
+                  {notice.updatedAt[2]}일&nbsp;{notice.updatedAt[3]}:
+                  {notice.updatedAt[4]}
+                </>
+              )}
+            </div>
           </NoticeDetailHeader>
           <div
             style={{
@@ -177,10 +221,10 @@ const NoticeDetail = ({ type }) => {
                 },
               }}
             >
-              {notice.content}
+              {notice.body}
             </ReactMarkdown>
             <div className="notice-detail-images-box">
-              {notice.image.map((image, index) => (
+              {images?.map((image, index) => (
                 <div
                   className="image-border"
                   key={index}

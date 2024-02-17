@@ -1,41 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import useGetAccessToken from "../../utils/getAccessToken";
+import { noticeListAPI } from "../../api";
 import styled from "styled-components";
 import IconNewNotice from "../../images/ic_new_notice.svg";
 import { IconSearch } from "@tabler/icons-react";
 import { TextAreaProvider } from "../../context/TextAreaProvider";
 import NoticeWrite from "./NoticeWrite";
 import NoticeDetail from "./NoticeDetail";
-import sample from "../../images/sample_project.png";
-
-const noticeDummy = [
-  {
-    id: 1,
-    title: "아이디어 페이지 공개",
-    is_modify: false,
-    content:
-      "**GACI 지부 챌린저 여러분**, 안녕하세요. GACI 지부 회장단입니다.\n - 헬로\n\n <u>히히</u>",
-    date: "2024년 1월 10일 15:00",
-    image: [sample, sample, sample],
-  },
-  {
-    id: 2,
-    title: "아이디어 페이지 공개2",
-    is_modify: true,
-    content:
-      "| GACI IDEAS : [https://bit.ly/4799kIp](https://bit.ly/4799kIp)\n - hello\n\t- hel",
-    date: "2024년 1월 10일 15:00",
-    image: [sample, sample, sample, sample, sample],
-  },
-  {
-    id: 3,
-    title: "아이디어 페이지 공개3",
-    is_modify: true,
-    content: "```js\nconst a=1;\nconst b=3;console.log();\n```",
-    date: "2024년 1월 10일 15:00",
-    image: [sample, sample, sample, sample, sample],
-  },
-];
 
 /*---------공지사항 페이지 전체 wrap-----------*/
 const NoticeWrapper = styled.div`
@@ -128,6 +101,8 @@ const NoticeList = styled.div`
   & .notice-component {
     display: flex;
     flex-direction: column;
+
+    font-family: KBO-Dia-Gothic;
     padding: 3.4rem 4.8rem 4.2rem 4.8rem;
     cursor: pointer;
 
@@ -162,18 +137,22 @@ const NoticeList = styled.div`
 `;
 const NoticeBasic = ({ type }) => {
   const navigation = useNavigate();
+  const dispatch = useDispatch();
+  const accessToken = useGetAccessToken();
+  const { autoLogin } = useSelector((state) => state.userInfo);
+
   const [searchText, setSearchText] = useState("");
-  const [list, setList] = useState(noticeDummy);
+  const [searchList, setSearchList] = useState([]);
+  const [list, setList] = useState([]);
+
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
   };
 
   /*------검색창 값에 따른 출력 관련 함수-------*/
   const onClickSearchIcon = () => {
-    const filterData = noticeDummy.filter((data) =>
-      data.title.includes(searchText)
-    );
-    setList(filterData);
+    const filterData = list.filter((data) => data.title.includes(searchText));
+    setSearchList(filterData);
   };
 
   const handleOnKeyPress = (e) => {
@@ -181,6 +160,20 @@ const NoticeBasic = ({ type }) => {
       onClickSearchIcon();
     }
   };
+
+  useEffect(() => {
+    if (accessToken !== "") {
+      noticeListAPI(accessToken, dispatch, autoLogin).then((response) => {
+        if (response.isSuccess) {
+          setList(response.noticeList);
+          setSearchList(response.noticeList);
+        } else {
+          alert(response.message);
+        }
+      });
+    }
+  }, []);
+
   return (
     <>
       <NoticeWrapper>
@@ -212,14 +205,14 @@ const NoticeBasic = ({ type }) => {
                 width="36"
                 onClick={() => {
                   /*클릭 시, 새 공지 작성 페이지로 이동*/
-                  navigation("../new");
+                  navigation("../new", { state: { mode: "new" } });
                 }}
               />
             </div>
           )}
         </NoticeSearch>
         <NoticeList>
-          {list.length === 0 ? (
+          {searchList?.length === 0 ? (
             <div
               style={{
                 textAlign: "center",
@@ -231,44 +224,47 @@ const NoticeBasic = ({ type }) => {
               검색 결과가 존재하지 않습니다.
             </div>
           ) : (
-            list.map((notice) => {
-              let content = notice.content;
-              const regExp = /[#*_-`]/gi;
-              content = content
-                .replace("<u>", "")
-                .replace("</u>", "")
-                .replace(regExp, "");
-              return (
-                <>
-                  <div
-                    className="notice-component"
-                    key={notice.id}
-                    onClick={() => {
-                      /*클릭시 상세 notice 페이지로 이동*/
-                      navigation(`../detail/${notice.title}`, {
-                        state: {
-                          data: { notice },
-                        },
-                      });
-                    }}
-                  >
-                    <div className="notice-top">
-                      <div className="notice-title">{notice.title}</div>
-                      <div className="notice-date">{notice.date}</div>
+            searchList
+              .map((notice) => {
+                let content = notice.body;
+                const regExp = /[#*_-`]/gi;
+                content = content
+                  .replace("<u>", "")
+                  .replace("</u>", "")
+                  .replace(regExp, "");
+                return (
+                  <>
+                    <div
+                      className="notice-component"
+                      key={notice.noticeId}
+                      onClick={() => {
+                        /*클릭시 상세 notice 페이지로 이동*/
+                        navigation(`../detail/${notice.noticeId}`);
+                      }}
+                    >
+                      <div className="notice-top">
+                        <div className="notice-title">{notice.title}</div>
+                        <div className="notice-date">
+                          {notice.updatedAt[0]}년&nbsp;{notice.updatedAt[1]}
+                          월&nbsp;
+                          {notice.updatedAt[2]}일&nbsp;{notice.updatedAt[3]}:
+                          {notice.updatedAt[4]}
+                        </div>
+                      </div>
+                      <div className="notice-content">{content}</div>
                     </div>
-                    <div className="notice-content">{content}</div>
-                  </div>
-                  <div
-                    style={{
-                      width: "113.4rem",
-                      height: "0.1rem",
-                      background: "#9C9AAB",
-                      margin: "0 0 0 3.3rem",
-                    }}
-                  ></div>
-                </>
-              );
-            })
+                    <div
+                      style={{
+                        width: "113.4rem",
+                        height: "0.1rem",
+                        background: "#9C9AAB",
+                        margin: "0 0 0 3.3rem",
+                      }}
+                    ></div>
+                  </>
+                );
+              })
+              .reverse()
           )}
         </NoticeList>
       </NoticeWrapper>
@@ -277,24 +273,21 @@ const NoticeBasic = ({ type }) => {
 };
 
 function Notice() {
-  const user = { type: "ROLE_ADMIN" }; // API 연결 시 변경 예정
+  const { userType } = useSelector((state) => state.userInfo);
+
   return (
     <TextAreaProvider>
       <Routes>
+        <Route path="/" exact element={<NoticeBasic type={userType} />}></Route>
         <Route
-          path="/"
-          exact
-          element={<NoticeBasic type={user.type} />}
-        ></Route>
-        <Route
-          path="/detail/*"
-          element={<NoticeDetail type={user.type} />}
+          path="/detail/:id"
+          element={<NoticeDetail type={userType} />}
         ></Route>
         <Route
           path="/new"
           exact
           element={
-            user.type === "ROLE_ADMIN" ? (
+            userType === "ROLE_ADMIN" ? (
               <NoticeWrite mode="new" />
             ) : (
               <Navigate to=".." />
@@ -305,7 +298,7 @@ function Notice() {
           path="/modify"
           exact
           element={
-            user.type === "ROLE_ADMIN" ? (
+            userType === "ROLE_ADMIN" ? (
               <NoticeWrite mode="modify" />
             ) : (
               <Navigate to=".." />
