@@ -4,7 +4,7 @@ import { PMRoute } from "../../routes";
 
 import EvaluateTeam from "./TeamEvaluate";
 import ApplyStatus from "./ApplyStatus";
-import LandingPage from "./LandingPage";
+import LandingPage from "./landing/LandingPage";
 
 export default function MyProject() {
   return (
