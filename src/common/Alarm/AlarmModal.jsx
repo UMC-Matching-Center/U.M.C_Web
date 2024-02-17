@@ -40,7 +40,7 @@ const AlarmContainer = ({
                       case "ROLE_PM":
                         navigate(
                           alarm.type === "match"
-                            ? "/myproject/viewstatus" // 내 프로젝트 지원현황
+                            ? "/myproject/applystatus" // 내 프로젝트 지원현황
                             : alarm.type === "notice"
                               ? "/notice"
                               : "/match" // 내 프로젝트 Q&A 변경
@@ -52,7 +52,7 @@ const AlarmContainer = ({
                           if (alarm.type === "notice") {
                             navigate("/notice");
                           } else if (alarm.type === "match_complete") {
-                            navigate("/mypage/review");
+                            navigate("/mypage/evaluate");
                           } else if (alarm.type === "match_apply") {
                             navigate("/match"); // 지원한 프로젝트 상세페이지 이동
                           }

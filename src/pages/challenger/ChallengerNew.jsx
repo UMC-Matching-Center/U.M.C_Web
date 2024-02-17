@@ -11,6 +11,8 @@ import {
 } from "../../api/index";
 import Modal from "react-modal";
 import { SignupAccept, SignupReject } from "../../components/modal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // 수락 및 거절
 const MatchingBtn = styled.div`
@@ -107,8 +109,27 @@ export default function ChallengerNew() {
             (data) => data.memberId !== selectUserData.memberId
           )
         );
+        toast.success(`${selectUserData.nickname} 수락 완료`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       } else {
-        alert(response.message);
+        toast.error(response.message, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     });
   };
@@ -127,8 +148,27 @@ export default function ChallengerNew() {
             (data) => data.memberId !== selectUserData.memberId
           )
         );
+        toast.success(`${selectUserData.nickname} 거절 완료`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       } else {
-        alert(response.message);
+        toast.error(response.message, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     });
   };
@@ -158,7 +198,16 @@ export default function ChallengerNew() {
               setIsEnd(true);
             }
           } else {
-            alert(response.message);
+            toast.error(response.message, {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
           }
           setLoading(false);
         }
@@ -169,6 +218,7 @@ export default function ChallengerNew() {
 
   return (
     <>
+      <ToastContainer />
       <Modal
         isOpen={accept}
         onRequestClose={() => setAccept(false)}
@@ -241,14 +291,14 @@ export default function ChallengerNew() {
                 </div>
               </div>
             ))}
-            {userData.length === 0 && (
+            {userData.length === 0 && page !== 0 && (
               <NoApplicantsMessage>
                 신청한 인원이 없습니다. 나중에 다시 확인해주세요.
               </NoApplicantsMessage>
             )}
             {loading && <div className="table_title">Loading</div>}
             {!loading && (
-              <div ref={setRef} style={{ width: "100%", height: "1px" }} />
+              <div ref={setRef} style={{ width: "100%", height: "2px" }} />
             )}
           </div>
         </div>

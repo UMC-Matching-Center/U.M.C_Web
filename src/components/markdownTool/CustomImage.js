@@ -56,35 +56,30 @@ const CustomImage = () => {
     let file = e.target.files[0];
 
     if (file) {
-      if (accessToken !== "") {
-        matchImageUploadAPI(accessToken, dispatch, autoLogin, file).then(
-          (response) => {
-            if (response.isSuccess) {
-              const id = response.imageId; // 이미지 ID
-              const fileURL = response.s3Image; // 이미지 URL
-              updateMatchImage(id, fileURL);
+      matchImageUploadAPI(accessToken, dispatch, autoLogin, file).then(
+        (response) => {
+          if (response.isSuccess) {
+            const id = response.imageId; // 이미지 ID
+            const fileURL = response.s3Image; // 이미지 URL
+            updateMatchImage(id, fileURL);
 
-              const newText =
-                matchText.substring(
-                  0,
-                  matchTextareaRef.current.selectionStart
-                ) +
-                `${"![" + `${id}` + "](" + `${fileURL}` + ")"}` +
-                matchText.substring(matchTextareaRef.current.selectionEnd);
+            const newText =
+              matchText.substring(0, matchTextareaRef.current.selectionStart) +
+              `${"![" + `${id}` + "](" + `${fileURL}` + ")"}` +
+              matchText.substring(matchTextareaRef.current.selectionEnd);
 
-              updateMatchText(newText); // 이미지 추가된 전체 TEXT 업데이트
-              const imageEnd =
-                matchTextareaRef.current.selectionEnd +
-                (5 + id.length + fileURL.length);
+            updateMatchText(newText); // 이미지 추가된 전체 TEXT 업데이트
+            const imageEnd =
+              matchTextareaRef.current.selectionEnd +
+              (5 + id.length + fileURL.length);
 
-              matchTextareaRef.current.focus();
-              setTimeout(() => {
-                matchTextareaRef.current.setSelectionRange(imageEnd, imageEnd);
-              }, 0);
-            }
+            matchTextareaRef.current.focus();
+            setTimeout(() => {
+              matchTextareaRef.current.setSelectionRange(imageEnd, imageEnd);
+            }, 0);
           }
-        );
-      }
+        }
+      );
     }
   };
 

@@ -171,12 +171,12 @@ const UserNavbar = () => {
             <UserNavMenuItem
               className={`${activePath === "myproject" && "active"}`}
             >
-              <Link to="/myproject/review" title="My Project">
+              <Link to="/myproject/evaluate" title="My Project">
                 My Project
               </Link>
               <SubMenuWrapper>
                 <SubMenuItem>
-                  <Link to="/myproject/review">팀원 상호 평가</Link>
+                  <Link to="/myproject/evaluate">팀원 상호 평가</Link>
                 </SubMenuItem>
                 <SubMenuItem>
                   <Link to="/myproject/landing">랜딩페이지 보기</Link>

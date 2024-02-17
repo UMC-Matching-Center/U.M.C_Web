@@ -6,9 +6,10 @@ import CustomCalendar from "../../components/schedule/CustomCalendar";
 import ScheduleList from "../../components/schedule/ScheduleList";
 
 import { scheduleDataAPI } from "../../api";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import useGetAccessToken from "../../utils/getAccessToken";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ScheduleBox = styled.div`
   margin-top: -6.2rem;
@@ -42,7 +43,6 @@ const colorOptionList = [
 ];
 
 export default function Schedule() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const accessToken = useGetAccessToken();
   const { autoLogin } = useSelector((state) => state.userInfo);
@@ -86,44 +86,52 @@ export default function Schedule() {
 
   // 첫 실행시, formData가 사용될 때 마다 API 호출
   useEffect(() => {
-    if (accessToken !== "") {
-      scheduleDataAPI(accessToken, dispatch, autoLogin).then((response) => {
-        if (response.isSuccess) {
-          setDummyData(response.scheduleList);
-        } else {
-          alert(response.message, "api 호출을 실패했습니다.");
-        }
-      });
-    } else {
-      navigate("/register", { replace: true }); // 메인 페이지로 이동
-    }
+    scheduleDataAPI(accessToken, dispatch, autoLogin).then((response) => {
+      if (response.isSuccess) {
+        setDummyData(response.scheduleList);
+      } else {
+        toast.error(response.message, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    });
   }, [formData]);
 
   return (
-    <ScheduleBox>
-      <ScheduleMonth
-        currentMonthIndex={currentMonthIndex} //현재 달 index값 give
-        currentYearIndex={currentYearIndex} //현재 년도
-        handleBeforeMonth={handleBeforeMonth} //저번 달 이동 handle 값 get
-        handleAfterMonth={handleAfterMonth} //다음 달 이동 handle 값 get
-      />
-      <ScheduleContainer>
-        <CustomCalendar
+    <>
+      <ToastContainer />
+      <ScheduleBox>
+        <ScheduleMonth
           currentMonthIndex={currentMonthIndex} //현재 달 index값 give
           currentYearIndex={currentYearIndex} //현재 년도
-          dummyData={dummyData} //해당 데이터 give
-          formData={formData} //추가하는 데이터에 대한 반응하기 위해 give
+          handleBeforeMonth={handleBeforeMonth} //저번 달 이동 handle 값 get
+          handleAfterMonth={handleAfterMonth} //다음 달 이동 handle 값 get
         />
-        <ScheduleList
-          currentMonthIndex={currentMonthIndex} //현재 달 index값 give
-          currentYearIndex={currentYearIndex} //현재 년도 넘기기
-          colorOptionList={colorOptionList} //해당 컬러 옵션 데이터 give
-          dummyData={dummyData} //해당 데이터 give
-          setDummyData={setDummyData}
-          formData={formData} //추가하는 데이터에 대한 반응하기 위해 give
-          setFormData={setFormData} //데이터 값을 주기 위한 것
-        />
-      </ScheduleContainer>
-    </ScheduleBox>
+        <ScheduleContainer>
+          <CustomCalendar
+            currentMonthIndex={currentMonthIndex} //현재 달 index값 give
+            currentYearIndex={currentYearIndex} //현재 년도
+            dummyData={dummyData} //해당 데이터 give
+            formData={formData} //추가하는 데이터에 대한 반응하기 위해 give
+          />
+          <ScheduleList
+            currentMonthIndex={currentMonthIndex} //현재 달 index값 give
+            currentYearIndex={currentYearIndex} //현재 년도 넘기기
+            colorOptionList={colorOptionList} //해당 컬러 옵션 데이터 give
+            dummyData={dummyData} //해당 데이터 give
+            setDummyData={setDummyData}
+            formData={formData} //추가하는 데이터에 대한 반응하기 위해 give
+            setFormData={setFormData} //데이터 값을 주기 위한 것
+          />
+        </ScheduleContainer>
+      </ScheduleBox>
+    </>
   );
 }

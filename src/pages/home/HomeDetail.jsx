@@ -15,7 +15,6 @@ const HomeDetail = () => {
         setProject(response.projectData);
       } else {
         navigate(-1);
-        alert(response.message);
       }
     });
   }, []);
