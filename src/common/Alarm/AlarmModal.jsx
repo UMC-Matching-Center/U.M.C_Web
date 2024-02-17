@@ -9,6 +9,7 @@ const AlarmContainer = ({
   deleteAlarm,
   alarmContent,
   handleIconBellClick,
+  alarmRef,
 }) => {
   const { userType } = useSelector((state) => state.userInfo);
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const AlarmContainer = ({
   return (
     <>
       <RedCircleFilled $aliveAlarm={aliveAlarm} />
-      <AlarmModal $display={isViewModal}>
+      <AlarmModal $display={isViewModal} ref={alarmRef}>
         <ModalContentBox>
           <ContentBoxTitle>알림</ContentBoxTitle>
           <ContentBoxSubTitle onClick={deleteAlarm}>
@@ -140,15 +141,15 @@ const RedCircleFilled = styled.div`
   height: 0.8rem;
   background-color: #d62117;
   border-radius: 1rem;
-  top: 0.1rem;
-  right: 0.4rem;
+  top: 0.7rem;
+  right: 0.9rem;
 `;
 const AlarmModal = styled.div`
   display: ${(props) => !props.$display && "none"};
   z-index: 2;
   position: absolute;
   top: 6.5rem;
-  right: -2.5rem;
+  right: -1.75rem;
   width: 41rem;
   height: 62.6rem;
   border-radius: 1rem;
