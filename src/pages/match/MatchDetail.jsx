@@ -109,6 +109,7 @@ const MatchProjectDetail = () => {
   const { userType, autoLogin } = useSelector((state) => state.userInfo);
   const [data, setData] = useState({
     projectId: null,
+    memberId: null,
     pmId: null,
     name: "",
     image: null,
@@ -185,7 +186,12 @@ const MatchProjectDetail = () => {
             className="match-question-circle"
             onClick={() =>
               navigate(window.location.pathname + `/question`, {
-                state: { id: id, name: data.name },
+                state: {
+                  id: id,
+                  name: data.name,
+                  pmId: data.pmId,
+                  memberId: data.memberId,
+                },
               })
             }
           >
