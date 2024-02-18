@@ -125,6 +125,7 @@ const CardDetailSchool = styled.div`
   margin: 0.5rem 0.5rem 0 0;
   font-size: 1rem;
   font-weight: 300;
+  
 `;
 
 //리뷰 컨테이너
@@ -141,11 +142,10 @@ const PartsDummy = [
   { num: 5, content: "SPRINGBOOT", display: "Spring" },
   { num: 6, content: "NODEJS", display: "Node.js" },
 ];
-export default function EvaluateCard({ list, setDataList }) {
+export default function EvaluateCard({ list, setEvaluateData }) {
   const dispatch = useDispatch();
   const accessToken = useGetAccessToken();
   const { autoLogin } = useSelector((state) => state.userInfo);
-
   const [isEvaluateMode, setisEvaluateMode] = useState(false);
 
   //상호평가 들어가기
@@ -201,7 +201,7 @@ export default function EvaluateCard({ list, setDataList }) {
         <EvaluateCardDetail
           list={list}
           handleSaveEvaluate={handleSaveEvaluate}
-          setDataList={setDataList}
+          setEvaluateData={setEvaluateData}
           DefaultCardImg={DefaultCardImg}
           PartsDummy={PartsDummy}
         />
