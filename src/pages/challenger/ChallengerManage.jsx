@@ -153,6 +153,9 @@ const ExitBtn = styled.div`
   background-color: #d62117;
   color: #fafafa;
   cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 
 const ModalStyles = {

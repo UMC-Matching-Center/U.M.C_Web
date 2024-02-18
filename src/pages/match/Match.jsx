@@ -29,11 +29,15 @@ const MatchMain = styled.div`
       height: 3.2rem;
       border-radius: 2rem;
       border: 0.2rem solid var(--primary-600, #0261aa);
-      background: transperant;
+      background: transparent;
       color: #fffefe;
 
       font-family: KBO-Dia-Gothic;
       font-size: 1.4rem;
+      transition: background 0.3s;
+      &:hover {
+        background: #0261aa;
+      }
     }
   }
 `;

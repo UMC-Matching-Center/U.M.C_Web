@@ -83,6 +83,9 @@
   &:active {
     background-color: #014171;
   }
+  &:hover {
+    opacity : 0.8;
+  }
 }
 
 /* 일정 완료 버튼 */
@@ -98,12 +101,16 @@
   &:active {
     background-color: #014171;
   }
+  &:hover {
+    opacity : 0.8;
+  }
 }
 
 /* 첫 번째 친구만 오른쪽 */
 .schedulebutton:first-child {
   margin-right: 2.2rem;
 }
+
 .scheduleeditbox {
   position: absolute;
   width: 6rem;
@@ -112,6 +119,10 @@
   font-weight: 300;
   margin-left: 33.8rem;
 }
+
 .scheduleedit {
   cursor: pointer;
+  &:hover {
+    opacity : 0.8;
+  }
 }
