@@ -7,14 +7,18 @@ export default function MyEvaluationCard({ list }) {
   return (
     <div className="container">
       <div className="detail-container">
-        <div className="head-container">
+        <HeadContainer>
           <EvaluateStar list={list} editOn={false} />
-        </div>
+        </HeadContainer>
         <TextBox>{list.content}</TextBox>
       </div>
     </div>
   );
 }
+
+const HeadContainer = styled.div`
+  margin : 2.7rem 0 0 2.4rem;
+`
 
 const TextBox = styled.div`
   margin: 1.1rem 2.4rem 0 2.4rem;
