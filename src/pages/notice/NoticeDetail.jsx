@@ -102,7 +102,8 @@ const CustomModalStyle = {
     left: "0",
   },
   content: {
-    background: "white",
+    background: "transparent",
+    border: "none",
     zIndex: "100",
     position: "absolute",
     top: "50%",
@@ -112,6 +113,8 @@ const CustomModalStyle = {
     justifyContent: "center",
     alignItems: "center",
     padding: 0,
+    width: "60rem",
+    height: "60rem",
   },
   closeButton: {
     position: "absolute",
@@ -244,13 +247,19 @@ const NoticeDetail = ({ type }) => {
         onRequestClose={() => setIsOpen(false)}
         style={CustomModalStyle}
       >
-        <div
-          style={CustomModalStyle.closeButton}
-          onClick={() => setIsOpen(false)}
-        >
-          <IconX size={24} color="#393556" stroke={1} />
+        <div style={{ position: "relative" }}>
+          <div
+            style={CustomModalStyle.closeButton}
+            onClick={() => setIsOpen(false)}
+          >
+            <IconX size={24} color="#393556" stroke={1} />
+          </div>
+          <img
+            src={selectedImage}
+            alt="image"
+            style={{ objectFit: "contain", width: "100%", height: "100%" }}
+          />
         </div>
-        <img src={selectedImage} alt="image" width="100%" height="100%" />
       </Modal>
     </>
   );

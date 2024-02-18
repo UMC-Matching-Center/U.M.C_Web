@@ -397,7 +397,7 @@ const MatchQA = () => {
                 </div>
               </QAModal>
             )}
-            {QAData?.reverse().map((question, index) => {
+            {QAData?.map((question, index) => {
               return (
                 <QAModal key={question.questionId}>
                   <div className="question-toggle">
@@ -499,7 +499,7 @@ const MatchQA = () => {
                   </div>
                 </QAModal>
               );
-            })}
+            }).reverse()}
           </QAContent>
         </QAWrapper>
       </QAContainer>

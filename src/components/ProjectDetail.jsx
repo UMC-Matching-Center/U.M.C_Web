@@ -139,7 +139,7 @@ const ProjectDetail = ({ project, type }) => {
     location.pathname === "/myproject/landing" && true;
   // 홈 페이지 url 여부(/project/{title})
   const isHomeDetailPage =
-    location.pathname.split("/")[1] === "/project" && true;
+    location.pathname.split("/")[1] === "project" && true;
 
   const [selectIndex, setSelectIndex] = useState(); // 메뉴 선택 index
   const [isMenuClicked, setIsMenuClicked] = useState(false); // 메뉴 클릭 여부
@@ -354,14 +354,16 @@ const ProjectDetail = ({ project, type }) => {
                           gap: "1.3rem",
                         }}
                       >
-                        {project.memberList?.map((member) => {
-                          return (
-                            <MemberCard
-                              key={member.nameNickName}
-                              member={member}
-                            />
-                          );
-                        })}
+                        {(project.memberList || project.members)?.map(
+                          (member) => {
+                            return (
+                              <MemberCard
+                                key={member.nameNickName}
+                                member={member}
+                              />
+                            );
+                          }
+                        )}
                       </div>
                     )}
                 </div>

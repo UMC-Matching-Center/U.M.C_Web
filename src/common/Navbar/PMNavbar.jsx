@@ -61,7 +61,7 @@ const SubMenuWrapper = styled.div`
 `;
 
 const SubMenuItem = styled(UserNavMenuItem)`
-  width: 13.5rem;
+  min-width: 13.5rem;
   > a {
     color: #cecdd5;
     font-weigth: 300;
