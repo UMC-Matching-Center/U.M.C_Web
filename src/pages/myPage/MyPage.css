@@ -1,11 +1,11 @@
-.container {
+.myPageContainer {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: calc(100% - 38rem);
 }
 
-.boxWrapper {
+.profileBoxWrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -119,9 +119,9 @@
     font-size: 1rem;
     cursor: pointer;
     align-items: center;
-    
+
     &:hover {
-      opacity : 0.8;
+      opacity: 0.8;
     }
   }
 }
@@ -140,7 +140,7 @@
   font-size: 1.2rem;
   font-weight: 300;
   &:hover {
-    opacity : 0.8;
+    opacity: 0.8;
   }
 }
 

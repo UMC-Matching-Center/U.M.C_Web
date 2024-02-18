@@ -5,8 +5,8 @@ import styled from "styled-components";
 
 export default function MyEvaluationCard({ list }) {
   return (
-    <div className="container">
-      <div className="detail-container">
+    <div className="evaluate-container">
+      <div className="evaluate-detail-container">
         <HeadContainer>
           <EvaluateStar list={list} editOn={false} />
         </HeadContainer>
@@ -17,8 +17,8 @@ export default function MyEvaluationCard({ list }) {
 }
 
 const HeadContainer = styled.div`
-  margin : 2.7rem 0 0 2.4rem;
-`
+  margin: 2.7rem 0 0 2.4rem;
+`;
 
 const TextBox = styled.div`
   margin: 1.1rem 2.4rem 0 2.4rem;

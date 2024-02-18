@@ -30,11 +30,11 @@
 
   /* 표 카테고리 리스트 */
   .table_title_list {
-    display: flex;
-    flex-basis: 70%;
     box-sizing: border-box;
-    padding: 0 5rem;
+    display: flex;
     justify-content: space-between;
+    flex-basis: 70%;
+    padding: 0 5rem;
   }
 
   /* 표 제목 옵션 부분 */
