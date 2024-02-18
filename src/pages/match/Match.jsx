@@ -10,7 +10,7 @@ import MatchDetail from "./MatchDetail";
 import MatchWrite from "./MatchWrite";
 import { TextAreaProvider } from "../../context/TextAreaProvider";
 import useIntersect from "../../utils/intersectionObserve";
-import { AdminRoute } from "../../routes";
+import { PMRoute } from "../../routes";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -139,7 +139,7 @@ export default function Match() {
       <Routes>
         <Route path="/" exact element={<MatchHome type={userType} />} />
         <Route path="/detail/*" element={<MatchDetail />} />
-        <Route element={<AdminRoute />}>
+        <Route element={<PMRoute />}>
           <Route path="/new" exact element={<MatchWrite />} />
           <Route path="/modify" exact element={<MatchWrite />} />
         </Route>
