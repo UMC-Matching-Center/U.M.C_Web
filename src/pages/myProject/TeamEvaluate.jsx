@@ -106,7 +106,6 @@ export default function EvaluateTeam() {
       }
     });
   }, []);
-  console.log(myEvaluationData);
   return (
     <>
       <WholeContainer>
