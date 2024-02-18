@@ -141,6 +141,7 @@ const PartsDummy = [
   { num: 4, content: "WEB", display: "Web" },
   { num: 5, content: "SPRINGBOOT", display: "Spring" },
   { num: 6, content: "NODEJS", display: "Node.js" },
+  { num: 7, content: "PLAN", display: "Plan" },
 ];
 export default function EvaluateCard({ list, setEvaluateData }) {
   const dispatch = useDispatch();
