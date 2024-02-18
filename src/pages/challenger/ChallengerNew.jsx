@@ -211,6 +211,7 @@ export default function ChallengerNew() {
               progress: undefined,
               theme: "light",
             });
+            setIsEnd(true);
           }
           setLoading(false);
         }

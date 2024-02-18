@@ -56,6 +56,7 @@ import {
   noticeUploadAPI,
   noticeModifyAPI,
 } from "./noticeAPI.js";
+import { alramConfirmAPI, alramListAPI, alramDeleteAPI } from "./alramAPI.js";
 
 export {
   loginAPI, // 로그인
@@ -103,4 +104,7 @@ export {
   noticeDetailAPI, // 공지사항 상세 조회
   noticeUploadAPI, // 공지사항 업로드
   noticeModifyAPI, // 공지사항 수정
+  alramConfirmAPI, // 알람 확인
+  alramListAPI, // 알람 리스트 조회
+  alramDeleteAPI, // 알람 삭제
 };

@@ -91,6 +91,7 @@ function MatchHome({ type }) {
               progress: undefined,
               theme: "light",
             });
+            setIsEnd(true);
           }
           setLoading(false);
         }
