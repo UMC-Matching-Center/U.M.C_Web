@@ -115,6 +115,7 @@ const CustomModalStyle = {
     padding: 0,
     width: "60rem",
     height: "60rem",
+    overflow: "hidden",
   },
   closeButton: {
     position: "absolute",
