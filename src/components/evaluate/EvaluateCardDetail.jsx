@@ -1,35 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import EvaluateStar from "./EvaluateStar";
+import "./Evaluate.css"
 
-//카드 컨테이너
-const Container = styled.div`
-  display: flex;
-  width: 38.4rem;
-  height: 22rem;
-  border-radius: 1rem;
-  background-color: #28272d;
-`;
-
-//카드 하얀색 디테일 컨테이너
-const DetailContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 36.8rem;
-  height: 20.6rem;
-  border-radius: 0.8rem;
-  background-color: #fafafa;
-  margin: 0.7rem 0.8rem;
-`;
-
-//헤드 컨테이너
-const HeadContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin: 1.8rem 0 0 2.5rem;
-  font-weight: 500;
-  font-size: 1.4rem;
-`;
 
 //해당 IMG 컨테이너
 const ImgContainer = styled.div`
@@ -139,9 +112,9 @@ export default function EvaluateCardDetail({
   };
 
   return (
-    <Container>
-      <DetailContainer>
-        <HeadContainer>
+    <div className="container">
+      <div className="detail-container">
+        <div className="head-container">
           <ImgContainer>
             <ProfileImg
               style={{
@@ -171,13 +144,13 @@ export default function EvaluateCardDetail({
           <CheckSVGContainer onClick={() => handleSaveEvaluate(list)}>
             <CheckSVG />
           </CheckSVGContainer>
-        </HeadContainer>
+        </div>
         <TextBox
           placeholder="평가를 작성해주세요"
           value={list.content}
           onChange={handleText}
         />
-      </DetailContainer>
-    </Container>
+      </div>
+    </div>
   );
 }
