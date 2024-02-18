@@ -20,11 +20,19 @@ const AlarmContainer = ({
       <AlarmModal $display={isViewModal} ref={alarmRef}>
         <ModalContentBox>
           <ContentBoxTitle>알림</ContentBoxTitle>
-          <ContentBoxSubTitle onClick={deleteAlarm}>
-            읽은 알림 삭제
-          </ContentBoxSubTitle>
+          <div
+            style={{
+              display: "flex",
+              flexFlow: "row-reverse",
+              margin: "2rem 2.9rem 0 0",
+            }}
+          >
+            <ContentBoxSubTitle onClick={deleteAlarm}>
+              읽은 알림 삭제
+            </ContentBoxSubTitle>
+          </div>
           <ModalContent>
-            {alarmContent.map((alarm, idx) => {
+            {alarmContent?.map((alarm, idx) => {
               return (
                 <AlarmContent
                   key={idx}
@@ -32,34 +40,30 @@ const AlarmContainer = ({
                     switch (userType) {
                       case "ROLE_ADMIN":
                         navigate(
-                          alarm.type === "match"
-                            ? "/challenger/manage"
-                            : "/challenger/new"
+                          alarm.type === "MATCHING_COMPLETE"
+                            ? "/challenger/manage" // 매칭 경우
+                            : "/challenger/new" // 가입 경우
                         );
-                        handleIconBellClick();
+                        handleIconBellClick(alarm.alarmId);
                         break;
                       case "ROLE_PM":
                         navigate(
-                          alarm.type === "match"
-                            ? "/myproject/applystatus" // 내 프로젝트 지원현황
-                            : alarm.type === "notice"
-                              ? "/notice"
-                              : "/match" // 내 프로젝트 Q&A 변경
+                          alarm.type === "NOTICE_NEW"
+                            ? "/notice" // 공지사항
+                            : alarm.type === "MATCHING_NEW"
+                              ? "/myproject/applystatus" // 내 프로젝트 지원현황
+                              : `/match/detail/${alarm.projectId}` // 내 프로젝트 Q&A 변경
                         );
-                        handleIconBellClick();
+                        handleIconBellClick(alarm.alarmId);
                         break;
                       case "ROLE_CHALLENGER":
-                        if (alarm.type !== "match_incomplete") {
-                          if (alarm.type === "notice") {
-                            navigate("/notice");
-                          } else if (alarm.type === "match_complete") {
-                            navigate("/mypage/evaluate");
-                          } else if (alarm.type === "match_apply") {
-                            navigate("/match"); // 지원한 프로젝트 상세페이지 이동
-                          }
-                          handleIconBellClick();
-                          break;
-                        }
+                        if (alarm.type === "NOTICE_NEW") navigate("/notice");
+                        else if (alarm.type === "MATCHING_COMPLETE")
+                          navigate(`/match/detail/${alarm.projectId}`);
+                        else if (alarm.type === "MATCHING_APPLY_SUCCESS")
+                          navigate("/mypage/evaluate");
+                        else null;
+                        break;
                     }
                   }}
                 >
@@ -94,15 +98,19 @@ const AlarmContainer = ({
                         {(() => {
                           switch (userType) {
                             case "ROLE_ADMIN":
-                              return alarm.type === "match" ? "매칭" : "가입";
+                              return alarm.type === "JOIN_NEW"
+                                ? "가입"
+                                : "매칭";
                             case "ROLE_PM":
-                              return alarm.type === "match"
-                                ? "매칭"
-                                : alarm.type === "notice"
-                                  ? "공지"
+                              return alarm.type === "NOTICE_NEW"
+                                ? "공지"
+                                : alarm.type === "MATCHING_NEW"
+                                  ? "매칭"
                                   : "문의";
                             case "ROLE_CHALLENGER":
-                              return alarm.type === "notice" ? "공지" : "매칭";
+                              return alarm.type === "NOTICE_NEW"
+                                ? "공지"
+                                : "매칭";
                           }
                         })()}
                       </ContentDetailText>
@@ -154,6 +162,7 @@ const AlarmModal = styled.div`
   height: 62.6rem;
   border-radius: 1rem;
   background-color: #fafafa;
+  box-shadow: 0 0.4rem 0.9rem 0 rgba(0, 0, 0, 0.4);
 
   &:before {
     content: "";
@@ -182,8 +191,6 @@ const ContentBoxTitle = styled.div`
 
 const ContentBoxSubTitle = styled.div`
   text-align: right;
-  margin-top: 2rem;
-  margin-right: 2.9rem;
   color: #9c9aab;
   font-family: KBO-Dia-Gothic;
   font-size: 1rem;
@@ -241,7 +248,6 @@ const ContentDetailText = styled.div`
 `;
 const BlueCircleFilled = styled.div`
   position: absolute;
-  top: 5.8rem;
   right: 0;
   width: 1rem;
   height: 1rem;
