@@ -87,7 +87,7 @@ const AdminNavbar = () => {
   /*알림창 로딩 여부*/
   const [alarmLoading, setAlarmLoading] = useState(false);
   /*읽지 않은 알람이 존재하는 지 여부*/
-  const [aliveAlarm, setAliveAlarm] = useState(true);
+  const [aliveAlarm, setAliveAlarm] = useState(false);
   /*알림창 토글*/
   const [isViewModal, setIsViewModal] = useState(false);
   /*각 알림을 읽었는지를 나타내는 bluecircle 표시 = is_confirmed*/
