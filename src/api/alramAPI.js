@@ -1,40 +1,11 @@
 import { privateAxios } from "../utils/customAxios.js";
 import errorCode from "./errorCode.js";
 
-//내 프로젝트 인원들 보기
-export const evaluateAppAPI = async (accessToken, dispatch, autoLogin) => {
-  //서버로부터 받아 사용할 데이터
-  const response = {
-    isSuccess: false, //API 성공 여부
-    message: "", //API 메시지
-    evaluateDataList: [], //데이터리스트
-  };
-
-  //매칭 일정
-  try {
-    const { data } = await privateAxios(accessToken, dispatch, autoLogin).get(
-      "/evaluation/getTeammates"
-    );
-    if (data.code === "COMMON200") {
-      response.isSuccess = true;
-      response.message = data.message;
-      response.evaluateDataList = data.result;
-    }
-  } catch (err) {
-    response.isSuccess = false;
-    response.message = errorCode(err);
-  }
-
-  return response;
-};
-
-//상호평가 저장
-export const evaluateSaveAPI = async (
+export const alramConfirmAPI = async (
   accessToken,
   dispatch,
   autoLogin,
-  memberId,
-  memeberData
+  alarmId
 ) => {
   //서버로부터 받아 사용할 데이터
   const response = {
@@ -43,9 +14,8 @@ export const evaluateSaveAPI = async (
   };
 
   try {
-    const { data } = await privateAxios(accessToken, dispatch, autoLogin).post(
-      `/evaluation/save/${memberId}`,
-      memeberData
+    const { data } = await privateAxios(accessToken, dispatch, autoLogin).patch(
+      `/alarms/${alarmId}`
     );
     if (data.code === "COMMON200") {
       response.isSuccess = true;
@@ -59,24 +29,49 @@ export const evaluateSaveAPI = async (
   return response;
 };
 
-//내 평가 보기
-export const myEvaluationAPI = async (accessToken, dispatch, autoLogin) => {
+export const alramListAPI = async (accessToken, dispatch, autoLogin) => {
   //서버로부터 받아 사용할 데이터
   const response = {
     isSuccess: false, //API 성공 여부
     message: "", //API 메시지
-    myEvaluationData: [], //데이터리스트
+    alarmList: [], //알람 데이터
+    listSize: 0, //알람 데이터 사이즈
   };
 
-  //매칭 일정
   try {
     const { data } = await privateAxios(accessToken, dispatch, autoLogin).get(
-      "/evaluation/getMyEvaluations"
+      `/alarms`
     );
     if (data.code === "COMMON200") {
       response.isSuccess = true;
       response.message = data.message;
-      response.myEvaluationData = data.result;
+      response.alarmList = data.result.alarmList;
+      response.listSize = data.result.listSize;
+    }
+  } catch (err) {
+    response.isSuccess = false;
+    response.message = errorCode(err);
+  }
+
+  return response;
+};
+
+export const alramDeleteAPI = async (accessToken, dispatch, autoLogin) => {
+  //서버로부터 받아 사용할 데이터
+  const response = {
+    isSuccess: false, //API 성공 여부
+    message: "", //API 메시지
+  };
+
+  try {
+    const { data } = await privateAxios(
+      accessToken,
+      dispatch,
+      autoLogin
+    ).delete(`/alarms`);
+    if (data.code === "COMMON200") {
+      response.isSuccess = true;
+      response.message = data.message;
     }
   } catch (err) {
     response.isSuccess = false;

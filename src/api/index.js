@@ -25,7 +25,11 @@ import {
   scheduleAddAPI,
   scheduleDataAPI,
 } from "./scheduleAPI.js";
-import { evaluateAppAPI, evaluateSaveAPI } from "./evaluateAPI.js";
+import {
+  evaluateAppAPI,
+  evaluateSaveAPI,
+  myEvaluationAPI,
+} from "./evaluateAPI.js";
 import { viewAppAPI, appPassAPI, appFailAPI } from "./applyStatusAPI.js";
 import {
   matchListAPI,
@@ -52,6 +56,7 @@ import {
   noticeUploadAPI,
   noticeModifyAPI,
 } from "./noticeAPI.js";
+import { alramConfirmAPI, alramListAPI, alramDeleteAPI } from "./alramAPI.js";
 
 export {
   loginAPI, // 로그인
@@ -75,6 +80,7 @@ export {
   scheduleDataAPI, //일정 조회 API
   evaluateAppAPI, //팀원 상호평가 조회 API
   evaluateSaveAPI, //팀원 상호평가 저장 API
+  myEvaluationAPI, //내 평가 보기 API
   viewAppAPI, //지원 현황보기 API
   appPassAPI, //지원자 합격 API
   appFailAPI, //지원자 불합격 API
@@ -98,4 +104,7 @@ export {
   noticeDetailAPI, // 공지사항 상세 조회
   noticeUploadAPI, // 공지사항 업로드
   noticeModifyAPI, // 공지사항 수정
+  alramConfirmAPI, // 알람 확인
+  alramListAPI, // 알람 리스트 조회
+  alramDeleteAPI, // 알람 삭제
 };

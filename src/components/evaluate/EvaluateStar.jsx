@@ -85,7 +85,7 @@ const EvaluateStarHalfFilled = () => (
   </EvaluateStarSVG>
 );
 
-export default function EvaluateStar({ list, editOn, setDataList }) {
+export default function EvaluateStar({ list, editOn, setEvaluateData }) {
   // 해당 star를 클릭할 때 해당 star 값에 값을 넣어줌
   const handleStar = (index, event) => {
     if (event && event.clientX) {
@@ -96,7 +96,7 @@ export default function EvaluateStar({ list, editOn, setDataList }) {
         clickX - event.currentTarget.getBoundingClientRect().left <
         starWidth / 2;
 
-      setDataList((prevList) => {
+        setEvaluateData((prevList) => {
         const updatedList = prevList.map((item) => {
           if (item.nameNickname === list.nameNickname) {
             // 좌클릭일 때 0.5를 더하고, 우클릭일 때는 1을 더합니다.

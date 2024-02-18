@@ -1,0 +1,28 @@
+/* 전체 컨테이너 */
+.evaluate-container {
+  display: flex;
+  width: 38.4rem;
+  height: 22rem;
+  border-radius: 1rem;
+  background-color: #28272d;
+}
+
+/*하얀 색 컨테이너*/
+.evaluate-detail-container {
+  display: flex;
+  flex-direction: column;
+  width: 36.8rem;
+  height: 20.6rem;
+  border-radius: 0.8rem;
+  background-color: #fafafa;
+  margin: 0.7rem 0.8rem;
+}
+
+/* 헤더 컨테이너 */
+.evaluate-head-container {
+  display: flex;
+  flex-direction: row;
+  margin: 1.8rem 0 0 2.5rem;
+  font-weight: 500;
+  font-size: 1.4rem;
+}

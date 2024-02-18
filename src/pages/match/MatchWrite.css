@@ -117,6 +117,9 @@ button {
     width: 8.6rem;
     height: 3.6rem;
     border-radius: 0.5rem;
+    &:hover{
+      opacity : 0.8;
+    }
   }
 
   &.match-modify-button,
@@ -133,11 +136,15 @@ button {
     display: flex;
     justify-content: center;
     align-items: center;
+    
 
     background-color: #fafafa;
     width: 2.4rem;
     height: 2.2rem;
     border: 0.1rem solid #6b6880;
+    &:hover{
+      opacity : 0.8;
+    }
   }
 
   font-family: KBO-Dia-Gothic;

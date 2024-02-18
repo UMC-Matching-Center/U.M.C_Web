@@ -169,8 +169,8 @@ const AdminModify = () => {
   return (
     <>
       <ToastContainer />
-      <div className="container">
-        <div className="boxWrapper">
+      <div className="myPage-container">
+        <div className="myPage-boxWrapper">
           <div className="profileBox-wrapper">
             <div className="profile_circle-bg">
               <label htmlFor="profileImageInput">
@@ -182,6 +182,8 @@ const AdminModify = () => {
                     backgroundPosition: "center center",
                     cursor: "pointer",
                   }}
+                  onMouseEnter={(e) => (e.target.style.opacity = "0.8")}
+                  onMouseLeave={(e) => (e.target.style.opacity = "1")}
                 >
                   {profileImageURL ? null : (
                     <IconPhotoPlus
@@ -352,8 +354,8 @@ const AdminInfo = () => {
           isLogout={() => handleLogout()}
         />
       </Modal>
-      <div className="container">
-        <div className="boxWrapper">
+      <div className="myPage-container">
+        <div className="myPage-boxWrapper">
           <div className="profileBox-wrapper">
             <div className="profile_circle-bg">
               <div
@@ -375,6 +377,8 @@ const AdminInfo = () => {
                 strokeWidth={1}
                 color={"#6B6880"}
                 style={{ cursor: "pointer" }}
+                onMouseEnter={(e) => (e.target.style.opacity = "0.8")}
+                onMouseLeave={(e) => (e.target.style.opacity = "1")}
                 onClick={() => {
                   navigate("/mypage/modify", {
                     state: {

@@ -3,7 +3,7 @@ import { getCookieToken } from "../utils/cookies";
 import { SET_LOCAL_TOKEN } from "../modules/localToken";
 import { SET_SESSION_TOKEN } from "../modules/sessionToken";
 import { USER_AUTO_LOGIN } from "../modules/userInfo";
-import { Link, Navigate } from "react-router-dom";
+import { createBrowserHistory } from "history";
 
 const ADDRESS = process.env.REACT_APP_API_ADDRESS;
 
@@ -65,14 +65,17 @@ const createPrivateAxios = (accessToken, dispatch, autoLogin) => {
             return axios(originRequest);
           }
         } catch (e) {
-          console.log("Refresh Error:\n", e);
           if (e.response.status === 401 && e.response.data.code === "JWT4005") {
-            Link("/register");
+            const history = createBrowserHistory();
+            // 이동
+            history.push("/register", { state: "재 로그인이 필요합니다." });
           } else console.log("Refresh Error:\n", e);
         }
       } else if (error.response.data.code === "JWT4001") {
         // 권한이 존재하지 않을 때
-        Navigate(-1);
+        const history = createBrowserHistory();
+        // 이동
+        history.push("/register", { state: "재 로그인이 필요합니다." });
       } else {
         console.log("OriginRequst Error:\n", error);
       }

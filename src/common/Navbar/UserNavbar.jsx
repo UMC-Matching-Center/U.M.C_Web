@@ -2,37 +2,15 @@ import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
 import { IconPin, IconBell, IconUser } from "@tabler/icons-react";
+import { alramConfirmAPI, alramListAPI, alramDeleteAPI } from "../../api/";
+import { useDispatch, useSelector } from "react-redux";
+import useGetAccessToken from "../../utils/getAccessToken";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Logo from "../../images/logo_crop.svg";
 import { AlarmContainer } from "../Alarm/AlarmModal";
 import "./Navbar.css";
-
-const AlarmDummy = [
-  {
-    type: "notice",
-    content: "새로운 공지사항이 등록되었습니다.",
-    date: "2023년 12월 12일",
-    is_confirm: false,
-  },
-  {
-    type: "match_complete",
-    content: "000 팀과 매칭이 완료되었습니다.",
-    date: "2023년 12월 12일",
-    is_confirm: false,
-  },
-  {
-    type: "match_incomplete",
-    content: "000 팀과 매칭이 이루어지지 않았습니다.",
-    date: "2023년 12월 12일",
-    is_confirm: true,
-  },
-  {
-    type: "match_apply",
-    content: "000에 지원이 완료되었습니다.",
-    date: "2023년 12월 12일",
-    is_confirm: true,
-  },
-];
 
 const UserNavMenuItem = styled.div`
   height: 100%;
@@ -98,47 +76,155 @@ const SubMenuItem = styled(UserNavMenuItem)`
 `;
 
 const UserNavbar = () => {
+  const dispatch = useDispatch();
+  const accessToken = useGetAccessToken();
+  const { autoLogin } = useSelector((state) => state.userInfo);
+
   const navigate = useNavigate();
   const location = useLocation();
   const [activePath, setActivePath] = useState("");
 
+  /*알림창 로딩 여부*/
+  const [alarmLoading, setAlarmLoading] = useState(false);
   /*읽지 않은 알람이 존재하는 지 여부*/
   const [aliveAlarm, setAliveAlarm] = useState(true);
   /*알림창 토글*/
   const [isViewModal, setIsViewModal] = useState(false);
   /*각 알림을 읽었는지를 나타내는 bluecircle 표시 = is_confirmed*/
-  const [alarmContent, setAlarmContent] = useState(AlarmDummy);
+  const [alarmContent, setAlarmContent] = useState([]);
   /* 알림창 외 클릭 시 알림창 닫기 */
   const alarmRef = useRef(null);
 
   /*알림창 클릭 이벤트*/
-  const handleIconBellClick = () => {
-    setIsViewModal((pre) => !pre);
-    // Toggle alarm modal red circle
-    if (aliveAlarm) setAliveAlarm((pre) => !pre);
-    // If the modal is closing, reset BlueCircleVisibility
-    if (isViewModal) {
-      const updatedVisibility = [...alarmContent].map((alarm) => ({
-        ...alarm,
-        is_confirm: alarm.is_confirm === false ? true : alarm.is_confirm,
-      }));
-      setAlarmContent(updatedVisibility);
-    }
+  const handleIconBellClick = (alarmId) => {
+    alramConfirmAPI(accessToken, dispatch, autoLogin, alarmId).then(
+      (response) => {
+        if (response.isSuccess) {
+          setIsViewModal(false);
+          // 알람 확인 시 is_confirm 1로 변경
+          const updatedAlarm = alarmContent.map((data) => {
+            if (data.alarmId === alarmId) data.is_confirm = true;
+            return data;
+          });
+          setAlarmContent(updatedAlarm);
+          // 읽지 않은 알람이 존재하는 지 여부
+          setAliveAlarm(
+            updatedAlarm.filter((item) => item.is_confirm === false).length > 0
+              ? true
+              : false
+          );
+        } else {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      }
+    );
   };
 
   /*알림창 삭제 이벤트*/
   const deleteAlarm = () => {
-    if (alarmContent.length > 0) {
-      const updatedArr = [...alarmContent].filter(
-        (arr) => arr.is_confirm === false
-      );
-      setAlarmContent(updatedArr);
+    if (alarmContent.length > 0 && !alarmLoading) {
+      setAlarmLoading(true);
+      alramDeleteAPI(accessToken, dispatch, autoLogin).then((response) => {
+        if (response.isSuccess) {
+          const updatedAlarm = [...alarmContent].filter(
+            (data) => data.is_confirm === false
+          );
+          setAlarmContent(updatedAlarm);
+          toast.success("알림 삭제 완료", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      });
+      setAlarmLoading(false);
     }
   };
 
   useEffect(() => {
     setActivePath(location.pathname.split("/")[1]);
     setIsViewModal(false);
+    if (!alarmLoading) {
+      setAlarmLoading(true);
+      alramListAPI(accessToken, dispatch, autoLogin).then((response) => {
+        if (response.isSuccess) {
+          if (response.listSize > 0) {
+            const responseList = response.alarmList.map((alarm) => {
+              const date = new Date(alarm.createdAt);
+              const year = date.getFullYear();
+              const month = date.getMonth() + 1;
+              const day = date.getDate();
+              let content = alarm.body;
+              let projectId = null;
+
+              if (
+                alarm.alarmType === "QNA_NEW" ||
+                alarm.alarmType === "MATCHING_APPLY_COMPLETE"
+              ) {
+                const splitContent = alarm.body.split("+");
+                if (splitContent.length > 1) {
+                  projectId = splitContent.shift(); // 첫번째 배열값을 projectId로 설정
+                  content = splitContent.join("+"); // 나머지 배열을 합쳐서 content로 설정
+                }
+              }
+
+              return {
+                alarmId: alarm.id,
+                type: alarm.alarmType,
+                content: content,
+                is_confirm: alarm.isConfirmed,
+                date: `${year}년 ${month}월 ${day}일`,
+                projectId: projectId,
+              };
+            });
+            setAlarmContent(responseList);
+            setAliveAlarm(
+              responseList.filter((item) => item.is_confirm === false).length >
+                0
+                ? true
+                : false
+            );
+          }
+        } else {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      });
+      setAlarmLoading(false);
+    }
   }, [location]);
 
   useEffect(() => {
@@ -161,6 +247,7 @@ const UserNavbar = () => {
 
   return (
     <>
+      <ToastContainer />
       <div className="app__nav">
         <div className="nav_area">
           <div className="nav_logo">
@@ -220,12 +307,14 @@ const UserNavbar = () => {
                 }}
               />
             </div>
+
             <div
               className="icon-bg"
               style={{
                 position: "relative",
                 margin: "0 2.4rem",
               }}
+              ref={alarmRef}
             >
               <IconBell
                 strokeWidth={1}
@@ -233,7 +322,7 @@ const UserNavbar = () => {
                 size={36}
                 style={{ display: "block" }}
                 onClick={() => {
-                  handleIconBellClick();
+                  setIsViewModal(!isViewModal);
                 }}
               />
               <AlarmContainer
