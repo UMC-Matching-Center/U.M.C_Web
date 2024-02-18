@@ -82,6 +82,13 @@ const QAModal = styled.div`
     font-size: 1.8rem;
     font-weight: 300;
     padding: 2.3rem 0 0 0.5rem;
+
+    > div {
+      width: 80rem;
+      > input {
+        width: 80rem;
+      }
+    }
   }
 
   & input {
@@ -158,6 +165,8 @@ const MatchQA = () => {
   const { state } = useLocation();
   const projectId = state.id;
   const projectName = state.name;
+  const pmId = state.pmId;
+  const memberId = state.memberId;
 
   const dispatch = useDispatch();
   const accessToken = useGetAccessToken();
@@ -213,11 +222,13 @@ const MatchQA = () => {
 
   // 답변 입력 상태 변경 핸들러
   const handleDisableAnswerChange = (index) => {
-    setDisableAnswer((prevList) => {
-      const newList = [...prevList];
-      newList[index] = false;
-      return newList;
-    });
+    if (pmId === memberId) {
+      setDisableAnswer((prevList) => {
+        const newList = [...prevList];
+        newList[index] = false;
+        return newList;
+      });
+    }
   };
 
   // 답변 삭제 이벤트
@@ -419,13 +430,15 @@ const MatchQA = () => {
                       }}
                     >
                       {question.question}{" "}
-                      {question.question && userType === "ROLE_PM" && (
-                        <DeleteQA
-                          onClick={() => deleteQA(index, question.questionId)}
-                        >
-                          삭제
-                        </DeleteQA>
-                      )}
+                      {question.question &&
+                        userType === "ROLE_PM" &&
+                        memberId === pmId && (
+                          <DeleteQA
+                            onClick={() => deleteQA(index, question.questionId)}
+                          >
+                            삭제
+                          </DeleteQA>
+                        )}
                     </div>
                     {!toggles[index] ? (
                       <IconChevronDown
@@ -484,6 +497,7 @@ const MatchQA = () => {
                       )}
                     </div>
                     {userType === "ROLE_PM" &&
+                      memberId === pmId &&
                       question.answer === null &&
                       !disableAnswer[index] && (
                         <button
@@ -499,7 +513,7 @@ const MatchQA = () => {
                   </div>
                 </QAModal>
               );
-            }).reverse()}
+            })}
           </QAContent>
         </QAWrapper>
       </QAContainer>
