@@ -80,6 +80,7 @@ const Home = () => {
             progress: undefined,
             theme: "light",
           });
+          setIsEnd(true);
         }
         setLoading(false);
       });

@@ -362,6 +362,7 @@ function ChallengerList() {
             progress: undefined,
             theme: "light",
           });
+          setIsEnd(true);
         }
         setLoading(false);
       });
