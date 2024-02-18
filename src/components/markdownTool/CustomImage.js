@@ -2,7 +2,7 @@ import React, { useContext, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import useGetAccessToken from "../../utils/getAccessToken";
 import { TextAreaContext } from "../../context/TextAreaProvider";
-import { matchImageUploadAPI } from "../../api";
+import { matchImageUploadAPI, landingImageUploadAPI } from "../../api";
 import { IconPhotoPlus } from "@tabler/icons-react";
 
 const CustomImage = () => {
@@ -21,6 +21,12 @@ const CustomImage = () => {
     matchTextareaRef,
     updateMatchText,
     updateMatchImage,
+
+    // 랜딩 페이지
+    landingText,
+    landingTextareaRef,
+    updateLandingText,
+    updateLandingImage,
   } = useContext(TextAreaContext);
   const imageRef = useRef(null);
 
@@ -57,33 +63,70 @@ const CustomImage = () => {
 
     if (file) {
       if (accessToken !== "") {
-        matchImageUploadAPI(accessToken, dispatch, autoLogin, file).then(
-          (response) => {
-            if (response.isSuccess) {
-              const id = response.imageId; // 이미지 ID
-              const fileURL = response.s3Image; // 이미지 URL
-              updateMatchImage(id, fileURL);
+        window.location.pathname === "/match/new" ||
+        window.location.pathname === "/match/modify"
+          ? matchImageUploadAPI(accessToken, dispatch, autoLogin, file).then(
+              (response) => {
+                if (response.isSuccess) {
+                  const id = response.imageId; // 이미지 ID
+                  const fileURL = response.s3Image; // 이미지 URL
+                  updateMatchImage(id, fileURL);
 
-              const newText =
-                matchText.substring(
-                  0,
-                  matchTextareaRef.current.selectionStart
-                ) +
-                `${"![" + `${id}` + "](" + `${fileURL}` + ")"}` +
-                matchText.substring(matchTextareaRef.current.selectionEnd);
+                  const newText =
+                    matchText.substring(
+                      0,
+                      matchTextareaRef.current.selectionStart
+                    ) +
+                    `${"![" + `${id}` + "](" + `${fileURL}` + ")"}` +
+                    matchText.substring(matchTextareaRef.current.selectionEnd);
 
-              updateMatchText(newText); // 이미지 추가된 전체 TEXT 업데이트
-              const imageEnd =
-                matchTextareaRef.current.selectionEnd +
-                (5 + id.length + fileURL.length);
+                  updateMatchText(newText); // 이미지 추가된 전체 TEXT 업데이트
+                  const imageEnd =
+                    matchTextareaRef.current.selectionEnd +
+                    (5 + id.length + fileURL.length);
 
-              matchTextareaRef.current.focus();
-              setTimeout(() => {
-                matchTextareaRef.current.setSelectionRange(imageEnd, imageEnd);
-              }, 0);
-            }
-          }
-        );
+                  matchTextareaRef.current.focus();
+                  setTimeout(() => {
+                    matchTextareaRef.current.setSelectionRange(
+                      imageEnd,
+                      imageEnd
+                    );
+                  }, 0);
+                }
+              }
+            )
+          : landingImageUploadAPI(accessToken, dispatch, autoLogin, file).then(
+              (response) => {
+                if (response.isSuccess) {
+                  const id = response.imageId; // 이미지 ID
+                  const fileURL = response.s3Image; // 이미지 URL
+                  updateLandingImage(id, fileURL);
+
+                  const newText =
+                    landingText.substring(
+                      0,
+                      landingTextareaRef.current.selectionStart
+                    ) +
+                    `${"![" + `${id}` + "](" + `${fileURL}` + ")"}` +
+                    landingText.substring(
+                      landingTextareaRef.current.selectionEnd
+                    );
+
+                  updateLandingText(newText); // 이미지 추가된 전체 TEXT 업데이트
+                  const imageEnd =
+                    landingTextareaRef.current.selectionEnd +
+                    (5 + id.length + fileURL.length);
+
+                  landingTextareaRef.current.focus();
+                  setTimeout(() => {
+                    landingTextareaRef.current.setSelectionRange(
+                      imageEnd,
+                      imageEnd
+                    );
+                  }, 0);
+                }
+              }
+            );
       }
     }
   };

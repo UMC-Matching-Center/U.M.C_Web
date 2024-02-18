@@ -1,15 +1,19 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import ReviewTeam from "./review/ReviewTeam";
-import ViewStatus from "./viewstatus/ViewStatus";
-import LandingPage from "./LandingPage";
+import { PMRoute } from "../../routes";
+
+import EvaluateTeam from "./TeamEvaluate";
+import ApplyStatus from "./ApplyStatus";
+import LandingPage from "./landing/LandingPage";
 
 export default function MyProject() {
-    return(
-        <Routes>
-        <Route path="/review" exact element={<ReviewTeam />}></Route>
-        <Route path="/viewstatus" exact element={<ViewStatus />}></Route>
-        <Route path="/landing/*" element={<LandingPage />}></Route>
-      </Routes>
-    )
+  return (
+    <Routes>
+      <Route path="/evaluate" exact element={<EvaluateTeam />} />
+      <Route path="/landing/*" element={<LandingPage />} />
+      <Route element={<PMRoute />}>
+        <Route path="/applystatus" exact element={<ApplyStatus />} />
+      </Route>
+    </Routes>
+  );
 }

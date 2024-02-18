@@ -1,18 +1,18 @@
 import React, { useContext } from "react";
-import { TextAreaContext } from "../../context/TextAreaProvider";
+import { TextAreaContext } from "../../../context/TextAreaProvider";
 
-const MatchView = ({ handleKeyDown }) => {
-  const { matchText, matchTextareaRef, updateMatchText } =
+const LandingPageView = ({ handleKeyDown }) => {
+  const { landingText, landingTextareaRef, updateLandingText } =
     useContext(TextAreaContext);
 
   return (
     <div className="match-markdown-view">
       <textarea
         placeholder="본문 내용을 입력하세요"
-        ref={matchTextareaRef}
-        value={matchText}
+        ref={landingTextareaRef}
+        value={landingText}
         onChange={(e) => {
-          updateMatchText(e.target.value);
+          updateLandingText(e.target.value);
         }}
         onKeyDown={(e) => {
           handleKeyDown(e);
@@ -22,4 +22,4 @@ const MatchView = ({ handleKeyDown }) => {
   );
 };
 
-export default MatchView;
+export default LandingPageView;

@@ -29,7 +29,7 @@ const IDAuth = styled.button`
   border: 1px solid #6b6880;
   background-color: #fafafa00;
   font-family: "KBO-Dia-Gothic";
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 300;
   color: #6b6880;
   box-sizing: border-box;
@@ -56,13 +56,13 @@ const PwCondition = styled.div`
   style={{ cursor: "pointer" }}
 
   svg {
-    width: 1rem;
-    height: 1rem;
+    width: 1.2rem;
+    height: 1.2rem;
     stroke-width: 0.1rem;
   }
 
   span {
-    font-size: 0.8rem;
+    font-size: 1rem;
     margin: 0.2rem 0.5rem 0 0;
   }
 `;

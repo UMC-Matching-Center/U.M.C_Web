@@ -9,6 +9,7 @@ const AlarmContainer = ({
   deleteAlarm,
   alarmContent,
   handleIconBellClick,
+  alarmRef,
 }) => {
   const { userType } = useSelector((state) => state.userInfo);
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const AlarmContainer = ({
   return (
     <>
       <RedCircleFilled $aliveAlarm={aliveAlarm} />
-      <AlarmModal $display={isViewModal}>
+      <AlarmModal $display={isViewModal} ref={alarmRef}>
         <ModalContentBox>
           <ContentBoxTitle>알림</ContentBoxTitle>
           <ContentBoxSubTitle onClick={deleteAlarm}>
@@ -40,7 +41,7 @@ const AlarmContainer = ({
                       case "ROLE_PM":
                         navigate(
                           alarm.type === "match"
-                            ? "/myproject/viewstatus" // 내 프로젝트 지원현황
+                            ? "/myproject/applystatus" // 내 프로젝트 지원현황
                             : alarm.type === "notice"
                               ? "/notice"
                               : "/match" // 내 프로젝트 Q&A 변경
@@ -52,7 +53,7 @@ const AlarmContainer = ({
                           if (alarm.type === "notice") {
                             navigate("/notice");
                           } else if (alarm.type === "match_complete") {
-                            navigate("/mypage/review");
+                            navigate("/mypage/evaluate");
                           } else if (alarm.type === "match_apply") {
                             navigate("/match"); // 지원한 프로젝트 상세페이지 이동
                           }
@@ -140,15 +141,15 @@ const RedCircleFilled = styled.div`
   height: 0.8rem;
   background-color: #d62117;
   border-radius: 1rem;
-  top: 0.1rem;
-  right: 0.4rem;
+  top: 0.7rem;
+  right: 0.9rem;
 `;
 const AlarmModal = styled.div`
   display: ${(props) => !props.$display && "none"};
   z-index: 2;
   position: absolute;
   top: 6.5rem;
-  right: -2.5rem;
+  right: -1.75rem;
   width: 41rem;
   height: 62.6rem;
   border-radius: 1rem;

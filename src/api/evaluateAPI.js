@@ -1,12 +1,13 @@
 import { privateAxios } from "../utils/customAxios.js";
+import errorCode from "./errorCode.js";
 
 //내 프로젝트 인원들 보기
-export const reviewAppAPI = async (accessToken, dispatch, autoLogin) => {
+export const evaluateAppAPI = async (accessToken, dispatch, autoLogin) => {
   //서버로부터 받아 사용할 데이터
   const response = {
     isSuccess: false, //API 성공 여부
     message: "", //API 메시지
-    reviewDataList: [], //데이터리스트
+    evaluateDataList: [], //데이터리스트
   };
 
   //매칭 일정
@@ -17,27 +18,18 @@ export const reviewAppAPI = async (accessToken, dispatch, autoLogin) => {
     if (data.code === "COMMON200") {
       response.isSuccess = true;
       response.message = data.message;
-      response.reviewDataList = data.result;
+      response.evaluateDataList = data.result;
     }
   } catch (err) {
     response.isSuccess = false;
-    if (
-      err.response &&
-      (err.response.data.code === "EVALUATION4003" ||
-        err.response.data.code === "EVALUATION4002" ||
-        err.response.data.code === "EVALUATION4001")
-    ) {
-      response.message = err.response.data.message;
-    } else {
-      response.message = "알 수 없는 오류가 발생했습니다. 다시 시도해주세요.";
-    }
+    response.message = errorCode(err);
   }
 
   return response;
 };
 
 //상호평가 저장
-export const reviewSaveAPI = async (
+export const evaluateSaveAPI = async (
   accessToken,
   dispatch,
   autoLogin,
@@ -61,17 +53,7 @@ export const reviewSaveAPI = async (
     }
   } catch (err) {
     response.isSuccess = false;
-    if (
-      err.response &&
-      (err.response.data.code === "EVALUATION4003" ||
-        err.response.data.code === "EVALUATION4002" ||
-        err.response.data.code === "EVALUATION4001")
-    ) {
-      response.message = err.response.data.message;
-    } else {
-      response.message =
-        "알 수 없는 오류가 발생했습니다. 다시 시도해주세요. 상호평가 저장 실패 ";
-    }
+    response.message = errorCode(err);
   }
 
   return response;

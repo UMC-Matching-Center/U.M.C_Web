@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import ReviewStar from "./ReviewStar";
-import ReviewCardDetail from "./ReviewCardDetail";
-import { reviewSaveAPI } from "../../api";
+import EvaluateStar from "./EvaluateStar";
+import EvaluateCardDetail from "./EvaluateCardDetail";
+import { evaluateSaveAPI } from "../../api";
 import { useDispatch, useSelector } from "react-redux";
 import useGetAccessToken from "../../utils/getAccessToken";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 //카드 전체 컨테이너
 const CardContainer = styled.div`
@@ -139,28 +141,27 @@ const PartsDummy = [
   { num: 5, content: "SPRINGBOOT", display: "Spring" },
   { num: 6, content: "NODEJS", display: "Node.js" },
 ];
-export default function ReviewCard({ list, setDataList }) {
+export default function EvaluateCard({ list, setDataList }) {
   const dispatch = useDispatch();
   const accessToken = useGetAccessToken();
   const { autoLogin } = useSelector((state) => state.userInfo);
 
-  const [isReviewMode, setisReviewMode] = useState(false);
+  const [isEvaluateMode, setisEvaluateMode] = useState(false);
 
   //상호평가 들어가기
-  const handleReview = () => {
-    setisReviewMode(!isReviewMode);
+  const handleEvaluate = () => {
+    setisEvaluateMode(!isEvaluateMode);
   };
 
   //상호 평가 저장
-  const handleSaveReview = (list) => {
-    setisReviewMode(!isReviewMode);
+  const handleSaveEvaluate = (list) => {
+    setisEvaluateMode(!isEvaluateMode);
     const updatedList = {
       rate: list.rate,
       content: list.content,
     };
-    console.log(list.memberId);
-    console.log(updatedList);
-    reviewSaveAPI(
+
+    evaluateSaveAPI(
       accessToken,
       dispatch,
       autoLogin,
@@ -168,25 +169,44 @@ export default function ReviewCard({ list, setDataList }) {
       updatedList
     ).then((response) => {
       if (response.isSuccess) {
-        console.log("상호 평가 저장 성공");
+        toast.success("상호 평가 저장 성공", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       } else {
-        alert(response.message);
+        toast.error(response.message, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     });
   };
 
   return (
     <>
-      {isReviewMode ? (
-        <ReviewCardDetail
+      <ToastContainer />
+      {isEvaluateMode ? (
+        <EvaluateCardDetail
           list={list}
-          handleSaveReview={handleSaveReview}
+          handleSaveEvaluate={handleSaveEvaluate}
           setDataList={setDataList}
           DefaultCardImg={DefaultCardImg}
           PartsDummy={PartsDummy}
         />
       ) : (
-        <CardContainer onClick={() => handleReview()}>
+        <CardContainer onClick={() => handleEvaluate()}>
           <CardProfileImgContainer>
             <CardProfileImg
               style={{
@@ -215,7 +235,7 @@ export default function ReviewCard({ list, setDataList }) {
               <CardDetailSchool>{list.university}</CardDetailSchool>
             </CardDetailContainer>
             <CardStarContainer>
-              <ReviewStar list={list} editOn={false} />
+              <EvaluateStar list={list} editOn={false} />
             </CardStarContainer>
           </CardRightContainer>
         </CardContainer>

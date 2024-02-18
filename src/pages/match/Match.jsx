@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import useGetAccessToken from "../../utils/getAccessToken";
@@ -10,6 +10,9 @@ import MatchDetail from "./MatchDetail";
 import MatchWrite from "./MatchWrite";
 import { TextAreaProvider } from "../../context/TextAreaProvider";
 import useIntersect from "../../utils/intersectionObserve";
+import { AdminRoute } from "../../routes";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const MatchMain = styled.div`
   display: flex;
@@ -74,7 +77,16 @@ function MatchHome({ type }) {
               setIsEnd(true);
             }
           } else {
-            alert(response.message);
+            toast.error(response.message, {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
           }
           setLoading(false);
         }
@@ -84,34 +96,39 @@ function MatchHome({ type }) {
   }, {});
 
   return (
-    <MatchMain>
-      {type === "ROLE_PM" && (
-        <div className="button_wrap">
-          <button
-            onClick={() =>
-              navigate("../new", { state: { project: null, mode: "new" } })
-            }
-          >
-            Add
-          </button>
-        </div>
-      )}
-      <MatchList>
-        {data.reverse().map((project) => {
-          return (
-            <MatchCard
-              project={project}
-              key={project.projectId}
-              onClick={handleCardClick}
-            />
-          );
-        })}
-        {loading && <div className="table_title">Loading</div>}
-        {!loading && (
-          <div ref={setRef} style={{ width: "100%", height: "1px" }} />
+    <>
+      <ToastContainer />
+      <MatchMain>
+        {type === "ROLE_PM" && (
+          <div className="button_wrap">
+            <button
+              onClick={() =>
+                navigate("../new", { state: { project: null, mode: "new" } })
+              }
+            >
+              Add
+            </button>
+          </div>
         )}
-      </MatchList>
-    </MatchMain>
+        <MatchList>
+          {data
+            .map((project) => {
+              return (
+                <MatchCard
+                  project={project}
+                  key={project.projectId}
+                  onClick={handleCardClick}
+                />
+              );
+            })
+            .reverse()}
+          {loading && <div className="table_title">Loading</div>}
+          {!loading && (
+            <div ref={setRef} style={{ width: "100%", height: "1px" }} />
+          )}
+        </MatchList>
+      </MatchMain>
+    </>
   );
 }
 
@@ -120,22 +137,12 @@ export default function Match() {
   return (
     <TextAreaProvider>
       <Routes>
-        <Route path="/" exact element={<MatchHome type={userType} />}></Route>
-        <Route path="/detail/*" element={<MatchDetail />}></Route>
-        <Route
-          path="/new"
-          exact
-          element={
-            userType === "ROLE_PM" ? <MatchWrite /> : <Navigate to=".." />
-          }
-        ></Route>
-        <Route
-          path="/modify"
-          exact
-          element={
-            userType === "ROLE_PM" ? <MatchWrite /> : <Navigate to=".." />
-          }
-        ></Route>
+        <Route path="/" exact element={<MatchHome type={userType} />} />
+        <Route path="/detail/*" element={<MatchDetail />} />
+        <Route element={<AdminRoute />}>
+          <Route path="/new" exact element={<MatchWrite />} />
+          <Route path="/modify" exact element={<MatchWrite />} />
+        </Route>
       </Routes>
     </TextAreaProvider>
   );

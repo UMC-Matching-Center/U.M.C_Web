@@ -5,19 +5,18 @@ import styled from "styled-components";
 const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
+  width: 100%;
+  justify-content: space-evenly;
 `;
 
 //텍스트 큰박스
 const TextBox = styled.div`
   display: flex;
+  height: 7.5rem;
   flex-direction: column;
   color: black;
-  margin-right: 4.2rem;
   justify-content: center;
   align-items: center;
-  &:last-child {
-    margin: 0;
-  }
 `;
 
 //숫자 들어가는 헤더 텍스트 박스
@@ -67,10 +66,6 @@ const HeaderBar = styled.div`
   width: 0.1rem;
   height: 7.3rem;
   background-color: #9c9aab;
-  margin-right: 4.2rem;
-  &:nth-child(2) {
-    margin-right: 5.7rem;
-  }
 `;
 
 //옵션 리스트

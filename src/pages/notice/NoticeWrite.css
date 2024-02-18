@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   width: 120rem;
-  margin: 6rem auto;
+  margin: 0 auto;
 }
 
 .notice-write-wrapper,
@@ -101,7 +101,7 @@
   padding: 4rem;
   background-color: #fafafa;
   border-radius: 0.8rem;
-  border: 0.1rem dotted #9c9aab;
+  border: 0.1rem dashed #9c9aab;
   margin-top: 1.3rem;
   margin-left: 2rem;
   cursor: pointer;

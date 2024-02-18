@@ -10,6 +10,9 @@ const CustomLeft = () => {
     matchText,
     matchTextareaRef,
     updateMatchText,
+    landingText,
+    landingTextareaRef,
+    updateLandingText,
   } = useContext(TextAreaContext);
 
   const handleLeftClick = (e) => {
@@ -28,6 +31,11 @@ const CustomLeft = () => {
         postText = matchText;
         postRef = matchTextareaRef;
         postUpdate = updateMatchText;
+        break;
+      case "/myproject/landing/new":
+        postText = landingText;
+        postRef = landingTextareaRef;
+        postUpdate = updateLandingText;
         break;
       default:
         break;

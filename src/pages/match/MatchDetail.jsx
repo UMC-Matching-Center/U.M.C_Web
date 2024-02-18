@@ -8,8 +8,10 @@ import ProjectDetail from "../../components/ProjectDetail";
 import MatchQA from "./MatchQA";
 import chat from "../../images/ic_chat.svg";
 import Modal from "react-modal";
-import { Apply, ApplyError } from "../../components/modal";
+import { Apply } from "../../components/modal";
 import { IconLoader, IconCircleCheck } from "@tabler/icons-react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ModalStyles = {
   overlay: { width: "100vw", background: "rgba(2, 1, 11, 0.5)", zIndex: "1" },
@@ -114,53 +116,64 @@ const MatchProjectDetail = () => {
     createAt: [],
   });
   const [apply, setApply] = useState(false);
-  const [applyError, setApplyError] = useState(false);
-  const [errMessage, setErrMessage] = useState("");
 
   useEffect(() => {
-    if (accessToken !== "") {
-      matchDetailAPI(accessToken, dispatch, autoLogin, id).then((response) => {
-        if (response.isSuccess) {
-          setData(response.project);
-        } else {
-          alert(response.message);
-        }
-      });
-    } else {
-      navigate("/login", { replace: true }); // 메인 페이지로 이동
-    }
+    matchDetailAPI(accessToken, dispatch, autoLogin, id).then((response) => {
+      if (response.isSuccess) {
+        setData(response.project);
+      } else {
+        toast.error(response.message, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    });
   }, []);
 
   const handleApply = () => {
-    if (accessToken !== "") {
-      matchApplyAPI(accessToken, dispatch, autoLogin, id).then((response) => {
-        if (response.isSuccess) {
-          setApply(true);
-        } else {
-          setErrMessage(response.message); // 에러 메시지 정의
-          setApplyError(true); // 에러 모달 띄우기
-        }
-      });
-    } else {
-      navigate("/login", { replace: true });
-    }
+    matchApplyAPI(accessToken, dispatch, autoLogin, id).then((response) => {
+      if (response.isSuccess) {
+        setApply(true);
+        toast.success("지원 완료", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        toast.error(response.message, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    });
   };
 
   return (
     <>
+      <ToastContainer />
       <Modal
         isOpen={apply}
         onRequestClose={() => setApply(false)}
         style={ModalStyles}
       >
         <Apply isClose={() => setApply(false)} />
-      </Modal>
-      <Modal
-        isOpen={applyError}
-        onRequestClose={() => setApplyError(false)}
-        style={ModalStyles}
-      >
-        <ApplyError isClose={() => setApplyError(false)} message={errMessage} />
       </Modal>
       <ProjectDetail project={data} type={userType} />
       <MatchBar>
@@ -169,7 +182,7 @@ const MatchProjectDetail = () => {
             className="match-question-circle"
             onClick={() =>
               navigate(window.location.pathname + `/question`, {
-                state: { id: id },
+                state: { id: id, name: data.name },
               })
             }
           >

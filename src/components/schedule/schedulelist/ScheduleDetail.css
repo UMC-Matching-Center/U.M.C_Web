@@ -1,7 +1,7 @@
 /* 전체 스케쥴 컨테이너 */
 .schedulecontainer {
   display: flex;
-  margin: 4.1rem 0 0 13.8rem;
+  margin: 4.1rem 0 0 0;
   width: 40.8rem;
   line-height: 150%;
   flex-direction: column;
@@ -63,55 +63,55 @@
 
 /* 일정 버튼 컨테이너 */
 .schedulebuttoncontainer {
-    display: flex;
-    flex-direction: row;
-    margin: 3.8rem 0 0 0;
-    font-weight: 300;
-    font-size: 1.4rem;
-  }
-  
-  /* 일정 추가, 편집 버튼 */
-  .schedulebutton {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 19.3rem; 
-    height: 3.4rem;
-    cursor: pointer;
-    border-radius: 0.8rem;
-    background-color: #0261aa;
-    &:active {
-      background-color: #014171;
-    }
-  }
+  display: flex;
+  flex-direction: row;
+  margin: 3.8rem 0 0 0;
+  font-weight: 300;
+  font-size: 1.4rem;
+}
 
-  /* 일정 완료 버튼 */
-  .schedulebuttonfinish {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 40.8rem; 
-    height: 3.4rem;
-    cursor: pointer;
-    border-radius: 0.8rem;
-    background-color: #0261aa;
-    &:active {
-      background-color: #014171;
-    }
+/* 일정 추가, 편집 버튼 */
+.schedulebutton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 19.3rem;
+  height: 3.4rem;
+  cursor: pointer;
+  border-radius: 0.8rem;
+  background-color: #0261aa;
+  &:active {
+    background-color: #014171;
   }
+}
 
-  /* 첫 번째 친구만 오른쪽 */
-  .schedulebutton:first-child {
-    margin-right: 2.2rem;
+/* 일정 완료 버튼 */
+.schedulebuttonfinish {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40.8rem;
+  height: 3.4rem;
+  cursor: pointer;
+  border-radius: 0.8rem;
+  background-color: #0261aa;
+  &:active {
+    background-color: #014171;
   }
-  .scheduleeditbox {
-    position: absolute;
-    width :6rem;
-    height : 2.1rem;
-    font-size : 1.4rem;
-    font-weight: 300;
-    margin-left: 33.8rem;
-  }
-  .scheduleedit {
-    cursor: pointer;
-  }
+}
+
+/* 첫 번째 친구만 오른쪽 */
+.schedulebutton:first-child {
+  margin-right: 2.2rem;
+}
+.scheduleeditbox {
+  position: absolute;
+  width: 6rem;
+  height: 2.1rem;
+  font-size: 1.4rem;
+  font-weight: 300;
+  margin-left: 33.8rem;
+}
+.scheduleedit {
+  cursor: pointer;
+}

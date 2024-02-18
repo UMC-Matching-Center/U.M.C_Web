@@ -5,6 +5,8 @@ import ScheduleAdd from "./schedulelist/ScheduleAdd";
 import { scheduleAddAPI } from "../../api";
 import { useDispatch, useSelector } from "react-redux";
 import useGetAccessToken from "../../utils/getAccessToken";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ScheduleList({
   currentMonthIndex,
@@ -13,12 +15,12 @@ export default function ScheduleList({
   dummyData,
   setDummyData,
   formData,
-  setFormData
+  setFormData,
 }) {
   const dispatch = useDispatch();
   const accessToken = useGetAccessToken();
   const { autoLogin } = useSelector((state) => state.userInfo);
-  currentYearIndex=currentYearIndex-2000; //해당 24년도로 변환해서 처리하기 위해
+  currentYearIndex = currentYearIndex - 2000; //해당 24년도로 변환해서 처리하기 위해
   const [scheduleAdd, setScheduleAdd] = useState(false);
   const [scheduleEdit, setScheduleEdit] = useState(false);
   const [editAble, setEditAble] = useState(true); //Edit 하나만 할 수 있도록 설정
@@ -53,19 +55,34 @@ export default function ScheduleList({
       endMonth: formData.endMonth,
       endDay: formData.endDay,
     };
-    console.log(newSchedule);
-    scheduleAddAPI(
-      accessToken,
-      dispatch,
-      autoLogin,
-      newSchedule
-    ).then((response) => {
-      if (response.isSuccess) {
-        console.log("추가 성공")
-      } else {
-        alert(response.message);
+
+    scheduleAddAPI(accessToken, dispatch, autoLogin, newSchedule).then(
+      (response) => {
+        if (response.isSuccess) {
+          toast.success("추가 성공", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
       }
-    });
+    );
     // 새로운 스케줄 추가 후 폼 초기화
     setFormData({
       title: "",
@@ -96,9 +113,10 @@ export default function ScheduleList({
     });
     setScheduleAdd(!scheduleAdd);
   };
-  
+
   return (
     <>
+      <ToastContainer />
       {scheduleAdd ? (
         <ScheduleAdd
           handleScheduleAdd={handleScheduleAdd}

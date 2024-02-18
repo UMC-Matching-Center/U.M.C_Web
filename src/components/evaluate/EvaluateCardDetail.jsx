@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import ReviewStar from "./ReviewStar";
+import EvaluateStar from "./EvaluateStar";
 
 //카드 컨테이너
 const Container = styled.div`
@@ -54,7 +54,7 @@ const HeadTitle = styled.div`
 `;
 
 //별 컨테이너
-const ReviewContainer = styled.div`
+const EvaluateContainer = styled.div`
   position: absolute;
   margin: 0.7rem 0 0 21rem;
 `;
@@ -119,9 +119,9 @@ const TextBox = styled.textarea`
   }
 `;
 
-export default function ReviewCardDetail({
+export default function EvaluateCardDetail({
   list,
-  handleSaveReview,
+  handleSaveEvaluate,
   setDataList,
   DefaultCardImg,
   PartsDummy,
@@ -161,14 +161,14 @@ export default function ReviewCardDetail({
               return null; // 조건을 만족하지 않는 경우 null 반환
             })}
           </HeadTitle>
-          <HeadTitle style={{marginTop : "0.3rem"}}>
+          <HeadTitle style={{ marginTop: "0.3rem" }}>
             {list.nameNickname.split("/")[0].trim()} /{" "}
             {list.nameNickname.split("/")[1].trim()}
           </HeadTitle>
-          <ReviewContainer>
-            <ReviewStar list={list} editOn={true} setDataList={setDataList} />
-          </ReviewContainer>
-          <CheckSVGContainer onClick={() => handleSaveReview(list)}>
+          <EvaluateContainer>
+            <EvaluateStar list={list} editOn={true} setDataList={setDataList} />
+          </EvaluateContainer>
+          <CheckSVGContainer onClick={() => handleSaveEvaluate(list)}>
             <CheckSVG />
           </CheckSVGContainer>
         </HeadContainer>

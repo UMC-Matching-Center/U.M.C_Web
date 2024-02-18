@@ -4,7 +4,6 @@ import styled from "styled-components";
 //모든 박스 틀
 const MonthBox = styled.div`
   display: flex;
-  margin-left : 1.3rem;
   width: 40rem;
   height: 12.4rem;
   line-height: 150%;
@@ -24,9 +23,9 @@ const CurrentMonthBox = styled.span`
 
 // //현재 년도
 const CurrentYearBox = styled.div`
-display : flex;
-position : absolute;
-margin-top : 4rem;
+  display: flex;
+  position: absolute;
+  margin-top: 4rem;
   font-size: 1.6rem;
   font-weight: 300;
   line-height: 150%;
