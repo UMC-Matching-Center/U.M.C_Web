@@ -10,7 +10,8 @@ const CardWrapper = styled.div`
   background-color: #fafafa;
   overflow: hidden;
   transition: all 0.5s;
-
+  cursor: pointer;
+  
   &:hover {
     transform: translateY(-0.5rem);
   }

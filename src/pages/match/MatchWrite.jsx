@@ -317,7 +317,10 @@ const MatchWrite = () => {
           <button
             className="match-upload-button"
             disabled={!enableUpload}
-            style={{ opacity: !enableUpload && "0.5" }}
+            style={{
+              opacity: !enableUpload && "0.5",
+              cursor: !enableUpload && "auto",
+            }}
             onClick={uploadMatchingProject}
           >
             업로드

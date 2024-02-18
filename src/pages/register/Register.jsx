@@ -187,6 +187,7 @@ function Login() {
                   style={{
                     marginTop: "3.9rem",
                     backgroundColor: ableBtn ? "#014171" : "#01417180",
+                    cursor: !ableBtn && "default"
                   }}
                   disabled={!ableBtn}
                 >

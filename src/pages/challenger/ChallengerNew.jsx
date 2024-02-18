@@ -27,6 +27,9 @@ const MatchingBtn = styled.div`
   font-weight: 500;
   line-height: 150%;
   cursor: pointer;
+  &:hover {
+    opacity : 0.8;
+  }
 
   &:nth-child(1) {
     background-color: #0281e2;

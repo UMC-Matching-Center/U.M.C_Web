@@ -48,6 +48,9 @@ const MatchBar = styled.div`
       border-radius: 5rem;
       background: #0261aa;
       cursor: pointer;
+      &:hover{
+        opacity: 0.8;
+      }
       > span {
         position: absolute;
         top: 3rem;

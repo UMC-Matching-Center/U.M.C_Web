@@ -6,7 +6,7 @@
 
   background-color: #fafafa;
   overflow: hidden;
-
+  cursor : pointer;
   transition: all 0.5s;
 
   &:hover {

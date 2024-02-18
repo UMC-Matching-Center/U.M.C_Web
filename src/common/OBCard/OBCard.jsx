@@ -16,7 +16,6 @@ const OBCard = (props) => {
             backgroundImage: `url(${props.project.projectImg})`,
             backgroundSize: "cover",
             backgroundPosition: "center center",
-            cursor: "pointer",
           }}
         />
       </div>

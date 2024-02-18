@@ -322,6 +322,7 @@ export default function Signup() {
                 style={{
                   marginTop: "3.2rem",
                   backgroundColor: ableBtn ? "#014171" : "#01417180",
+                  cursor: !ableBtn && "default"
                 }}
                 disabled={!ableBtn}
               >
