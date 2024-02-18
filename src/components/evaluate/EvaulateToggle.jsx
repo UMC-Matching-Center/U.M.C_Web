@@ -9,7 +9,7 @@ export default function EvaluateToggle({ evaluateMode, setEvaluateMode }) {
   return (
     <Container>
       <div className="text">팀원 평가</div>
-      <ToggleContainer isActive={evaluateMode} onClick={toggleHandler}>
+      <ToggleContainer $isActive={evaluateMode} onClick={toggleHandler}>
         <div className="toggle-text">{evaluateMode ? "ON" : "OFF"}</div>
         <div className="toggle-circle" />
       </ToggleContainer>
@@ -38,14 +38,14 @@ const ToggleContainer = styled.div`
   width: 7.3rem;
   height: 3.3rem;
   border-radius: 5rem;
-  background-color: ${({ isActive }) => (isActive ? "#0281e2" : "#cecdd5")};
+  background-color: ${(props) => (props.$isActive ? "#0281e2" : "#cecdd5")};
   cursor: pointer;
   transition: background-color 0.5s;
 
   .toggle-circle {
     position: absolute;
     top: 0.3rem;
-    left: ${({ isActive }) => (isActive ? "4.3rem" : "0.3rem")};
+    left: ${(props) => (props.$isActive ? "4.3rem" : "0.3rem")};
     width: 2.7rem;
     height: 2.7rem;
     border-radius: 50%;
@@ -54,9 +54,8 @@ const ToggleContainer = styled.div`
   }
   .toggle-text {
     font-weight: 500;
-    padding-top : 0.3rem;
-    padding-left: ${({ isActive }) => (isActive ? "1.1rem" : "3.5rem")};
+    padding-top: 0.3rem;
+    padding-left: ${(props) => (props.$isActive ? "1.1rem" : "3.5rem")};
     transition: 0.5s;
   }
 `;
-
