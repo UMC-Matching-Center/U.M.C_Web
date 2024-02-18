@@ -90,23 +90,26 @@ export default function Schedule() {
       if (response.isSuccess) {
         setDummyData(response.scheduleList);
       } else {
-        toast.error(response.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        if (!toast.isActive("scheduleDataAPI", "evaluateAPI")) {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            toastId: "scheduleDataAPI",
+          });
+        }
       }
     });
   }, [formData]);
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer containerId={"scheduleAPI"} />
       <ScheduleBox>
         <ScheduleMonth
           currentMonthIndex={currentMonthIndex} //현재 달 index값 give
