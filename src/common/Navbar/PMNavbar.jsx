@@ -195,7 +195,7 @@ const PMNavbar = () => {
                   <Link to="/myproject/evaluate">팀원 상호 평가</Link>
                 </SubMenuItem>
                 <SubMenuItem>
-                  <Link to="/myproject/landing">랜딩페이지 작성</Link>
+                  <Link to="/myproject/landing">랜딩페이지 작성·보기</Link>
                 </SubMenuItem>
               </SubMenuWrapper>
             </UserNavMenuItem>
