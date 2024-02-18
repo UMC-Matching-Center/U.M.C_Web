@@ -1,4 +1,5 @@
 import { privateAxios } from "../utils/customAxios.js";
+import errorCode from "./errorCode.js";
 
 export const landingWriteAPI = async (
   accessToken,
@@ -23,7 +24,7 @@ export const landingWriteAPI = async (
   } catch (err) {
     response.isSuccess = false;
     if (err.response) {
-      response.message = err.response.data.message;
+      response.message = errorCode(err);
     } else {
       response.message = "알 수 없는 오류가 발생했습니다. 다시 시도해주세요.";
     }
@@ -56,7 +57,7 @@ export const landingModifyAPI = async (
   } catch (err) {
     response.isSuccess = false;
     if (err.response) {
-      response.message = err.response.data.message;
+      response.message = errorCode(err);
     } else {
       response.message = "알 수 없는 오류가 발생했습니다. 다시 시도해주세요.";
     }
@@ -85,10 +86,10 @@ export const landingDetailAPI = async (accessToken, dispatch, autoLogin) => {
   } catch (err) {
     response.isSuccess = false;
     if (err.response && err.response.data.code === "MYPROJECT4003") {
-      response.message = err.response.data.message;
+      response.message = errorCode(err);
       response.project = null;
     } else if (err.response && err.response.data.code === "PROJECT4001") {
-      response.message = err.response.data.message;
+      response.message = errorCode(err);
     } else {
       response.message = "알 수 없는 오류가 발생했습니다. 다시 시도해주세요.";
     }
