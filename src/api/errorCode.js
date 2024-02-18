@@ -16,6 +16,7 @@ export default function errorCode(err) {
     // My Project
     "MYPROJECT4001",
     "MYPROJECT4002",
+    "MYPROJECT4003",
 
     // Authorization
     "EMAIL4002",
@@ -42,6 +43,8 @@ export default function errorCode(err) {
     "SCHEDULE4001",
     "SCHEDULE4002",
     "SCHEDULE4003",
+    "SCHEDULE4004",
+    "SCHEDULE4005",
 
     // Notice
     "NOTICE4001",
@@ -51,6 +54,7 @@ export default function errorCode(err) {
     "EVALUATION4001",
     "EVALUATION4002",
     "EVALUATION4003",
+    "EVALUATION4004",
 
     // Branch
     "BRANCH4001",
