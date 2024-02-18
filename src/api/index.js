@@ -25,7 +25,11 @@ import {
   scheduleAddAPI,
   scheduleDataAPI,
 } from "./scheduleAPI.js";
-import { evaluateAppAPI, evaluateSaveAPI } from "./evaluateAPI.js";
+import {
+  evaluateAppAPI,
+  evaluateSaveAPI,
+  myEvaluationAPI,
+} from "./evaluateAPI.js";
 import { viewAppAPI, appPassAPI, appFailAPI } from "./applyStatusAPI.js";
 import {
   matchListAPI,
@@ -75,6 +79,7 @@ export {
   scheduleDataAPI, //일정 조회 API
   evaluateAppAPI, //팀원 상호평가 조회 API
   evaluateSaveAPI, //팀원 상호평가 저장 API
+  myEvaluationAPI, //내 평가 보기 API
   viewAppAPI, //지원 현황보기 API
   appPassAPI, //지원자 합격 API
   appFailAPI, //지원자 불합격 API
