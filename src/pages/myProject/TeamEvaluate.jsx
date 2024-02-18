@@ -35,46 +35,54 @@ export default function EvaluateTeam() {
   const accessToken = useGetAccessToken();
   const { autoLogin } = useSelector((state) => state.userInfo);
 
-  //첫 실행 시 API 호출
   useEffect(() => {
-    evaluateAppAPI(accessToken, dispatch, autoLogin).then((response) => {
-      if (response.isSuccess) {
-        setEvaluateData(response.evaluateDataList);
-      } else {
-        toast.error(response.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      }
-    });
-    myEvaluationAPI(accessToken, dispatch, autoLogin).then((response) => {
-      if (response.isSuccess) {
-        setMyEvaluationData(response.myEvaluationData);
-      } else {
-        toast.error(response.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      }
-    });
-  }, []);
+    if (evaluateMode) {
+      evaluateAppAPI(accessToken, dispatch, autoLogin).then((response) => {
+        if (response.isSuccess) {
+          setEvaluateData(response.evaluateDataList);
+        } else {
+          if (!toast.isActive("evaluateAppAPI", "evaluateAPI")) {
+            toast.error(response.message, {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              toastId: "evaluateAppAPI",
+            });
+          }
+        }
+      });
+    } else {
+      myEvaluationAPI(accessToken, dispatch, autoLogin).then((response) => {
+        if (response.isSuccess) {
+          setMyEvaluationData(response.myEvaluationData);
+        } else {
+          if (!toast.isActive("evaluateAPI")) {
+            toast.error(response.message, {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              toastId: "myEvaluationAPI",
+            });
+          }
+        }
+      });
+    }
+  }, [evaluateMode]);
 
   return (
     <>
       <WholeContainer>
-        <ToastContainer />
+        <ToastContainer containerId={"evaluateAPI"} />
         <EvaluateModeContainer>
           <EvaluateToggle
             evaluateMode={evaluateMode}
