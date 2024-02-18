@@ -369,15 +369,14 @@ const UserInfo = () => {
               <div
                 className="profile_circle"
                 style={{
-                  backgroundImage: `url(${profileImageURL})`,
+                  backgroundImage:
+                    profileImageURL === null
+                      ? `url("https://i.pinimg.com/474x/3b/73/a1/3b73a13983f88f8b84e130bb3fb29e17.jpg")`
+                      : `url(${profileImageURL})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center center",
                 }}
-              >
-                {profileImageURL !== "" ? null : (
-                  <IconPhotoPlus size={36} strokeWidth={1} color={"#E7E6EA"} />
-                )}
-              </div>
+              ></div>
             </div>
             <div className="profileBox">
               <IconPencil
