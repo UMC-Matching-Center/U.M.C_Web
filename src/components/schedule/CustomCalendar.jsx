@@ -51,7 +51,7 @@ const CalendarTable = styled.div`
 const CalendarTableBox = styled.div`
   display: flex;
   box-sizing: border-box;
-  width: 9.6rem;
+  width: 9.8rem;
   height: 12rem;
   flex-direction: column;
   background-color: ${(props) =>
@@ -60,16 +60,6 @@ const CalendarTableBox = styled.div`
   border-left: 0.1rem solid #02010b;
   border-right: 0.1rem solid #02010b;
 
-  //하이라이트 여부에 따라 width 조절
-  width: ${(props) =>
-    props.$isHighlightedAddandLastDay
-      ? "9.4rem"
-      : props.$isHighlightedLastday || props.$isHighlightedFirstday
-        ? "9.5rem"
-        : "9.8rem"};
-
-  //하이라이트 여부에 따라 height 조절
-  height: ${(props) => (props.$isHighlighted ? "11.8rem" : "12rem")};
 
   //시작 하이라이트
   border-left: ${(props) =>
