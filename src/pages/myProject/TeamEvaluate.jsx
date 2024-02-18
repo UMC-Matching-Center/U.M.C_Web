@@ -24,7 +24,7 @@ const EvaluateContainer = styled.div`
 `;
 
 const EvaluateModeContainer = styled.div`
-  margin : 0 0 1.1rem 105rem;
+  margin: 0 0 1.1rem 105rem;
 `;
 export default function EvaluateTeam() {
   const [evaluateData, setEvaluateData] = useState([]); //상호평가 하기
@@ -71,41 +71,6 @@ export default function EvaluateTeam() {
     });
   }, []);
 
-    //첫 실행 시 API 호출
-  useEffect(() => {
-    evaluateAppAPI(accessToken, dispatch, autoLogin).then((response) => {
-      if (response.isSuccess) {
-        setEvaluateData(response.evaluateDataList);
-      } else {
-        toast.error(response.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      }
-    });
-    myEvaluationAPI(accessToken, dispatch, autoLogin).then((response) => {
-      if (response.isSuccess) {
-        setMyEvaluationData(response.myEvaluationData);
-      } else {
-        toast.error(response.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      }
-    });
-  }, []);
   return (
     <>
       <WholeContainer>
@@ -123,7 +88,7 @@ export default function EvaluateTeam() {
                   <EvaluateCard list={list} setEvaluateData={setEvaluateData} />
                 </div>
               ))
-            : myEvaluationData.map((list,index) => (
+            : myEvaluationData.map((list, index) => (
                 <div key={index}>
                   <MyEvaluationCard list={list} />
                 </div>

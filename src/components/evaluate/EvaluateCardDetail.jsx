@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import EvaluateStar from "./EvaluateStar";
 import "./Evaluate.css";
@@ -94,12 +94,20 @@ const TextBox = styled.textarea`
 export default function EvaluateCardDetail({
   list,
   handleSaveEvaluate,
-  setDataList,
+  setEvaluateData,
   DefaultCardImg,
   PartsDummy,
 }) {
+  const [ableBtn, setAbleBtn] = useState(
+    list.content.trim() !== "" && list.star !== 0
+  );
+
+  useEffect(() => {
+    setAbleBtn(list.content.trim() !== "" && list.star !== 0);
+  }, [list.content, list.star]);
+
   const handleText = (e) => {
-    setDataList((prevList) => {
+    setEvaluateData((prevList) => {
       const updatedList = prevList.map((item) => {
         if (item.memberId === list.memberId) {
           return { ...item, content: e.target.value };
@@ -109,7 +117,9 @@ export default function EvaluateCardDetail({
       return updatedList;
     });
   };
-
+  useEffect(() => {
+    setAbleBtn(list.content.trim() !== "" && list.star !== 0);
+  }, [list.content, list.star]);
   return (
     <div className="evaluate-container">
       <div className="evaluate-detail-container">
@@ -138,9 +148,18 @@ export default function EvaluateCardDetail({
             {list.nameNickname.split("/")[1].trim()}
           </HeadTitle>
           <EvaluateContainer>
-            <EvaluateStar list={list} editOn={true} setDataList={setDataList} />
+            <EvaluateStar
+              list={list}
+              editOn={true}
+              setEvaluateData={setEvaluateData}
+            />
           </EvaluateContainer>
-          <CheckSVGContainer onClick={() => handleSaveEvaluate(list)}>
+          <CheckSVGContainer
+            onClick={() => ableBtn && handleSaveEvaluate(list)} // ableBtn 값이 true일 때만 클릭 이벤트 실행
+            style={{
+              pointerEvents: ableBtn ? "auto" : "none",
+            }}
+          >
             <CheckSVG />
           </CheckSVGContainer>
         </div>
