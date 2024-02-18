@@ -209,6 +209,9 @@ const AdminNavbar = () => {
                 ? true
                 : false
             );
+          } else {
+            setAlarmContent([]);
+            setAliveAlarm(false);
           }
         } else {
           toast.error(response.message, {
