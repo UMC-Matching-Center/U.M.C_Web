@@ -169,8 +169,8 @@ const AdminModify = () => {
   return (
     <>
       <ToastContainer />
-      <div className="container">
-        <div className="boxWrapper">
+      <div className="myPage-container">
+        <div className="myPage-boxWrapper">
           <div className="profileBox-wrapper">
             <div className="profile_circle-bg">
               <label htmlFor="profileImageInput">
@@ -354,8 +354,8 @@ const AdminInfo = () => {
           isLogout={() => handleLogout()}
         />
       </Modal>
-      <div className="container">
-        <div className="boxWrapper">
+      <div className="myPage-container">
+        <div className="myPage-boxWrapper">
           <div className="profileBox-wrapper">
             <div className="profile_circle-bg">
               <div
