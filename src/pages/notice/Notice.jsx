@@ -55,6 +55,9 @@ const NoticeSearch = styled.div`
         &::placeholder {
           color: #9c9aab;
         }
+        &:not(:placeholder-shown) {
+          color: initial;
+        }
       }
     }
 
@@ -66,6 +69,11 @@ const NoticeSearch = styled.div`
       display: flex;
       justify-content: center;
       align-items: center;
+      cursor: pointer;
+      transition: background 0.3s ease-in-out;
+      &:hover {
+        background: #cecdd5;
+      }
     }
   }
 
@@ -79,6 +87,10 @@ const NoticeSearch = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.8;
+    }
   }
 `;
 
@@ -107,7 +119,10 @@ const NoticeList = styled.div`
     font-family: KBO-Dia-Gothic;
     padding: 3.4rem 4.8rem 4.2rem 4.8rem;
     cursor: pointer;
-
+    transition: background 0.3s ease-in-out;
+    &:hover {
+      background: #cecdd5;
+    }
     > .notice-top {
       display: flex;
       margin-bottom: 1.9rem;
@@ -195,7 +210,12 @@ const NoticeBasic = ({ type }) => {
                 onKeyPress={handleOnKeyPress}
               />
             </div>
-            <div className="searchIcon-box">
+            <div
+              className="searchIcon-box"
+              style={{
+                borderTopRightRadius: type !== "ROLE_ADMIN" && "1rem",
+              }}
+            >
               <IconSearch size={36} stroke={1.5} onClick={onClickSearchIcon} />
             </div>
           </div>

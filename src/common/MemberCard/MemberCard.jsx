@@ -6,11 +6,15 @@ const MemberCard = ({ member }) => {
     <div className="member-card-box">
       <div className="member-card-image">
         <div className="member-card-image-circle">
-          {member.profileImage && <img src={member.profileImage} />}
+          {member.profileImage ? (
+            <img src={member.profileImage} />
+          ) : (
+            <img src="https://i.pinimg.com/474x/3b/73/a1/3b73a13983f88f8b84e130bb3fb29e17.jpg" />
+          )}
         </div>
       </div>
       <div className="member-card-content">
-        <div className="member-card-name">{member.nameNickName}</div>
+        <div className="member-card-name">{member.nameNickname}</div>
         <div className="member-card-bar"></div>
         <div className="member-card-text">
           <span>기수</span>
@@ -20,7 +24,7 @@ const MemberCard = ({ member }) => {
           <span>파트</span>
           <span>
             {(() => {
-              switch (member.memberPart) {
+              switch (member.memberPart || member.part) {
                 case "PLAN":
                   return "Plan";
                 case "WEB":
