@@ -55,6 +55,9 @@ const NoticeSearch = styled.div`
         &::placeholder {
           color: #9c9aab;
         }
+        &:not(:placeholder-shown) {
+          color: initial;
+        }
       }
     }
 
@@ -69,7 +72,7 @@ const NoticeSearch = styled.div`
       cursor: pointer;
       transition: background 0.3s ease-in-out;
       &:hover {
-        background: #CECDD5;
+        background: #cecdd5;
       }
     }
   }
@@ -118,7 +121,7 @@ const NoticeList = styled.div`
     cursor: pointer;
     transition: background 0.3s ease-in-out;
     &:hover {
-      background: #CECDD5;
+      background: #cecdd5;
     }
     > .notice-top {
       display: flex;
@@ -207,7 +210,12 @@ const NoticeBasic = ({ type }) => {
                 onKeyPress={handleOnKeyPress}
               />
             </div>
-            <div className="searchIcon-box">
+            <div
+              className="searchIcon-box"
+              style={{
+                borderTopRightRadius: type !== "ROLE_ADMIN" && "1rem",
+              }}
+            >
               <IconSearch size={36} stroke={1.5} onClick={onClickSearchIcon} />
             </div>
           </div>
