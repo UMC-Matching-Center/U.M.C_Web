@@ -1,5 +1,5 @@
 /* 전체 컨테이너 */
-.container {
+.evaluate-container {
   display: flex;
   width: 38.4rem;
   height: 22rem;
@@ -8,7 +8,7 @@
 }
 
 /*하얀 색 컨테이너*/
-.detail-container {
+.evaluate-detail-container {
   display: flex;
   flex-direction: column;
   width: 36.8rem;
@@ -19,7 +19,7 @@
 }
 
 /* 헤더 컨테이너 */
-.head-container {
+.evaluate-head-container {
   display: flex;
   flex-direction: row;
   margin: 1.8rem 0 0 2.5rem;

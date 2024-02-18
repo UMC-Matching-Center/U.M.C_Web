@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import EvaluateStar from "./EvaluateStar";
-import "./Evaluate.css"
-
+import "./Evaluate.css";
 
 //해당 IMG 컨테이너
 const ImgContainer = styled.div`
@@ -112,9 +111,9 @@ export default function EvaluateCardDetail({
   };
 
   return (
-    <div className="container">
-      <div className="detail-container">
-        <div className="head-container">
+    <div className="evaluate-container">
+      <div className="evaluate-detail-container">
+        <div className="evaluate-head-container">
           <ImgContainer>
             <ProfileImg
               style={{

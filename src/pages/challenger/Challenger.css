@@ -27,47 +27,47 @@
   border-bottom: 0.1rem solid #e7e6ea;
   color: #e7e6ea;
   margin-right: 2rem;
+}
 
-  /* 표 카테고리 리스트 */
-  .table_title_list {
-    display: flex;
-    flex-basis: 70%;
-    box-sizing: border-box;
-    padding: 0 5rem;
-    justify-content: space-between;
-  }
+/* 표 카테고리 리스트 */
+.table_title_list {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  flex-basis: 70%;
+  padding: 0 5rem;
+}
 
-  /* 표 제목 옵션 부분 */
-  .table_title_optioin {
-    display: block;
-    flex-basis: 30%;
-    box-sizing: border-box;
+/* 표 제목 옵션 부분 */
+.table_title_optioin {
+  display: block;
+  flex-basis: 30%;
+  box-sizing: border-box;
+}
 
-    .table_title_select {
-      float: right;
-      min-width: 18rem;
-      box-sizing: border-box;
-      padding-right: 3rem;
-    }
+.table_title_select {
+  float: right;
+  min-width: 18rem;
+  box-sizing: border-box;
+  padding-right: 3rem;
+}
 
-    .table_option_dropdown {
-      float: right;
-    }
-  }
+.table_option_dropdown {
+  float: right;
+}
 
-  /* 표 제목 폰트 스타일 */
-  .table_title {
-    display: flex;
-    justify-content: center;
-    width: 10rem;
-    color: var(--base-50, #e7e6ea);
-    text-align: center;
-    font-family: KBO-Dia-Gothic;
-    font-size: 2.2rem;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 150%;
-  }
+/* 표 제목 폰트 스타일 */
+.table_title {
+  display: flex;
+  justify-content: center;
+  width: 10rem;
+  color: var(--base-50, #e7e6ea);
+  text-align: center;
+  font-family: KBO-Dia-Gothic;
+  font-size: 2.2rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
 }
 
 /*첼린저 리스트들을 나열하는 박스*/
