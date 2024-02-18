@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import { landingDetailAPI } from "../../../api";
 import useGetAccessToken from "../../../utils/getAccessToken";
 import LandingPageWrite from "./LandingPageWrite";
@@ -18,7 +18,7 @@ export default function LandingPage() {
   const { userType, autoLogin } = useSelector((state) => state.userInfo);
 
   const [data, setData] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     if (accessToken !== "") {
       landingDetailAPI(accessToken, dispatch, autoLogin).then((response) => {
@@ -31,16 +31,28 @@ export default function LandingPage() {
         } else if (response.project === null) {
           setData(null);
         }
+        setIsLoading(false);
       });
     }
   }, [location]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
       <TextAreaProvider>
         <Routes>
-          {userType === "ROLE_PM" && data === null ? (
-            <Route path="/new" element={<LandingPageWrite mode="new" />} />
+          {data === null ? (
+            userType === "ROLE_PM" ? (
+              <Route
+                path="/"
+                element={<Navigate to="/myproject/landing/new" />}
+              />
+            ) : (
+              <Route path="/" element={<Navigate to="/match" />} />
+            )
           ) : (
             <Route
               path="/"
@@ -48,10 +60,18 @@ export default function LandingPage() {
             />
           )}
           <Route
+            path="/new"
+            element={userType === "ROLE_PM" && <LandingPageWrite mode="new" />}
+          />
+          <Route
             path="/modify"
             element={
               userType === "ROLE_PM" && <LandingPageWrite mode="modify" />
             }
+          />
+          <Route
+            path="/"
+            element={<LandingPageDetail project={data} type={userType} />}
           />
         </Routes>
       </TextAreaProvider>
