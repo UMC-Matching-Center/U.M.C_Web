@@ -40,29 +40,35 @@ export default function LandingPage() {
           setData(responseData);
         } else if (response.message === "프로젝트가 존재하지 않습니다.") {
           setDisAllow(true);
-          toast.error(response.message, {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (!toast.isActive("landingDetailAPI", "LandingPage")) {
+            toast.error(response.message, {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              toastId: "landingDetailAPI",
+            });
+          }
           navigate("/match");
         } else if (response.message === "랜딩페이지가 존재하지 않습니다.") {
           setDisAllow(true);
-          toast.error(response.message, {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (!toast.isActive("landingDetailAPI", "LandingPage")) {
+            toast.error(response.message, {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              toastId: "landingDetailAPI",
+            });
+          }
           navigate("/match");
         }
         setIsLoading(false);
@@ -77,7 +83,7 @@ export default function LandingPage() {
   return (
     <>
       <TextAreaProvider>
-        <ToastContainer />
+        <ToastContainer containerId={"LandingPage"} />
         <Routes>
           {data === null ? (
             userType === "ROLE_PM" ? (

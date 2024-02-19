@@ -28,7 +28,7 @@ const MatchingBtn = styled.div`
   line-height: 150%;
   cursor: pointer;
   &:hover {
-    opacity : 0.8;
+    opacity: 0.8;
   }
 
   &:nth-child(1) {
@@ -112,27 +112,33 @@ export default function ChallengerNew() {
             (data) => data.memberId !== selectUserData.memberId
           )
         );
-        toast.success(`${selectUserData.nickname} 수락 완료`, {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        if (!toast.isActive("signupAcceptAPI", "ChallengerNew")) {
+          toast.success(`${selectUserData.nickname} 수락 완료`, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            toastId: "signupAcceptAPI",
+          });
+        }
       } else {
-        toast.error(response.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        if (!toast.isActive("signupAcceptAPI", "ChallengerNew")) {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            toastId: "signupAcceptAPI",
+          });
+        }
       }
     });
   };
@@ -151,27 +157,33 @@ export default function ChallengerNew() {
             (data) => data.memberId !== selectUserData.memberId
           )
         );
-        toast.success(`${selectUserData.nickname} 거절 완료`, {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        if (!toast.isActive("signupRejectAPI", "ChallengerNew")) {
+          toast.success(`${selectUserData.nickname} 거절 완료`, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            toastId: "signupRejectAPI",
+          });
+        }
       } else {
-        toast.error(response.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        if (!toast.isActive("signupRejectAPI", "ChallengerNew")) {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            toastId: "signupRejectAPI",
+          });
+        }
       }
     });
   };
@@ -201,17 +213,20 @@ export default function ChallengerNew() {
               setIsEnd(true);
             }
           } else {
-            toast.error(response.message, {
-              position: "top-center",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-            setIsEnd(true);
+            if (!toast.isActive("signupListAPI", "ChallengerNew")) {
+              toast.error(response.message, {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                toastId: "signupListAPI",
+              });
+              setIsEnd(true);
+            }
           }
           setLoading(false);
         }
@@ -222,7 +237,7 @@ export default function ChallengerNew() {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer containerId={"ChallengerNew"} />
       <Modal
         isOpen={accept}
         onRequestClose={() => setAccept(false)}

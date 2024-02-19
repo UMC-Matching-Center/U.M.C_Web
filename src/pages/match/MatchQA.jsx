@@ -182,16 +182,19 @@ const MatchQA = () => {
           setAContent(response.qnaList.map(() => ""));
           setDisableAnswer(response.qnaList.map(() => true));
         } else {
-          toast.error(response.message, {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (!toast.isActive("matchQAListAPI", "MatchQA")) {
+            toast.error(response.message, {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              toastId: "matchQAListAPI",
+            });
+          }
         }
       }
     );
@@ -236,16 +239,19 @@ const MatchQA = () => {
     matchQADeleteAPI(accessToken, dispatch, autoLogin, questionId).then(
       (response) => {
         if (response.isSuccess) {
-          toast.success(`답변 삭제 완료`, {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (!toast.isActive("matchQADeleteAPI", "MatchQA")) {
+            toast.success(`답변 삭제 완료`, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              toastId: "matchQADeleteAPI",
+            });
+          }
           // 삭제된 QA를 제외하고 QA 목록 업데이트
           const updatedQAList = QAData.filter((qa, idx) => idx !== index);
           setQAData(updatedQAList);
@@ -255,16 +261,19 @@ const MatchQA = () => {
           setAContent(updatedQAList.map(() => ""));
           setDisableAnswer(updatedQAList.map(() => true));
         } else {
-          toast.error(response.message, {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (!toast.isActive("matchQADeleteAPI", "MatchQA")) {
+            toast.error(response.message, {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              toastId: "matchQADeleteAPI",
+            });
+          }
         }
       }
     );
@@ -280,16 +289,19 @@ const MatchQA = () => {
       newQ
     ).then((response) => {
       if (response.isSuccess) {
-        toast.success(`질문 등록 완료`, {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        if (!toast.isActive("matchQuestionUploadAPI", "MatchQA")) {
+          toast.success(`질문 등록 완료`, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            toastId: "matchQuestionUploadAPI",
+          });
+        }
         // 삭제된 QA를 제외하고 QA 목록 업데이트
         const updatedQAList = [
           ...QAData,
@@ -307,16 +319,19 @@ const MatchQA = () => {
         setAContent(updatedQAList.map(() => ""));
         setDisableAnswer(updatedQAList.map(() => true));
       } else {
-        toast.error(response.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        if (!toast.isActive("matchQuestionUploadAPI", "MatchQA")) {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            toastId: "matchQuestionUploadAPI",
+          });
+        }
       }
     });
 
@@ -333,17 +348,20 @@ const MatchQA = () => {
       questionId,
       answer
     ).then((response) => {
-      if (response.isSuccess) {
-        toast.success(`답변 등록 완료`, {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+      if (!toast.isActive("matchAnswerUploadAPI", "MatchQA")) {
+        if (response.isSuccess) {
+          toast.success(`답변 등록 완료`, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            toastId: "matchAnswerUploadAPI",
+          });
+        }
         // 답변 등록된 QA 목록 업데이트
         const updatedQAList = QAData.map((item) => {
           if (item.questionId === questionId) {
@@ -353,23 +371,26 @@ const MatchQA = () => {
         });
         setQAData(updatedQAList);
       } else {
-        toast.error(response.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        if (!toast.isActive("matchAnswerUploadAPI", "MatchQA")) {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            toastId: "matchAnswerUploadAPI",
+          });
+        }
       }
     });
   };
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer containerId={"MatchQA"} />
       <QAContainer>
         <QAWrapper>
           <QATitle>

@@ -116,16 +116,19 @@ const UserModify = () => {
       if (response.isSuccess) {
         navigate(-1, { replace: true, state: "마이페이지 수정 완료" });
       } else {
-        toast.error(response.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        if (!toast.isActive("challengerModifyAPI", "MyPageUserEdit")) {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            toastId: "challengerModifyAPI",
+          });
+        }
       }
     });
   };
@@ -137,7 +140,7 @@ const UserModify = () => {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer containerId={"MyPageUserEdit"} />
       <div className="myPage-container">
         <div className="myPage-boxWrapper">
           <div className="profileBox-wrapper">
@@ -283,16 +286,19 @@ const UserInfo = () => {
         navigate("/", { replace: true, state: "탈퇴가 완료되었습니다." }); // 메인 페이지로 이동
         purge(); // 초기화 실행
       } else {
-        toast.error(response.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        if (!toast.isActive("challengerWithdrawAPI", "MyPageUser")) {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            toastId: "challengerWithdrawAPI",
+          });
+        }
       }
     });
   };
@@ -300,16 +306,19 @@ const UserInfo = () => {
   // 첫 실행시 API 호출
   useEffect(() => {
     if (location.state) {
-      toast.success(location.state, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      if (!toast.isActive("tokenError", "MyPageUser")) {
+        toast.success(location.state, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          toastId: "tokenError",
+        });
+      }
     }
     myPageDataAPI(accessToken, dispatch, autoLogin).then((response) => {
       if (response.isSuccess) {
@@ -327,23 +336,26 @@ const UserInfo = () => {
         );
         setPortfolio(response.portfolio);
       } else {
-        toast.error(response.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        if (!toast.isActive("myPageDataAPI", "MyPageUser")) {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            toastId: "myPageDataAPI",
+          });
+        }
       }
     });
   }, []);
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer containerId={"MyPageUser"} />
       <Modal
         isOpen={logout}
         onRequestClose={() => setLogout(false)}

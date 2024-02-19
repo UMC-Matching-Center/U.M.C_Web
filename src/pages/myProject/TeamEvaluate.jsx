@@ -61,7 +61,7 @@ export default function EvaluateTeam() {
         if (response.isSuccess) {
           setMyEvaluationData(response.myEvaluationData);
         } else {
-          if (!toast.isActive("evaluateAPI")) {
+          if (!toast.isActive("myEvaluationAPI", "evaluateAPI")) {
             toast.error(response.message, {
               position: "top-center",
               autoClose: 3000,

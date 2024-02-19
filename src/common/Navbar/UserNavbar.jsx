@@ -114,16 +114,19 @@ const UserNavbar = () => {
               : false
           );
         } else {
-          toast.error(response.message, {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (!toast.isActive("alramConfirmAPI", "UserNavbar")) {
+            toast.error(response.message, {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              toastId: "alramConfirmAPI",
+            });
+          }
         }
       }
     );
@@ -139,27 +142,33 @@ const UserNavbar = () => {
             (data) => data.is_confirm === false
           );
           setAlarmContent(updatedAlarm);
-          toast.success("알림 삭제 완료", {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (!toast.isActive("alramDeleteAPI", "UserNavbar")) {
+            toast.success("알림 삭제 완료", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              toastId: "alramDeleteAPI",
+            });
+          }
         } else {
-          toast.error(response.message, {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (!toast.isActive("alramDeleteAPI", "UserNavbar")) {
+            toast.error(response.message, {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              toastId: "alramDeleteAPI",
+            });
+          }
         }
       });
       setAlarmLoading(false);
@@ -214,16 +223,19 @@ const UserNavbar = () => {
             setAliveAlarm(false);
           }
         } else {
-          toast.error(response.message, {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (!toast.isActive("alramListAPI", "UserNavbar")) {
+            toast.error(response.message, {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              toastId: "alramListAPI",
+            });
+          }
         }
       });
       setAlarmLoading(false);
@@ -250,7 +262,7 @@ const UserNavbar = () => {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer containerId={"UserNavbar"} />
       <div className="app__nav">
         <div className="nav_area">
           <div className="nav_logo">

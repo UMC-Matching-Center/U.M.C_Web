@@ -230,16 +230,19 @@ function ChallengerList() {
             return new Map(nextState); // 새로운 맵 객체를 반환하여 상태 업데이트
           });
         } else {
-          toast.error(response.message, {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (!toast.isActive("challengerMatchingAPI", "ChallengerManage")) {
+            toast.error(response.message, {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              toastId: "challengerMatchingAPI",
+            });
+          }
         }
       }
     );
@@ -264,27 +267,33 @@ function ChallengerList() {
           setUserData((prevUserData) =>
             prevUserData.filter((data) => data.memberId !== expelUser.memberId)
           );
-          toast.success("탈부 처리 완료", {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (!toast.isActive("challengerExpelAPI", "ChallengerManage")) {
+            toast.success("탈부 처리 완료", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              toastId: "challengerExpelAPI",
+            });
+          }
         } else {
-          toast.error(response.message, {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (!toast.isActive("challengerExpelAPI", "ChallengerManage")) {
+            toast.error(response.message, {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              toastId: "challengerExpelAPI",
+            });
+          }
         }
       });
     }
@@ -355,16 +364,19 @@ function ChallengerList() {
             setIsEnd(true);
           }
         } else {
-          toast.error(response.message, {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (!toast.isActive("challengerListAPI", "ChallengerManage")) {
+            toast.error(response.message, {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              toastId: "challengerListAPI",
+            });
+          }
           setIsEnd(true);
         }
         setLoading(false);
@@ -382,7 +394,7 @@ function ChallengerList() {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer containerId={"ChallengerManage"} />
       <Modal
         isOpen={expel}
         onRequestClose={() => setExpel(false)}

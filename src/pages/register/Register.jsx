@@ -69,22 +69,25 @@ function Login() {
 
   useEffect(() => {
     if (location.state) {
-      toast.error(location.state, {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      if (!toast.isActive("tokenError", "Register")) {
+        toast.error(location.state, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          toastId: "tokenError",
+        });
+      }
     }
   }, []);
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer containerId={"Register"} />
       <div className="Container">
         <div className="MainBox">
           {/* 좌측 로고 부분 */}
@@ -187,7 +190,7 @@ function Login() {
                   style={{
                     marginTop: "3.9rem",
                     backgroundColor: ableBtn ? "#014171" : "#01417180",
-                    cursor: !ableBtn && "default"
+                    cursor: !ableBtn && "default",
                   }}
                   disabled={!ableBtn}
                 >
