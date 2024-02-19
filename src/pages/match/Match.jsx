@@ -95,8 +95,8 @@ function MatchHome({ type }) {
               });
               setIsEnd(true);
             }
-            setLoading(false);
           }
+          setLoading(false);
         }
       );
     }
