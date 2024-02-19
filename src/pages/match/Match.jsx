@@ -81,19 +81,22 @@ function MatchHome({ type }) {
               setIsEnd(true);
             }
           } else {
-            toast.error(response.message, {
-              position: "top-center",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-            setIsEnd(true);
+            if (!toast.isActive("matchListAPI", "Match")) {
+              toast.error(response.message, {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                toastId: "matchListAPI",
+              });
+              setIsEnd(true);
+            }
+            setLoading(false);
           }
-          setLoading(false);
         }
       );
     }
@@ -102,7 +105,7 @@ function MatchHome({ type }) {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer containerId={"Match"} />
       <MatchMain>
         {type === "ROLE_PM" && (
           <div className="button_wrap">

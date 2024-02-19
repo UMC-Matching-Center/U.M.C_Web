@@ -59,27 +59,33 @@ export default function ScheduleList({
     scheduleAddAPI(accessToken, dispatch, autoLogin, newSchedule).then(
       (response) => {
         if (response.isSuccess) {
-          toast.success("추가 성공", {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (!toast.isActive("scheduleAddAPI", "ScheduleList")) {
+            toast.success("추가 성공", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              toastId: "scheduleAddAPI",
+            });
+          }
         } else {
-          toast.error(response.message, {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (!toast.isActive("scheduleAddAPI", "ScheduleList")) {
+            toast.error(response.message, {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              toastId: "scheduleAddAPI",
+            });
+          }
         }
       }
     );
@@ -116,7 +122,7 @@ export default function ScheduleList({
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer containerId={"ScheduleList"} />
       {scheduleAdd ? (
         <ScheduleAdd
           handleScheduleAdd={handleScheduleAdd}

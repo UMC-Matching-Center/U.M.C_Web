@@ -128,16 +128,19 @@ const AdminModify = () => {
       if (response.isSuccess) {
         navigate(-1, { replace: true, state: "마이페이지 수정 완료" });
       } else {
-        toast.error(response.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        if (!toast.isActive("adminModifyAPI", "MyPageAdminEdit")) {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            toastId: "adminModifyAPI",
+          });
+        }
       }
     });
   };
@@ -168,7 +171,7 @@ const AdminModify = () => {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer containerId={"MyPageAdminEdit"} />
       <div className="myPage-container">
         <div className="myPage-boxWrapper">
           <div className="profileBox-wrapper">
@@ -315,8 +318,25 @@ const AdminInfo = () => {
           )
         );
       } else {
-        toast.error(response.message, {
-          position: "top-center",
+        if (!toast.isActive("myPageDataAPI", "MyPageAdmin")) {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            toastId: "myPageDataAPI",
+          });
+        }
+      }
+    });
+    if (location.state) {
+      if (!toast.isActive("tokenError", "MyPageAdmin")) {
+        toast.success(location.state, {
+          position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -324,26 +344,15 @@ const AdminInfo = () => {
           draggable: true,
           progress: undefined,
           theme: "light",
+          toastId: "tokenError",
         });
       }
-    });
-    if (location.state) {
-      toast.success(location.state, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
     }
   }, []);
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer containerId={"MyPageAdmin"} />
       <Modal
         isOpen={logout}
         onRequestClose={() => setLogout(false)}

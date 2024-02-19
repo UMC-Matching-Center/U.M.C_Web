@@ -74,56 +74,68 @@ export default function ApplyStatus() {
         ? appPassAPI(accessToken, dispatch, autoLogin, memberId).then(
             (response) => {
               if (response.isSuccess) {
-                toast.success("합격 처리 완료", {
-                  position: "top-right",
-                  autoClose: 3000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: "light",
-                });
+                if (!toast.isActive("appPassAPI", "ApplyStatus")) {
+                  toast.success("합격 처리 완료", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    toastId: "appPassAPI",
+                  });
+                }
                 setRender(!render);
               } else {
-                toast.error(response.message, {
-                  position: "top-center",
-                  autoClose: 3000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: "light",
-                });
+                if (!toast.isActive("appPassAPI", "ApplyStatus")) {
+                  toast.error(response.message, {
+                    position: "top-center",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    toastId: "appPassAPI",
+                  });
+                }
               }
             }
           )
         : appFailAPI(accessToken, dispatch, autoLogin, memberId).then(
             (response) => {
               if (response.isSuccess) {
-                toast.success("불합격 처리 완료", {
-                  position: "top-right",
-                  autoClose: 3000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: "light",
-                });
+                if (!toast.isActive("appFailAPI", "ApplyStatus")) {
+                  toast.success("불합격 처리 완료", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    toastId: "appFailAPI",
+                  });
+                }
                 setRender(!render);
               } else {
-                toast.error(response.message, {
-                  position: "top-center",
-                  autoClose: 3000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: "light",
-                });
+                if (!toast.isActive("appFailAPI", "ApplyStatus")) {
+                  toast.error(response.message, {
+                    position: "top-center",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    toastId: "appFailAPI",
+                  });
+                }
               }
             }
           );
@@ -140,23 +152,26 @@ export default function ApplyStatus() {
         setCompetitionRate(response.competitionRate);
         setApplicantInfoList(response.appInfoList);
       } else {
-        toast.error(response.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        if (!toast.isActive("viewAppAPI", "ApplyStatus")) {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            toastId: "viewAppAPI",
+          });
+        }
       }
     });
   }, [render]);
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer containerId={"ApplyStatus"} />
       <Container>
         <HeadContainer>
           <ViewHeader

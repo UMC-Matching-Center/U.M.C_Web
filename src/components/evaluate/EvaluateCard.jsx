@@ -125,7 +125,6 @@ const CardDetailSchool = styled.div`
   margin: 0.5rem 0.5rem 0 0;
   font-size: 1rem;
   font-weight: 300;
-  
 `;
 
 //리뷰 컨테이너
@@ -170,34 +169,40 @@ export default function EvaluateCard({ list, setEvaluateData }) {
       updatedList
     ).then((response) => {
       if (response.isSuccess) {
-        toast.success("상호 평가 저장 성공", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        if (!toast.isActive("evaluateSaveAPI", "EvaluateCard")) {
+          toast.success("상호 평가 저장 성공", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            toastId: "evaluateSaveAPI",
+          });
+        }
       } else {
-        toast.error(response.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        if (!toast.isActive("evaluateSaveAPI", "EvaluateCard")) {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            toastId: "evaluateSaveAPI",
+          });
+        }
       }
     });
   };
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer containerId={"EvaluateCard"} />
       {isEvaluateMode ? (
         <EvaluateCardDetail
           list={list}

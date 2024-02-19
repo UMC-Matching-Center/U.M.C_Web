@@ -308,23 +308,26 @@ export default function UserSignup() {
         dispatch(SIGNUP_COMPLETE({ open: true }));
         navigate("../../", { replace: true });
       } else {
-        toast.error(response.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        if (!toast.isActive("signupAPI", "SignupDetail")) {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            toastId: "signupAPI",
+          });
+        }
       }
     });
   };
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer containerId={"SignupDetail"} />
       <Modal
         isOpen={requestModal}
         onRequestClose={() => setRequestModal(false)}
@@ -552,7 +555,7 @@ export default function UserSignup() {
                   style={{
                     marginTop: "3.2rem",
                     backgroundColor: ableBtn ? "#014171" : "#01417180",
-                    cursor: !ableBtn && "default"
+                    cursor: !ableBtn && "default",
                   }}
                   disabled={!ableBtn}
                 >

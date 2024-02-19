@@ -115,27 +115,33 @@ export default function ScheduleEdit({
     scheduleDeleteAPI(accessToken, dispatch, autoLogin, scheduleId).then(
       (response) => {
         if (response.isSuccess) {
-          toast.success("삭제 성공", {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (!toast.isActive("scheduleDeleteAPI", "ScheduleEdit")) {
+            toast.success("삭제 성공", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              toastId: "scheduleDeleteAPI",
+            });
+          }
         } else {
-          toast.error(response.message, {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (!toast.isActive("scheduleDeleteAPI", "ScheduleEdit")) {
+            toast.error(response.message, {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              toastId: "scheduleDeleteAPI",
+            });
+          }
         }
       }
     );
@@ -169,27 +175,33 @@ export default function ScheduleEdit({
     scheduleEditAPI(accessToken, dispatch, autoLogin, id, giveData).then(
       (response) => {
         if (response.isSuccess) {
-          toast.success("수정 성공", {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (!toast.isActive("scheduleEditAPI", "ScheduleEdit")) {
+            toast.success("수정 성공", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              toastId: "scheduleEditAPI",
+            });
+          }
         } else {
-          toast.error(response.message, {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (!toast.isActive("scheduleEditAPI", "ScheduleEdit")) {
+            toast.error(response.message, {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              toastId: "scheduleEditAPI",
+            });
+          }
         }
       }
     );
@@ -326,7 +338,7 @@ export default function ScheduleEdit({
   );
   return (
     <>
-      <ToastContainer />
+      <ToastContainer containerId={"ScheduleEdit"} />
       <div className="schedulecontainer">
         {isDataInMonth ? (
           dummyData.map((infobox) =>

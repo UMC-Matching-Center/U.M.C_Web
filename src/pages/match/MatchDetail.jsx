@@ -48,7 +48,7 @@ const MatchBar = styled.div`
       border-radius: 5rem;
       background: #0261aa;
       cursor: pointer;
-      &:hover{
+      &:hover {
         opacity: 0.8;
       }
       > span {
@@ -126,16 +126,19 @@ const MatchProjectDetail = () => {
       if (response.isSuccess) {
         setData(response.project);
       } else {
-        toast.error(response.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        if (!toast.isActive("matchDetailAPI", "MatchDetail")) {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            toastId: "matchDetailAPI",
+          });
+        }
       }
     });
   }, []);
@@ -144,34 +147,40 @@ const MatchProjectDetail = () => {
     matchApplyAPI(accessToken, dispatch, autoLogin, id).then((response) => {
       if (response.isSuccess) {
         setApply(true);
-        toast.success("지원 완료", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        if (!toast.isActive("matchApplyAPI", "MatchDetail")) {
+          toast.success("지원 완료", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            toastId: "matchApplyAPI",
+          });
+        }
       } else {
-        toast.error(response.message, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        if (!toast.isActive("matchApplyAPI", "MatchDetail")) {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            toastId: "matchApplyAPI",
+          });
+        }
       }
     });
   };
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer containerId={"MatchDetail"} />
       <Modal
         isOpen={apply}
         onRequestClose={() => setApply(false)}
