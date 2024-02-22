@@ -58,7 +58,7 @@ const AlarmContainer = ({
                         break;
                       case "ROLE_CHALLENGER":
                         if (alarm.type === "NOTICE_NEW") navigate("/notice");
-                        else if (alarm.type === "MATCHING_COMPLETE")
+                        else if (alarm.type === "MATCHING_APPLY_COMPLETE")
                           navigate(`/match/detail/${alarm.projectId}`);
                         else if (alarm.type === "MATCHING_APPLY_SUCCESS")
                           navigate("/mypage/evaluate");
